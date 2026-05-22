@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool Profile — bmad</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/bmad.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="bmad-bmad-method" tabindex="-1"><a class="header-anchor" href="#bmad-bmad-method"><span>bmad — BMad-Method</span></a></h1>
+<blockquote>
+<p>A structured Agile-style workflow harness that runs a Plan → Code → Review loop through a single <code>/bmad-quick-dev</code> slash command.</p>
+</blockquote>
+<h2 id="upstream" tabindex="-1"><a class="header-anchor" href="#upstream"><span>Upstream</span></a></h2>
+<ul>
+<li><strong>Repo:</strong> https://github.com/bmad-code-org/BMAD-METHOD</li>
+<li><strong>Version used:</strong> <code>6.6.0</code> (<code>e6cdc93b</code>), pinned via <code>npx bmad-method@6.6.0 install</code> in <code>scripts/setup-tool-config.sh</code>.</li>
+<li><strong>Author / maintainer:</strong> <code>bmad-code-org</code> (GitHub organisation).</li>
+<li><strong>License:</strong> MIT.</li>
+<li><strong>Primary doc:</strong> https://github.com/bmad-code-org/BMAD-METHOD (README). Installer also writes <code>_bmad/</code> and <code>.claude/skills/bmad-*</code> into the repo with its own docs.</li>
+</ul>
+<h2 id="performance-in-this-benchmark" tabindex="-1"><a class="header-anchor" href="#performance-in-this-benchmark"><span>Performance in this benchmark</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">Weighted mean /200</th>
+<th style="text-align:right">within_σ</th>
+<th style="text-align:right">between_σ</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">141.33</td>
+<td style="text-align:right">7.02</td>
+<td style="text-align:right">20.81</td>
+<td>3 / 8</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">165.72</td>
+<td style="text-align:right">12.75</td>
+<td style="text-align:right">12.94</td>
+<td>6 / 8</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">177.74</td>
+<td style="text-align:right">5.48</td>
+<td style="text-align:right">15.28</td>
+<td>3 / 8</td>
+</tr>
+</tbody>
+</table>
+<p>Refactor is bmad’s rank-3 task (within 2.45 weighted pts of rank-1 <code>pure</code> at 180.19 — inside the between-judge σ envelope). Bugfix is rank-6 by ≈ 13 pts behind rank-1 <code>claudekit</code> (178.93). Feature is rank-3; <code>between_σ</code> of 20.81 on feature is the highest in the cohort, signalling judges disagreed widely on bmad’s feature output.</p>
+<h2 id="mechanism-what-actually-runs" tabindex="-1"><a class="header-anchor" href="#mechanism-what-actually-runs"><span>Mechanism — what actually runs</span></a></h2>
+<ul>
+<li><strong>Install surface</strong> (from <code>scripts/setup-tool-config.sh</code> case <code>bmad)</code>): <code>npx bmad-method@6.6.0 install --directory . --modules bmm --tools claude-code --yes</code> is run inside the cloned repo. This writes <code>_bmad/</code> (config + agent prompts, gitignored by the bench safety rules), <code>.claude/skills/bmad-*</code> (skill files exposed to Claude Code), and <code>_bmad-output/</code> (tracked, used for phase artifacts). No plugin is added to the CLI’s plugin registry. The tool’s <code>settings.json</code> is just <code>{ &quot;skipDangerousModePermissionPrompt&quot;: true }</code>; all bmad behaviour comes from the in-repo skill files, not from CLI-level config.</li>
+<li><strong>Entry point</strong> (from <code>scripts/manual-bench.sh</code> case <code>bmad)</code>): the harness prepends an intro that tells bmad which path to take, then sends <code>PROMPT=&quot;/bmad-quick-dev $BMAD_INTRO\n\n$SHARED_TASK&quot;</code>. The intro always says “Pick the Plan-Code-Review path” and adds task-shape hints (“non-trivial feature”, “scoped bugfix — reproduce first”, “scoped refactor — no behavior change”). Observable behaviour: the command parses the intro, then proceeds through plan → code → review phases inline.</li>
+<li><strong>Skills / sub-agents / hooks activated:</strong> bmad dispatches <code>Agent</code> tool calls to sub-agents during execution. Roles observed in sub-agent prompts: an <code>Explore</code> investigator, a blind adversarial code reviewer, an edge-case hunter, and an acceptance auditor. No external hooks, no MCP servers — only the installed skill files and Claude Code’s built-in <code>Task</code>/<code>Agent</code> tool.</li>
+<li><strong>Core mental model:</strong> BMad stages a cut-down Agile cycle — scope → plan → implement → multi-angle review — into a single slash command, with a fact-forcing preamble and explicit phase checkpoints before file edits.</li>
+</ul>
+<h2 id="how-this-benchmark-invoked-it" tabindex="-1"><a class="header-anchor" href="#how-this-benchmark-invoked-it"><span>How this benchmark invoked it</span></a></h2>
+<p>Exact PROMPT (from <code>manual-bench.sh</code>, with per-task intro):</p>
+<pre class="hljs"><code>/bmad-quick-dev Pick the Plan-Code-Review path — this is a &lt;non-trivial feature | scoped bugfix | scoped refactor&gt; in an existing &lt;brownfield&gt; codebase. &lt;task-shape hint&gt;
+
+&lt;SHARED_TASK&gt;
+</code></pre>
+<p>Base model: <code>claude-opus-4-7</code> (same for all eight tools).</p>
+<h2 id="what-the-transcripts-show-session-audit" tabindex="-1"><a class="header-anchor" href="#what-the-transcripts-show-session-audit"><span>What the transcripts show (session audit)</span></a></h2>
+<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/bmad/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/bmad/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">wall min</th>
+<th style="text-align:right">main turns</th>
+<th style="text-align:right">sidechain turns</th>
+<th style="text-align:right">sub-agent disp.</th>
+<th style="text-align:right">files read (config / target)</th>
+<th style="text-align:right">files edited</th>
+<th style="text-align:right">cache hit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">21.4</td>
+<td style="text-align:right">156.3</td>
+<td style="text-align:right">49.3</td>
+<td style="text-align:right"><strong>1.0</strong></td>
+<td style="text-align:right">47.0 (6.0 / 40.7)</td>
+<td style="text-align:right">10.0</td>
+<td style="text-align:right">0.96</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">9.5</td>
+<td style="text-align:right">83.3</td>
+<td style="text-align:right">0.0</td>
+<td style="text-align:right"><strong>0.0</strong></td>
+<td style="text-align:right">15.3 (2.7 / 12.7)</td>
+<td style="text-align:right">3.0</td>
+<td style="text-align:right">0.96</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">82.1</td>
+<td style="text-align:right">168.0</td>
+<td style="text-align:right">70.0</td>
+<td style="text-align:right"><strong>1.3</strong></td>
+<td style="text-align:right">45.3 (4.7 / 40.7)</td>
+<td style="text-align:right">29.0</td>
+<td style="text-align:right">0.96</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Single skill drives every trial.</strong> <code>attributionSkill</code> is <code>bmad-quick-dev</code> on every assistant turn across all 9 trials (1,380 turns total). No second bmad skill activates; the “phases” are sequential turns inside one skill, not skill hand-offs.</li>
+<li><strong>Slash commands typed:</strong> <code>/bmad-quick-dev</code> only (12 across the corpus).</li>
+<li><strong>Sub-agent types when dispatched:</strong> <code>Explore</code> (6), <code>general-purpose</code> (1) — all on feature/refactor, none on bugfix.</li>
+<li><strong>Bugfix dispatches no sub-agents.</strong> All 3 bugfix trials use the same <code>Bash</code>+<code>Read</code>+<code>Edit</code>+<code>Write</code> mix in the main thread; no <code>Agent</code> tool calls. The previously claimed “multi-reviewer gate fires on bugfix” (Explore + adversarial + edge-case + acceptance reviewers as sub-agent dispatches) is <strong>not supported by the transcripts</strong> — if reviewer personas appear, they appear as sequential role-play turns inside <code>bmad-quick-dev</code>, not as <code>Agent</code> dispatches.</li>
+</ul>
+<h2 id="why-it-ranked-where-it-did" tabindex="-1"><a class="header-anchor" href="#why-it-ranked-where-it-did"><span>Why it ranked where it did</span></a></h2>
+<ul>
+<li><strong>Refactor (rank 3)</strong> is bmad’s strongest task — the Plan-Code-Review loop fits a scope-bounded structural change with a named refactor target. <code>pure</code> and <code>claudekit</code> land ahead, by ≈ 2.45 and 0.30 weighted pts respectively (both inside the noise envelope; refactor top-3 spans 2.45 pts). Wall-clock is 82 min — longest of any bmad cell — driven by the 168-turn main thread and the fact-forcing preamble before each of 29 edits.</li>
+<li><strong>Bugfix (rank 6)</strong> does <strong>not</strong> benefit from a multi-reviewer sub-agent gate (the audit shows 0 dispatches). Whatever lift bmad has on this task comes from the in-skill checkpoints and fact-forcing preamble, not from reviewer fan-out. <code>claudekit</code> and <code>ecc</code> separate from the cohort by ≈ 7–13 pts on a task with a tightly named target file.</li>
+<li><strong>Feature (rank 3)</strong> is a strong spot on score but the <code>between_σ</code> of 20.81 is the cohort’s highest on this task, meaning judges disagreed widely on the bmad feature artifact — some saw it as thorough, others as overlong. This is a “judge disagreement”, not a “tool instability” failure mode (<code>within_σ</code> is a low 7.02).</li>
+</ul>
+<h2 id="strengths-failure-modes" tabindex="-1"><a class="header-anchor" href="#strengths-failure-modes"><span>Strengths &amp; failure modes</span></a></h2>
+<p><strong>Strengths (transcript-grounded):</strong></p>
+<ul>
+<li>Fact-forcing preamble before edits and explicit “checkpoint” markers keep the agent from drifting on long sessions; appears as repeated assistant text turns rather than as sub-agent dispatches.</li>
+<li>Matches task shape via the intro: the harness-provided hint flips the workflow between feature / bugfix / refactor without changing the slash command.</li>
+<li>Lean tool-config overhead (~5 config reads per task) — the in-repo <code>_bmad/</code> scaffolding is referenced lightly during the run.</li>
+</ul>
+<p><strong>Failure modes (transcript-grounded):</strong></p>
+<ul>
+<li>Lint is not gated; the workflow does not round-trip <code>eslint</code> before declaring done.</li>
+<li>Pre-maturity elicitation is skipped when the agent judges context “sufficient”, so the plan step can collapse into a monologue — the failure mode behind the high feature <code>between_σ</code>.</li>
+<li>The “multi-reviewer” structure documented upstream does not materialise as actual reviewer sub-agents in this corpus, especially on bugfix; the workflow is effectively single-thread role-play inside <code>bmad-quick-dev</code>.</li>
+</ul>
+<h2 id="references" tabindex="-1"><a class="header-anchor" href="#references"><span>References</span></a></h2>
+<ul>
+<li>Install surface: <code>scripts/setup-tool-config.sh</code> (case <code>bmad)</code>)</li>
+<li>Prompt construction: <code>scripts/manual-bench.sh</code> (case <code>bmad)</code>)</li>
+<li>Config snapshot: <code>config/bmad-t&lt;N&gt;/settings.json</code>, <code>config/bmad-t&lt;N&gt;/plugins/</code></li>
+<li>Transcripts: <code>results/{bmad,bugfix/bmad,refactor/bmad}/t&lt;N&gt;/session-logs/</code></li>
+<li>Per-task reports: <a href="final-report-feature.html"><code>results/final-report.md</code></a>, <a href="final-report-bugfix.html"><code>results/bugfix/final-report.md</code></a>, <a href="final-report-refactor.html"><code>results/refactor/final-report.md</code></a></li>
+<li>Upstream repo: https://github.com/bmad-code-org/BMAD-METHOD</li>
+</ul>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/tools/bmad.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

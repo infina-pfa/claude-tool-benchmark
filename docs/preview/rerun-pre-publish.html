@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pre-publish Rerun Runbook</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/RERUN-PRE-PUBLISH.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="pre-publish-rerun-runbook" tabindex="-1"><a class="header-anchor" href="#pre-publish-rerun-runbook"><span>Pre-publish rerun runbook</span></a></h1>
+<h2 id="patches-applied-to-the-harness" tabindex="-1"><a class="header-anchor" href="#patches-applied-to-the-harness"><span>Patches applied to the harness</span></a></h2>
+<p>The re-publish pass applied the following script-level fixes; the runbook
+below assumes they are in place.</p>
+<ul>
+<li><code>scripts/apply-r1-override.py</code> —
+<ul>
+<li><strong>Item 16 field</strong>: reads <code>tests_core_failed</code>, matching the Mode-1 rubric wording.</li>
+<li><strong>Item 20 added</strong> to the <code>feature</code> lock list with the same formula the
+judge prompt uses: <code>s20 = 10 if lines_removed == 0 else max(0, 10 - ceil(lines_removed / 10))</code>.</li>
+<li><strong><code>scores_pre_r1</code> snapshot is now always written</strong> on first sweep
+(previously only written when the override changed at least one item, so
+files where the LLM happened to be correct silently lacked the audit
+trail).</li>
+</ul>
+</li>
+<li><code>scripts/blind-eval-setup.sh</code> —
+<ul>
+<li>Path-level excludes extended with <code>docs/bmad/**</code>, <code>.superpowers/**</code>,
+<code>.compound-engineering/**</code>, <code>.ecc/**</code>.</li>
+<li>Awk content-scrub list extended with <code>plans/</code>, <code>research/</code> and the new
+tool-state dirs above.</li>
+<li><strong><code>auto-metrics.json</code> anonymisation</strong>: <code>plugin_versions</code> and
+<code>collected_at</code> are stripped before the file lands under <code>_blind-eval/</code>
+(both are identity fingerprints).</li>
+</ul>
+</li>
+<li><code>scripts/aggregate-results.sh</code> —
+<ul>
+<li>Idempotent <strong>R1 sweep</strong> runs before every aggregation, closing the
+single-judge-retry bypass orchestration gap.</li>
+<li>σ decomposition: <code>within_σ</code> (trial-to-trial within-judge noise) and <code>between_σ</code>
+(judge base-rate spread) are emitted alongside pooled σ.</li>
+<li>Cohort-span hours and weight pre-registration date are surfaced in the
+Caveats block.</li>
+</ul>
+</li>
+<li><code>versions.lock.json</code> — <code>judges.*.weight</code> block added with the pre-registered
+3 / 2 / 1 / 1 / 1 scheme; <code>_weight_comment</code> documents the registration
+date (2026-05-12).</li>
+<li><code>scripts/env.sh</code> — <code>BENCH_COMMIT</code> for all three tasks switched from 7-char
+short SHAs to full 40-char SHAs to remove ambiguity.</li>
+</ul>
+<p>After applying these patches, regenerate the six leak-fix re-judge labels
+(Grove, Delta, Mike, Xray, November, Quebec — all feature) on clean diffs:</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># from the repo root</span>
+TASK=feature ./scripts/blind-eval-setup.sh
+TASK=feature ./scripts/judge-all.sh Grove Delta Mike Xray November Quebec
+TASK=feature  ./scripts/aggregate-results.sh
+TASK=bugfix   ./scripts/aggregate-results.sh
+TASK=refactor ./scripts/aggregate-results.sh
+</code></pre>
+<p>Verify <code>scores_pre_r1</code> coverage across the corpus (expect 1800 / 1800):</p>
+<pre class="hljs"><code class="language-bash">python3 -c <span class="hljs-string">&quot;
+import json, pathlib
+files = list(pathlib.Path(&#x27;results&#x27;).rglob(&#x27;_blind-eval/*/[!.]*-judge.json&#x27;))
+files = [f for f in files if &#x27;_archive&#x27; not in f.parts and &#x27;request&#x27; not in f.name and &#x27;raw&#x27; not in f.name]
+total = len(files); with_snap = sum(1 for f in files if &#x27;scores_pre_r1&#x27; in json.loads(f.read_text()))
+print(f&#x27;{with_snap}/{total} files carry scores_pre_r1&#x27;)
+&quot;</span>
+</code></pre>
+<p>Verify no fingerprint leaks:</p>
+<pre class="hljs"><code class="language-bash">grep -rlE <span class="hljs-string">&quot;\.omc/|_bmad-output/|docs/bmad/|\.superpowers/|\.compound-engineering/|\.ecc/|CLAUDE\.md\.original|plugin_versions&quot;</span> \
+  results/{,bugfix/,refactor/}_blind-<span class="hljs-built_in">eval</span>/*/{implementation-diff.patch,auto-metrics.json} 2&gt;/dev/null \
+  | grep -v <span class="hljs-string">&quot;\.pre-&quot;</span> \
+  | <span class="hljs-built_in">head</span>
+<span class="hljs-comment"># Expect: empty.</span>
+</code></pre>
+<hr>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/RERUN-PRE-PUBLISH.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

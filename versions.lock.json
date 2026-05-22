@@ -1,0 +1,157 @@
+{
+  "$comment": [
+    "v2 cohort version lock — captured 2026-04-25.",
+    "Source of truth for what every trial must run on.",
+    "Generated initially by hand; future updates via scripts/generate-lockfile.sh.",
+    "Verify before each trial via scripts/verify-versions.sh."
+  ],
+  "version": "v2",
+  "generated_at": "2026-04-25T09:20:00Z",
+  "cohort_size": {
+    "_comment": "trials_per_cell is the canonical N for power analysis. Trials 4 and 5 executed and aggregated 2026-05-16/17; all 8 tools × 3 tasks now run 5 trials × 3 rounds (40 labels/task, 75 judgments per (tool,task) cell, 1800 corpus). Aggregator unions the label root + ^round[0-9]+$ subdirs across all trial subdirs present.",
+    "trials_per_cell_executed": 5,
+    "trials_per_cell_target": 5,
+    "expansion_completed_at": "2026-05-17",
+    "rationale": "n=3 MDE under-estimated true trial-to-trial variance; the n=3→n=5 expansion RAISED σ_pool and MDE on every task (feature 17.99→17.21, bugfix 22.83→19.73, refactor 13.87→39.18) — see results/power-analysis.json and PAPER §4. The rising-MDE result is itself why post-hoc selective reruns are barred."
+  },
+  "claude_cli": {
+    "version": "2.1.133",
+    "verify_cmd": "$BENCH_CLAUDE_BIN --version",
+    "pinned_bin": "~/.local/bench-claude/node_modules/.bin/claude",
+    "install_cmd": "npm i --prefix ~/.local/bench-claude @anthropic-ai/claude-code@2.1.133",
+    "gate_active_since": "2026-05-08",
+    "version_history": {
+      "2026-04-26_to_2026-04-28": "2.1.119 (system) — Uniform, Yankee, Cipher, Iron, Beacon",
+      "2026-04-28": "2.1.121 (system, auto-update mid-cohort) — Bravo, Foxtrot",
+      "2026-05-08_drift_rerun": "2.1.133 (system) — Drift",
+      "2026-05-08_pin_bumped": "2.1.133 pinned via $BENCH_CLAUDE_BIN; 7 prior trials reset for rerun (Uniform, Yankee, Cipher, Bravo, Iron, Foxtrot, Beacon)",
+      "2026-05-08_full_cohort_reset": "All 72 trials wiped + tools bumped to latest stable. claude_cli 2.1.133 unchanged."
+    }
+  },
+  "base_model": "claude-opus-4-7",
+  "effort_level": "medium",
+  "context_window": "200k",
+  "betas": [],
+  "judges": {
+    "_comment": "Locked 2026-04-26 P4 canary as 4-judge; gpt54pro promoted 2026-05-07 after Uniform 3-round stability test (σ=5.13, best in panel; mean=95.7 — harshest scorer, ~35-65pt below others). 5 vendors: Anthropic / xAI / Z.ai / OpenAI / Xiaomi. Note (2026-05-16): gpt54pro slot routing flipped to cliproxy/gpt-5.4 for t4+ trials — see judges.gpt54pro.routing_history.",
+    "_weight_comment": "Weights are operator-chosen, pre-registered 2026-05-12. Anthropic (opus) and OpenAI (gpt54pro) carry more weight as canonical and harshest scorers respectively; other vendors at weight 1. This lockfile is the pre-registered source of record; the values are mirrored as a hardcoded constant in scripts/aggregate-results.sh and kept in sync manually (the aggregator does not parse this file).",
+    "opus":      {"model": "claude-opus-4-7",   "route": "anthropic-cli",      "temperature": "cli-default", "vendor": "anthropic", "weight": 3},
+    "grok420":   {"model": "x-ai/grok-4.20",    "route": "openrouter",         "provider_order": ["xai"], "temperature": 0, "vendor": "xai", "weight": 1},
+    "glm51":     {"model": "glm-5.1",           "route": "opencode-go-direct", "base_url": "https://opencode.ai/zen/go/v1/chat/completions", "temperature": 0, "vendor": "z-ai", "weight": 1},
+    "gpt54pro":  {
+      "model": "gpt-5.4",
+      "route": "cliproxy",
+      "base_url": "http://localhost:8317/v1/chat/completions",
+      "temperature": "model-fixed",
+      "max_output_tokens": 32000,
+      "vendor": "openai",
+      "weight": 2,
+      "routing_history": {
+        "_comment": "Slot name kept as 'gpt54pro' for aggregation continuity with t1-t3 JSONs. Upstream model changes effective t4+ (per operator request 2026-05-16 — local cliproxy was preferred but does not expose gpt-5.4-pro; gpt-5.4 was the closest available model). Re-judging t1-t3 was not triggered; per-task aggregation now contains a heterogeneous gpt54pro signal (t1-t3 = gpt-5.4-pro via OpenAI /v1/responses, t4+ = gpt-5.4 via cliproxy /v1/chat/completions). Document in any rank comparison that crosses t1-t3 vs t4+ on the gpt54pro lane.",
+        "t1_to_t3": {"effective": "2026-05-07", "model": "gpt-5.4-pro", "route": "openai-responses", "base_url": "https://api.openai.com/v1/responses"},
+        "t4_onward": {"effective": "2026-05-16", "model": "gpt-5.4",    "route": "cliproxy",         "base_url": "http://localhost:8317/v1/chat/completions"}
+      }
+    },
+    "mimo25pro": {"model": "mimo-v2.5-pro",     "route": "opencode-go-direct", "base_url": "https://opencode.ai/zen/go/v1/chat/completions", "temperature": 0, "vendor": "xiaomi", "weight": 1}
+  },
+  "judges_retired": [
+    "codex", "codex-oai", "codex-or", "qwen", "qwen-oc",
+    "deepseek", "deepseekv4", "grok", "glm", "glm51-or",
+    "gpt54mini", "kimi-oc", "o3", "o4mini"
+  ],
+  "prompt": {
+    "version": "v2",
+    "script": "scripts/generate-judge-prompt-combined-v2.sh",
+    "fixes": [
+      "R1 mechanical-fact pre-block (items 12/13/16/20)",
+      "R3 N/A defaults (items 18/19)",
+      "R5 per-item rationale field"
+    ]
+  },
+  "base_repos": {
+    "feature":  {"sha": "<bench-feature-sha>", "short": "<bench-feature-sha>"},
+    "bugfix":   {"sha": "<bench-bugfix-sha>", "short": "<bench-bugfix-sha>"},
+    "refactor": {"sha": "<bench-refactor-sha>", "short": "<bench-refactor-sha>"}
+  },
+  "tools": {
+    "pure": {
+      "kind": "baseline",
+      "note": "stock Claude CLI; no plugin/marketplace install. Reproducibility = claude_cli.version above."
+    },
+    "claudekit": {
+      "kind": "git-fork",
+      "source": "a private Infina fork of claudekit",
+      "branch": "master",
+      "sha": "<pinned>",
+      "short_sha": "cf636d9",
+      "upstream": "carlrannaberg/claudekit",
+      "upstream_latest": "v0.9.5",
+      "_note": "Pinned to a private Infina fork of claudekit master HEAD (already at origin/master tip 2026-04-25). Fork has unrelated history with upstream `carlrannaberg/claudekit` — `git merge` refuses; no shared ancestor. The fork is treated as the source of truth for v2 claudekit trials; upstream is referenced for context, not merged."
+    },
+    "gstack": {
+      "kind": "git-clone",
+      "source": "garrytan/gstack",
+      "sha": "443bde054c6d8a0e608ec099b841d508c2fa4be5",
+      "short_sha": "443bde05",
+      "version": "1.28.0.0",
+      "_note": "Bumped 2026-05-08 from 1.12.2.0 (62091639). Cloned by setup-tool-config.sh; checkout to this SHA after clone."
+    },
+    "bmad": {
+      "kind": "npm",
+      "package": "bmad-method",
+      "version": "6.6.0",
+      "tag_sha": "e6cdc93b79420fcc915d3bd3ca63387bc86af694",
+      "verify_cmd": "npx bmad-method@6.6.0 --version",
+      "_note": "Bumped 2026-05-08 from 6.4.0 (b119cc38)."
+    },
+    "omc": {
+      "kind": "claude-plugin",
+      "marketplace": "omc",
+      "marketplace_source": "https://github.com/Yeachan-Heo/oh-my-claudecode",
+      "plugin_id": "oh-my-claudecode",
+      "version": "4.13.6",
+      "tag_sha": "8b24a29dd7c64953ec0578339fc2cb173e627a74",
+      "_note": "Bumped 2026-05-08 from v4.13.4 (c1cd5d08). tag_sha is the commit SHA the plugin installer records."
+    },
+    "compound": {
+      "kind": "claude-plugin",
+      "marketplace": "compound-engineering-plugin",
+      "marketplace_source": "https://github.com/EveryInc/compound-engineering-plugin",
+      "plugin_id": "compound-engineering",
+      "version": "3.7.0",
+      "tag": "compound-engineering-v3.7.0",
+      "tag_sha": "0bb53dfad0a502d39727d2392c5038ff2a0d99ae",
+      "_note": "Bumped 2026-05-08 from v3.1.0 (ea8721eb). Entry point /compound-engineering:lfg unchanged."
+    },
+    "ecc": {
+      "kind": "claude-plugin",
+      "marketplace": "everything-claude-code",
+      "marketplace_source": "https://github.com/affaan-m/everything-claude-code",
+      "plugin_id": "everything-claude-code",
+      "version": "1.10.0",
+      "tag_sha": "846ffb75da9a5f4e677d927af1ad4a1951652267"
+    },
+    "superpower": {
+      "kind": "claude-plugin",
+      "marketplace": "superpowers-marketplace",
+      "marketplace_source": "https://github.com/obra/superpowers-marketplace",
+      "plugin_id": "superpowers",
+      "version": "5.1.0",
+      "marketplace_sha": "f2cbfbefebbfef77321e4c9abc9e949826bea9d7",
+      "_note": "Repo has no release tags; SHA is the only stable handle. Captured 2026-05-08 from setup-tool-config superpower 1 install. Bumped from v5.0.7/c4bbe651."
+    }
+  },
+  "cohort_reset_2026_05_08": {
+    "_comment": "Full v2 cohort reset. All 72 trials wiped, judge JSONs deleted, tool versions bumped to latest stable per CLAUDE.md cohort-rerun-symmetry rule.",
+    "wipe_scope": ["results/<tool>/t*/", "results/_blind-eval/", "results/bugfix/<tool>/t*/", "results/bugfix/_blind-eval/", "results/refactor/<tool>/t*/", "results/refactor/_blind-eval/", "results/final-report.md", "results/FINAL-REPORT-*.md", "runs/<tool>-t*/", "runs/bugfix/", "runs/refactor/", "config/<tool>-t*/", "config/bugfix/", "config/refactor/"],
+    "preserved": ["results/_archive/", "results/_human-reference/", "runs/base-feature/", "runs/base-bugfix/", "runs/base-refactor/", "runs/_*.sh", "config/judge-opus/", "config/judge-sonnet/"],
+    "version_bumps": {
+      "bmad":     {"from": "6.4.0/b119cc38",      "to": "6.6.0/e6cdc93b"},
+      "omc":      {"from": "v4.13.4/c1cd5d08",    "to": "v4.13.6/8b24a29d"},
+      "compound": {"from": "v3.1.0/ea8721eb",     "to": "v3.7.0/0bb53dfa"},
+      "gstack":   {"from": "1.12.2.0/62091639",   "to": "1.28.0.0/443bde05"},
+      "superpower": {"from": "v5.0.7/c4bbe651", "to": "v5.1.0/f2cbfbef (resolved at install time, captured 2026-05-08)"}
+    },
+    "no_change": ["claude_cli 2.1.133", "ecc v1.10.0/846ffb75", "claudekit cf636d9 (fork master)"]
+  }
+}

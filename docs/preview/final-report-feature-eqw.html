@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Final Report — feature (equal-weight comparator)</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/final-report.equal-weight.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="feature-equal-weight-aggregation-companion-to-final-reportmd" tabindex="-1"><a class="header-anchor" href="#feature-equal-weight-aggregation-companion-to-final-reportmd"><span>feature — Equal-Weight Aggregation (companion to final-report.md)</span></a></h1>
+<p>Generated: 2026-05-19T04:05:40Z</p>
+<h2 id="inputs-and-source-artifacts" tabindex="-1"><a class="header-anchor" href="#inputs-and-source-artifacts"><span>Inputs and source artifacts</span></a></h2>
+<p>Same inputs as the canonical <a href="final-report-feature.html"><code>final-report.md</code></a> — only the aggregation rule changes here.</p>
+<ul>
+<li><strong>Trial input (task PRD).</strong> <code>_blind-eval/prd.md</code> <span class="muted">(omitted from public release)</span>.</li>
+<li><strong>Per-tool prompt prefix.</strong> <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/manual-bench.sh"><code>scripts/manual-bench.sh</code></a>.</li>
+<li><strong>Judge input (verbatim request payload).</strong> <code>_blind-eval/Alpha/round1/</code> <span class="muted">(omitted from public release)</span> (<code>&lt;judge&gt;-judge.json.request.json</code>).</li>
+<li><strong>Judge prompt template.</strong> <code>scripts/generate-judge-prompt-combined-v2.sh</code> <span class="muted">(omitted from public release)</span>.</li>
+<li><strong>Methodology and threats to validity.</strong> <a href="paper.html"><code>PAPER.md</code></a> · <a href="readme.html"><code>README.md</code></a> · <a href="https://claude-tool-benchmark.pages.dev/">landing page</a>.</li>
+</ul>
+<h2 id="methodology" tabindex="-1"><a class="header-anchor" href="#methodology"><span>Methodology</span></a></h2>
+<ul>
+<li>Same cohort, judges, rubric, and 3-round layout as <code>final-report.md</code>.</li>
+<li><strong>Equal weighting</strong> — every judge contributes weight 1 (vs the published weighted mean’s opus×3, <code>GPT-5.4</code>×2, others×1).</li>
+<li>Use this to verify rank-stability under operator-neutral weighting.</li>
+</ul>
+<h2 id="ranking-equal-weight-mean" tabindex="-1"><a class="header-anchor" href="#ranking-equal-weight-mean"><span>Ranking (Equal-Weight Mean)</span></a></h2>
+<ol>
+<li><strong>ecc</strong> — 157.11/200</li>
+<li><strong>bmad</strong> — 147.65/200</li>
+<li><strong>pure</strong> — 147.44/200</li>
+<li><strong>superpower</strong> — 143.68/200</li>
+<li><strong>omc</strong> — 143.59/200</li>
+<li><strong>compound</strong> — 140.11/200</li>
+<li><strong>claudekit</strong> — 139.07/200</li>
+<li><strong>gstack</strong> — 137.80/200</li>
+</ol>
+<h2 id="detail" tabindex="-1"><a class="header-anchor" href="#detail"><span>Detail</span></a></h2>
+<p>Same cohort and judgments as <code>final-report.md</code>; only the aggregation rule differs. Column glossary:</p>
+<ul>
+<li><strong>Tool</strong> — the setup under test (8 rows). Sort order: Equal-Weight Mean, rank-1 first.</li>
+<li><strong>Equal-Weight Mean</strong> <em>(bold; canonical rank column for this comparator)</em> — straight arithmetic mean over all 75 judgments, every judge counted 1×. Compare against the Weighted Mean in <code>final-report.md</code> to verify rank-stability under operator-neutral weighting.</li>
+<li><strong>Pooled σ</strong> — standard deviation across all 75 judgments (raw spread).</li>
+<li><strong>within_σ</strong> — within-judge spread: per-judge σ across the 15 samples per tool (5 trials × 3 rounds), then averaged across judges. High = unstable trial-to-trial.</li>
+<li><strong>between_σ</strong> — between-judge spread: σ across the 5 per-judge means. High = judges systematically disagree about this tool.</li>
+<li><strong>N</strong> — total judgments aggregated. Should equal 75 when complete (5 trials × 5 judges × 3 rounds).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Equal-Weight Mean</th>
+<th>Pooled σ</th>
+<th>within_σ</th>
+<th>between_σ</th>
+<th>N</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ecc</td>
+<td><strong>157.11</strong></td>
+<td>16.46</td>
+<td>8.96</td>
+<td>15.29</td>
+<td>75</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td><strong>147.65</strong></td>
+<td>19.99</td>
+<td>7.02</td>
+<td>20.81</td>
+<td>75</td>
+</tr>
+<tr>
+<td>pure</td>
+<td><strong>147.44</strong></td>
+<td>16.05</td>
+<td>7.51</td>
+<td>15.72</td>
+<td>75</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td><strong>143.68</strong></td>
+<td>16.95</td>
+<td>10.06</td>
+<td>15.14</td>
+<td>75</td>
+</tr>
+<tr>
+<td>omc</td>
+<td><strong>143.59</strong></td>
+<td>19.00</td>
+<td>10.88</td>
+<td>17.29</td>
+<td>75</td>
+</tr>
+<tr>
+<td>compound</td>
+<td><strong>140.11</strong></td>
+<td>19.65</td>
+<td>13.26</td>
+<td>15.99</td>
+<td>75</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td><strong>139.07</strong></td>
+<td>19.67</td>
+<td>12.75</td>
+<td>16.83</td>
+<td>75</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td><strong>137.80</strong></td>
+<td>25.02</td>
+<td>18.35</td>
+<td>19.41</td>
+<td>75</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cross-rule-comparison" tabindex="-1"><a class="header-anchor" href="#cross-rule-comparison"><span>Cross-rule comparison</span></a></h2>
+<p>Compare <code>Equal-Weight Mean</code> here against <code>Weighted Mean</code> in <code>final-report.md</code>. Rank-1 is identical under both rules on every task in this corpus; mid-pack ranks 4–7 may swap by at most 2 positions.</p>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>results/final-report.equal-weight.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

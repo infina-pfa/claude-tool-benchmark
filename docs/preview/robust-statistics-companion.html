@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Robust-statistics Companion (median / trimmed mean)</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/robust-statistics-companion.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="robust-statistics-companion-median-and-trimmed-mean-view" tabindex="-1"><a class="header-anchor" href="#robust-statistics-companion-median-and-trimmed-mean-view"><span>Robust-statistics companion — median and trimmed-mean view</span></a></h1>
+<p>Generated: 2026-05-19 by <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/compute-robust-stats.py"><code>scripts/compute-robust-stats.py</code></a>.
+Source: same 1,800 canonical judge JSONs the headline report consumes.</p>
+<h2 id="why" tabindex="-1"><a class="header-anchor" href="#why"><span>Why</span></a></h2>
+<p>The pre-registered protocol forbids dropping any in-distribution trial. A single
+high-variance trial (<code>gstack</code> t4 refactor weighted mean <strong>36.42</strong> vs <strong>153.79–181.67</strong>
+on its other four trials) therefore moves the canonical refactor leaderboard
+and inflates σ_pool from ~10 to ~22, pushing refactor MDE from ~24 to <strong>44 pts</strong>.</p>
+<p>That trial is retained in the canonical report (correctly — selective post-hoc
+removal would bias the cohort). This companion view is the parallel question
+the canonical view cannot answer: <em>what does the leaderboard look like under
+location estimators that are insensitive to a single trial?</em></p>
+<ul>
+<li><strong>Median</strong> — natural robust analog of the mean. Invariant to a single outlier
+in either tail.</li>
+<li><strong>Trimmed mean (drop hi/lo)</strong> — average of the middle 3 of 5 trials. Less
+robust than median but uses more of the data.</li>
+</ul>
+<p><strong>This companion does not replace the canonical mean.</strong> The mean is the
+pre-registered primary statistic. This is a sensitivity view, published for
+the same reason the equal-weight report is — so readers can verify rank
+stability under alternative aggregation rules.</p>
+<h2 id="aggregation-rule-matches-canonical-aggregator" tabindex="-1"><a class="header-anchor" href="#aggregation-rule-matches-canonical-aggregator"><span>Aggregation rule (matches canonical aggregator)</span></a></h2>
+<ol>
+<li>Per (tool, trial), compute the per-judge mean across that trial’s 5 (or 15
+with rounds) judgments per judge.</li>
+<li>Combine the 5 per-judge means into a single per-trial weighted mean using
+the pre-registered weights from <code>versions.lock.json</code> (opus×3 / gpt54pro×2 /
+grok420 / glm51 / mimo25pro all ×1).</li>
+<li>Then take the <strong>median</strong> or <strong>trimmed mean</strong> of the 5 per-trial weighted
+means — the only change vs. the canonical aggregator, which takes the
+arithmetic mean at this last step.</li>
+</ol>
+<h2 id="refactor-where-the-trial-4-gstack-run-matters-most" tabindex="-1"><a class="header-anchor" href="#refactor-where-the-trial-4-gstack-run-matters-most"><span>Refactor — where the trial-4 gstack run matters most</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th style="text-align:right">Mean (canonical)</th>
+<th style="text-align:right">Median</th>
+<th style="text-align:right">Trimmed mean (drop hi/lo)</th>
+<th style="text-align:right">Trial spread</th>
+<th>Trial-level weighted means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pure</td>
+<td style="text-align:right"><strong>180.19</strong></td>
+<td style="text-align:right">179.58</td>
+<td style="text-align:right">179.72</td>
+<td style="text-align:right">4.5</td>
+<td>180.17 / 183.17 / 179.58 / 178.62 / 179.42</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td style="text-align:right"><strong>178.04</strong></td>
+<td style="text-align:right">177.33</td>
+<td style="text-align:right">177.58</td>
+<td style="text-align:right">3.9</td>
+<td>178.21 / 177.21 / 180.67 / 177.33 / 176.79</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td style="text-align:right"><strong>177.74</strong></td>
+<td style="text-align:right">177.96</td>
+<td style="text-align:right">177.68</td>
+<td style="text-align:right">4.0</td>
+<td>177.96 / 179.83 / 179.08 / 175.83 / 176.00</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td style="text-align:right"><strong>177.56</strong></td>
+<td style="text-align:right">177.67</td>
+<td style="text-align:right">177.14</td>
+<td style="text-align:right">8.0</td>
+<td>182.17 / 177.67 / 178.46 / 175.29 / 174.21</td>
+</tr>
+<tr>
+<td>compound</td>
+<td style="text-align:right"><strong>174.42</strong></td>
+<td style="text-align:right">174.88</td>
+<td style="text-align:right">174.71</td>
+<td style="text-align:right">8.2</td>
+<td>175.29 / 174.88 / 173.96 / 169.88 / 178.08</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td style="text-align:right"><strong>173.61</strong></td>
+<td style="text-align:right">175.46</td>
+<td style="text-align:right">176.11</td>
+<td style="text-align:right">18.7</td>
+<td>179.21 / 173.92 / 178.96 / 175.46 / 160.50</td>
+</tr>
+<tr>
+<td>omc</td>
+<td style="text-align:right"><strong>170.11</strong></td>
+<td style="text-align:right">171.33</td>
+<td style="text-align:right">171.43</td>
+<td style="text-align:right">15.2</td>
+<td>171.33 / 160.50 / 175.75 / 173.50 / 169.46</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td style="text-align:right"><strong>144.92</strong></td>
+<td style="text-align:right"><strong>174.58</strong></td>
+<td style="text-align:right">168.83</td>
+<td style="text-align:right"><strong>145.2</strong></td>
+<td>174.58 / 153.79 / 181.67 / <strong>36.42</strong> / 178.12</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Headline shift on refactor — gstack t4 is doing the work.</strong></p>
+<p>Under the canonical mean, <code>gstack</code> is rank-8 at 144.92, with a 25.2-pt gap
+from rank-7 (<code>omc</code> 170.11). Under the <strong>median</strong>, <code>gstack</code> is <strong>174.58</strong> —
+ahead of both <code>omc</code> (171.33) and <code>ecc</code> (175.46 — actually within 1 pt of
+gstack-median). The 4 well-behaved gstack trials (174.58 / 153.79 / 181.67 /
+178.12) put it firmly in the middle of the pack; the t4 collapse (36.42) is
+moving the gstack canonical figure by ~30 pts.</p>
+<p>Under the <strong>trimmed mean</strong> (drop t4=36.42 and t3=181.67) gstack lands at
+168.83 — still rank-8, but the gap to rank-7 narrows from 25.2 pts (mean) to
+2.6 pts.</p>
+<p><strong>Pure remains rank-1 on refactor under all three statistics.</strong> Top-4
+(<code>pure / claudekit / bmad / superpower</code>) is invariant. The story this view
+adds: the refactor leaderboard is even more obviously a statistical tie
+than the canonical mean already suggests. Removing the canonical mean’s
+sensitivity to one trial collapses the rank-1-to-rank-8 spread from 35.3
+pts (mean) to ~5.6 pts (median).</p>
+<h2 id="feature" tabindex="-1"><a class="header-anchor" href="#feature"><span>Feature</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th style="text-align:right">Mean (canonical)</th>
+<th style="text-align:right">Median</th>
+<th style="text-align:right">Trimmed mean</th>
+<th style="text-align:right">Trial spread</th>
+<th>Trial-level weighted means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ecc</td>
+<td style="text-align:right"><strong>153.30</strong></td>
+<td style="text-align:right">152.75</td>
+<td style="text-align:right">152.39</td>
+<td style="text-align:right">20.3</td>
+<td>149.67 / 152.75 / 144.50 / 164.83 / 154.75</td>
+</tr>
+<tr>
+<td>pure</td>
+<td style="text-align:right"><strong>143.13</strong></td>
+<td style="text-align:right">143.96</td>
+<td style="text-align:right">143.06</td>
+<td style="text-align:right">7.1</td>
+<td>140.00 / 146.79 / 139.71 / 143.96 / 145.21</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td style="text-align:right"><strong>141.33</strong></td>
+<td style="text-align:right">140.25</td>
+<td style="text-align:right">141.06</td>
+<td style="text-align:right">8.6</td>
+<td>140.12 / 142.79 / 140.25 / 137.46 / 146.04</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td style="text-align:right"><strong>140.16</strong></td>
+<td style="text-align:right">139.88</td>
+<td style="text-align:right">140.85</td>
+<td style="text-align:right">19.4</td>
+<td>144.29 / 148.83 / 138.38 / 129.42 / 139.88</td>
+</tr>
+<tr>
+<td>omc</td>
+<td style="text-align:right"><strong>139.49</strong></td>
+<td style="text-align:right">143.71</td>
+<td style="text-align:right">141.31</td>
+<td style="text-align:right">21.4</td>
+<td>146.00 / 126.08 / 134.21 / 147.46 / 143.71</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td style="text-align:right"><strong>135.04</strong></td>
+<td style="text-align:right">136.12</td>
+<td style="text-align:right">137.71</td>
+<td style="text-align:right">31.0</td>
+<td>135.62 / 115.54 / 146.54 / 141.38 / 136.12</td>
+</tr>
+<tr>
+<td>compound</td>
+<td style="text-align:right"><strong>134.67</strong></td>
+<td style="text-align:right">140.12</td>
+<td style="text-align:right">136.22</td>
+<td style="text-align:right">23.9</td>
+<td>141.58 / 144.29 / 140.12 / 120.38 / 126.96</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td style="text-align:right"><strong>131.98</strong></td>
+<td style="text-align:right">129.12</td>
+<td style="text-align:right">130.18</td>
+<td style="text-align:right">46.0</td>
+<td>111.67 / 129.12 / 123.75 / 157.71 / 137.67</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Feature — most ranks invariant, two rank-3 / rank-4 swaps in middle.</strong>
+Rank-1 (<code>ecc</code>) and rank-2 (<code>pure</code>) are stable across all three statistics.
+Under the median, <code>omc</code> rises from canonical rank-5 (139.49) to rank-4
+(143.71) on the back of a low-variance set of trials with one bottom-tail
+outlier (126.08); under the trimmed mean <code>omc</code> is also rank-4. <code>superpower</code>
+drops from canonical rank-4 to rank-5 under median/trimmed for the same
+reason — t4=129.42 pulls its mean up less than its median.</p>
+<p><code>claudekit</code> has the largest feature trial spread (31.0 pts; t2=115.54), and
+<code>compound</code> jumps from canonical rank-7 to median rank-5 (134.67→140.12) —
+both are sensitive to one bottom-tail trial each. Neither cross the rank-1
+or top-3 boundary.</p>
+<h2 id="bugfix" tabindex="-1"><a class="header-anchor" href="#bugfix"><span>Bugfix</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th style="text-align:right">Mean (canonical)</th>
+<th style="text-align:right">Median</th>
+<th style="text-align:right">Trimmed mean</th>
+<th style="text-align:right">Trial spread</th>
+<th>Trial-level weighted means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>claudekit</td>
+<td style="text-align:right"><strong>178.93</strong></td>
+<td style="text-align:right">184.25</td>
+<td style="text-align:right">181.85</td>
+<td style="text-align:right">30.3</td>
+<td>188.75 / 189.71 / 172.54 / 184.25 / 159.42</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td style="text-align:right"><strong>172.31</strong></td>
+<td style="text-align:right">175.08</td>
+<td style="text-align:right">175.43</td>
+<td style="text-align:right">36.8</td>
+<td>186.04 / 170.38 / 180.83 / 149.21 / 175.08</td>
+</tr>
+<tr>
+<td>pure</td>
+<td style="text-align:right"><strong>169.53</strong></td>
+<td style="text-align:right">165.00</td>
+<td style="text-align:right">169.32</td>
+<td style="text-align:right">25.0</td>
+<td>160.96 / 182.33 / 182.00 / 157.38 / 165.00</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td style="text-align:right"><strong>166.41</strong></td>
+<td style="text-align:right">167.12</td>
+<td style="text-align:right">166.24</td>
+<td style="text-align:right">8.4</td>
+<td>164.42 / 170.88 / 167.12 / 167.17 / 162.46</td>
+</tr>
+<tr>
+<td>compound</td>
+<td style="text-align:right"><strong>166.25</strong></td>
+<td style="text-align:right">164.12</td>
+<td style="text-align:right">166.00</td>
+<td style="text-align:right">16.7</td>
+<td>174.96 / 159.04 / 164.12 / 174.83 / 158.29</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td style="text-align:right"><strong>165.72</strong></td>
+<td style="text-align:right">160.25</td>
+<td style="text-align:right">164.61</td>
+<td style="text-align:right">29.8</td>
+<td>158.67 / 182.29 / 174.92 / 160.25 / 152.46</td>
+</tr>
+<tr>
+<td>omc</td>
+<td style="text-align:right"><strong>164.80</strong></td>
+<td style="text-align:right">159.67</td>
+<td style="text-align:right">163.81</td>
+<td style="text-align:right">33.3</td>
+<td>159.67 / 153.00 / 182.92 / 149.67 / 178.75</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td style="text-align:right"><strong>159.97</strong></td>
+<td style="text-align:right">161.38</td>
+<td style="text-align:right">160.10</td>
+<td style="text-align:right">12.4</td>
+<td>156.25 / 162.67 / 153.58 / 165.96 / 161.38</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bugfix — rank-1 (claudekit) stable.</strong> Median elevates claudekit’s
+margin (184.25 vs. ecc 175.08 = 9.2-pt median gap, similar to the 6.6-pt
+canonical mean gap). <code>bmad</code> drops from canonical rank-6 to median rank-7
+(165.72→160.25) — its mean is propped up by two right-tail trials
+(t2=182.29, t3=174.92). Top-3 (<code>claudekit / ecc / pure</code>) is identical
+under mean and trimmed mean; under median, <code>pure</code> (165.00) edges below
+<code>superpower</code> (167.12) — a rank-3 / rank-4 swap. <code>gstack</code> shows the
+smallest bugfix trial spread (12.4 pts) — well-behaved on this task.</p>
+<h2 id="how-to-read-this" tabindex="-1"><a class="header-anchor" href="#how-to-read-this"><span>How to read this</span></a></h2>
+<ul>
+<li><strong>Ordering changes under median or trimmed mean → canonical mean is
+absorbing trial outliers.</strong> Treat the canonical mean ranking with extra
+suspicion for tools showing large shifts.</li>
+<li><strong>Ordering invariant under all three statistics → ranking is robust to
+single-trial outliers within this corpus.</strong></li>
+</ul>
+<p>In this corpus:</p>
+<ul>
+<li><strong>Refactor gstack:</strong> rank-8 → rank-7 under median; t4 alone is doing
+~30 pts of work on the canonical mean. The only large-magnitude shift
+in the cohort.</li>
+<li><strong>Feature claudekit / compound / omc / superpower:</strong> swap by one rank
+in the middle of the table under median; none cross top-3.</li>
+<li><strong>Bugfix bmad / pure / superpower:</strong> swap by one rank in mid-table
+under median; rank-1 invariant.</li>
+<li><strong>Rank-1 invariant on every task across mean / median / trimmed.</strong> This
+matches the canonical report’s “rank-1 stable across weighted and
+equal-weight rules” finding and extends it to robust location estimators.</li>
+</ul>
+<p>This robust view <em>strengthens</em> — does not contradict — the canonical
+report’s “everything is a statistical tie” headline. The largest
+canonical-mean visual gap in the corpus (gstack refactor: 35.3 pts to
+rank-7) shrinks to ~5.6 pts under the median.</p>
+<h2 id="data-and-reproduction" tabindex="-1"><a class="header-anchor" href="#data-and-reproduction"><span>Data and reproduction</span></a></h2>
+<ul>
+<li><strong>Raw figures:</strong> <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/robust-statistics.json"><code>results/robust-statistics.json</code></a> —
+per-task, per-tool, per-trial weighted means + median + trimmed mean.</li>
+<li><strong>Source:</strong> the 1,800 canonical judge JSONs at
+<code>results/{,bugfix/,refactor/}_blind-eval/&lt;LABEL&gt;/[round*/]*-judge.json</code>.</li>
+<li><strong>Rule:</strong> same weighted-mean-of-per-judge-means at the trial level, same
+round-filter (label root ∪ <code>^round[0-9]+$</code>), same R1 override (applied
+in the canonical aggregation before this script reads).</li>
+<li><strong>Recompute:</strong> <code>python3 scripts/compute-robust-stats.py</code> regenerates
+<code>results/robust-statistics.json</code> deterministically.</li>
+</ul>
+<blockquote>
+<p>This companion view is <strong>not</strong> the pre-registered primary statistic.
+The canonical weighted-mean report is the headline; this file is a
+sensitivity check on what the leaderboard says under robust location
+estimators that are insensitive to a single trial’s score.</p>
+</blockquote>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>results/robust-statistics-companion.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

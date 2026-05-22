@@ -1,0 +1,2280 @@
+{
+  "bmad": {
+    "feature": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 21.41,
+        "median": 22.36
+      },
+      "main_turns": {
+        "mean": 156.33,
+        "median": 170.0
+      },
+      "sidechain_turns": {
+        "mean": 49.33,
+        "median": 51.0
+      },
+      "subagent_dispatches": {
+        "mean": 1.0,
+        "median": 1.0
+      },
+      "files_read": {
+        "mean": 47.0,
+        "median": 43.0
+      },
+      "distinct_files_read": {
+        "mean": 29.0,
+        "median": 27.0
+      },
+      "files_edited": {
+        "mean": 10.0,
+        "median": 9.0
+      },
+      "distinct_files_edited": {
+        "mean": 8.33,
+        "median": 8.0
+      },
+      "tool_config_reads": {
+        "mean": 6.0,
+        "median": 6.0
+      },
+      "target_repo_reads": {
+        "mean": 40.67,
+        "median": 36.0
+      },
+      "input_tokens": {
+        "mean": 2826.0,
+        "median": 3248.0
+      },
+      "output_tokens": {
+        "mean": 80702.0,
+        "median": 73658.0
+      },
+      "cache_hit_ratio_mean": 0.959,
+      "skills_invoked": {
+        "bmad-quick-dev": 617
+      },
+      "tools": {
+        "Bash": 248,
+        "Read": 141,
+        "Edit": 30,
+        "Write": 14,
+        "TaskUpdate": 14,
+        "TaskCreate": 7,
+        "Agent": 3,
+        "ToolSearch": 1
+      },
+      "subagent_types": {
+        "Explore": 3
+      },
+      "slash_commands": {
+        "/bmad-quick-dev": 6
+      },
+      "skill_token_cost": {
+        "bmad-quick-dev": {
+          "turns": 617,
+          "input": 8478,
+          "output": 242106,
+          "cache_read": 49455295,
+          "cache_creation": 2045578
+        }
+      }
+    },
+    "bugfix": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 9.52,
+        "median": 6.16
+      },
+      "main_turns": {
+        "mean": 83.33,
+        "median": 71.0
+      },
+      "sidechain_turns": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "subagent_dispatches": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "files_read": {
+        "mean": 15.33,
+        "median": 13.0
+      },
+      "distinct_files_read": {
+        "mean": 15.33,
+        "median": 13.0
+      },
+      "files_edited": {
+        "mean": 3.0,
+        "median": 1.0
+      },
+      "distinct_files_edited": {
+        "mean": 2.33,
+        "median": 2.0
+      },
+      "tool_config_reads": {
+        "mean": 2.67,
+        "median": 1.0
+      },
+      "target_repo_reads": {
+        "mean": 12.67,
+        "median": 12.0
+      },
+      "input_tokens": {
+        "mean": 100.0,
+        "median": 89.0
+      },
+      "output_tokens": {
+        "mean": 43326.0,
+        "median": 38399.0
+      },
+      "cache_hit_ratio_mean": 0.96,
+      "skills_invoked": {
+        "bmad-quick-dev": 250
+      },
+      "tools": {
+        "Bash": 110,
+        "Read": 46,
+        "Edit": 9,
+        "Write": 4,
+        "AskUserQuestion": 1
+      },
+      "subagent_types": {},
+      "slash_commands": {
+        "/bmad-quick-dev": 3
+      },
+      "skill_token_cost": {
+        "bmad-quick-dev": {
+          "turns": 250,
+          "input": 300,
+          "output": 129978,
+          "cache_read": 22429588,
+          "cache_creation": 865185
+        }
+      }
+    },
+    "refactor": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 82.11,
+        "median": 11.76
+      },
+      "main_turns": {
+        "mean": 168.0,
+        "median": 152.0
+      },
+      "sidechain_turns": {
+        "mean": 70.0,
+        "median": 64.0
+      },
+      "subagent_dispatches": {
+        "mean": 1.33,
+        "median": 1.0
+      },
+      "files_read": {
+        "mean": 45.33,
+        "median": 44.0
+      },
+      "distinct_files_read": {
+        "mean": 27.67,
+        "median": 25.0
+      },
+      "files_edited": {
+        "mean": 29.0,
+        "median": 27.0
+      },
+      "distinct_files_edited": {
+        "mean": 16.0,
+        "median": 15.0
+      },
+      "tool_config_reads": {
+        "mean": 4.67,
+        "median": 4.0
+      },
+      "target_repo_reads": {
+        "mean": 40.67,
+        "median": 40.0
+      },
+      "input_tokens": {
+        "mean": 2153.33,
+        "median": 727.0
+      },
+      "output_tokens": {
+        "mean": 140651.33,
+        "median": 150333.0
+      },
+      "cache_hit_ratio_mean": 0.959,
+      "skills_invoked": {
+        "bmad-quick-dev": 513
+      },
+      "tools": {
+        "Bash": 225,
+        "Read": 136,
+        "Edit": 87,
+        "Write": 24,
+        "TaskUpdate": 10,
+        "TaskCreate": 5,
+        "Agent": 4,
+        "ToolSearch": 1
+      },
+      "subagent_types": {
+        "Explore": 3,
+        "general-purpose": 1
+      },
+      "slash_commands": {
+        "/bmad-quick-dev": 3
+      },
+      "skill_token_cost": {
+        "bmad-quick-dev": {
+          "turns": 513,
+          "input": 6225,
+          "output": 321649,
+          "cache_read": 43287939,
+          "cache_creation": 2273332
+        }
+      }
+    }
+  },
+  "claudekit": {
+    "feature": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 97.16,
+        "median": 84.77
+      },
+      "main_turns": {
+        "mean": 116.0,
+        "median": 64.0
+      },
+      "sidechain_turns": {
+        "mean": 334.33,
+        "median": 244.0
+      },
+      "subagent_dispatches": {
+        "mean": 2.33,
+        "median": 2.0
+      },
+      "files_read": {
+        "mean": 67.33,
+        "median": 52.0
+      },
+      "distinct_files_read": {
+        "mean": 41.0,
+        "median": 40.0
+      },
+      "files_edited": {
+        "mean": 47.33,
+        "median": 29.0
+      },
+      "distinct_files_edited": {
+        "mean": 30.67,
+        "median": 29.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 67.0,
+        "median": 52.0
+      },
+      "input_tokens": {
+        "mean": 2949.0,
+        "median": 3158.0
+      },
+      "output_tokens": {
+        "mean": 116072.67,
+        "median": 95330.0
+      },
+      "cache_hit_ratio_mean": 0.979,
+      "skills_invoked": {
+        "cook": 1176,
+        "ck-plan": 175
+      },
+      "tools": {
+        "Bash": 502,
+        "Read": 202,
+        "Edit": 142,
+        "Write": 53,
+        "TaskUpdate": 13,
+        "TaskCreate": 7,
+        "Agent": 7,
+        "ToolSearch": 1,
+        "AskUserQuestion": 1
+      },
+      "subagent_types": {
+        "fullstack-developer": 4,
+        "Explore": 1,
+        "tester": 1,
+        "code-reviewer": 1
+      },
+      "slash_commands": {
+        "/ck-plan": 3,
+        "/cook": 3
+      },
+      "skill_token_cost": {
+        "ck-plan": {
+          "turns": 175,
+          "input": 3107,
+          "output": 73767,
+          "cache_read": 12073524,
+          "cache_creation": 717544
+        },
+        "cook": {
+          "turns": 1176,
+          "input": 5740,
+          "output": 274451,
+          "cache_read": 122806221,
+          "cache_creation": 2093517
+        }
+      }
+    },
+    "bugfix": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 21.21,
+        "median": 20.61
+      },
+      "main_turns": {
+        "mean": 92.67,
+        "median": 93.0
+      },
+      "sidechain_turns": {
+        "mean": 38.67,
+        "median": 55.0
+      },
+      "subagent_dispatches": {
+        "mean": 0.67,
+        "median": 1.0
+      },
+      "files_read": {
+        "mean": 20.67,
+        "median": 24.0
+      },
+      "distinct_files_read": {
+        "mean": 14.33,
+        "median": 14.0
+      },
+      "files_edited": {
+        "mean": 2.33,
+        "median": 2.0
+      },
+      "distinct_files_edited": {
+        "mean": 6.33,
+        "median": 8.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 20.67,
+        "median": 24.0
+      },
+      "input_tokens": {
+        "mean": 246.33,
+        "median": 258.0
+      },
+      "output_tokens": {
+        "mean": 43712.67,
+        "median": 41948.0
+      },
+      "cache_hit_ratio_mean": 0.972,
+      "skills_invoked": {
+        "ck-plan": 211,
+        "cook": 183
+      },
+      "tools": {
+        "Bash": 157,
+        "Read": 62,
+        "Write": 14,
+        "Edit": 7,
+        "Agent": 2
+      },
+      "subagent_types": {
+        "Explore": 2
+      },
+      "slash_commands": {
+        "/ck-plan": 3,
+        "/cook": 3
+      },
+      "skill_token_cost": {
+        "ck-plan": {
+          "turns": 211,
+          "input": 490,
+          "output": 57487,
+          "cache_read": 12145779,
+          "cache_creation": 707521
+        },
+        "cook": {
+          "turns": 183,
+          "input": 249,
+          "output": 73651,
+          "cache_read": 21134790,
+          "cache_creation": 240012
+        }
+      }
+    },
+    "refactor": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 38.16,
+        "median": 30.56
+      },
+      "main_turns": {
+        "mean": 147.67,
+        "median": 137.0
+      },
+      "sidechain_turns": {
+        "mean": 19.67,
+        "median": 0.0
+      },
+      "subagent_dispatches": {
+        "mean": 0.33,
+        "median": 0.0
+      },
+      "files_read": {
+        "mean": 25.33,
+        "median": 25.0
+      },
+      "distinct_files_read": {
+        "mean": 17.0,
+        "median": 17.0
+      },
+      "files_edited": {
+        "mean": 24.67,
+        "median": 19.0
+      },
+      "distinct_files_edited": {
+        "mean": 19.67,
+        "median": 19.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 25.33,
+        "median": 25.0
+      },
+      "input_tokens": {
+        "mean": 353.33,
+        "median": 275.0
+      },
+      "output_tokens": {
+        "mean": 82196.67,
+        "median": 85159.0
+      },
+      "cache_hit_ratio_mean": 0.983,
+      "skills_invoked": {
+        "cook": 348,
+        "ck-plan": 154
+      },
+      "tools": {
+        "Bash": 162,
+        "Read": 76,
+        "Edit": 74,
+        "Write": 28,
+        "AskUserQuestion": 1,
+        "Agent": 1
+      },
+      "subagent_types": {
+        "Explore": 1
+      },
+      "slash_commands": {
+        "/ck-plan": 3,
+        "/cook": 3,
+        "/copy": 2
+      },
+      "skill_token_cost": {
+        "ck-plan": {
+          "turns": 154,
+          "input": 576,
+          "output": 69178,
+          "cache_read": 10094814,
+          "cache_creation": 582698
+        },
+        "cook": {
+          "turns": 348,
+          "input": 484,
+          "output": 177412,
+          "cache_read": 60315016,
+          "cache_creation": 521129
+        }
+      }
+    }
+  },
+  "compound": {
+    "feature": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 22.0,
+        "median": 19.68
+      },
+      "main_turns": {
+        "mean": 165.0,
+        "median": 149.0
+      },
+      "sidechain_turns": {
+        "mean": 53.33,
+        "median": 0.0
+      },
+      "subagent_dispatches": {
+        "mean": 1.67,
+        "median": 0.0
+      },
+      "files_read": {
+        "mean": 25.0,
+        "median": 15.0
+      },
+      "distinct_files_read": {
+        "mean": 17.67,
+        "median": 15.0
+      },
+      "files_edited": {
+        "mean": 11.67,
+        "median": 10.0
+      },
+      "distinct_files_edited": {
+        "mean": 16.0,
+        "median": 13.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 25.0,
+        "median": 15.0
+      },
+      "input_tokens": {
+        "mean": 3720.0,
+        "median": 182.0
+      },
+      "output_tokens": {
+        "mean": 107605.0,
+        "median": 83723.0
+      },
+      "cache_hit_ratio_mean": 0.977,
+      "skills_invoked": {
+        "compound-engineering:ce-work": 306,
+        "compound-engineering:ce-code-review": 225,
+        "compound-engineering:ce-plan": 118,
+        "compound-engineering:lfg": 6,
+        "Skill:compound-engineering:ce-plan": 3,
+        "Skill:compound-engineering:ce-work": 3,
+        "Skill:compound-engineering:ce-code-review": 2
+      },
+      "tools": {
+        "Bash": 298,
+        "Read": 75,
+        "Edit": 35,
+        "Write": 33,
+        "TaskUpdate": 16,
+        "Skill": 8,
+        "TaskCreate": 8,
+        "Agent": 5,
+        "ToolSearch": 2
+      },
+      "subagent_types": {
+        "compound-engineering:ce-correctness-reviewer": 1,
+        "compound-engineering:ce-adversarial-reviewer": 1,
+        "compound-engineering:ce-api-contract-reviewer": 1,
+        "compound-engineering:ce-testing-reviewer": 1,
+        "compound-engineering:ce-maintainability-reviewer": 1
+      },
+      "slash_commands": {
+        "/compound-engineering:lfg": 3,
+        "/login": 1
+      },
+      "skill_token_cost": {
+        "compound-engineering:lfg": {
+          "turns": 6,
+          "input": 30,
+          "output": 1440,
+          "cache_read": 42424,
+          "cache_creation": 263544
+        },
+        "compound-engineering:ce-plan": {
+          "turns": 118,
+          "input": 142,
+          "output": 80514,
+          "cache_read": 12475591,
+          "cache_creation": 451658
+        },
+        "compound-engineering:ce-work": {
+          "turns": 306,
+          "input": 349,
+          "output": 132134,
+          "cache_read": 57533435,
+          "cache_creation": 788308
+        },
+        "compound-engineering:ce-code-review": {
+          "turns": 225,
+          "input": 10639,
+          "output": 108727,
+          "cache_read": 23308341,
+          "cache_creation": 742292
+        }
+      }
+    },
+    "bugfix": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 7.22,
+        "median": 6.63
+      },
+      "main_turns": {
+        "mean": 83.0,
+        "median": 74.0
+      },
+      "sidechain_turns": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "subagent_dispatches": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "files_read": {
+        "mean": 14.0,
+        "median": 14.0
+      },
+      "distinct_files_read": {
+        "mean": 13.0,
+        "median": 13.0
+      },
+      "files_edited": {
+        "mean": 1.0,
+        "median": 1.0
+      },
+      "distinct_files_edited": {
+        "mean": 2.67,
+        "median": 3.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 14.0,
+        "median": 14.0
+      },
+      "input_tokens": {
+        "mean": 108.33,
+        "median": 97.0
+      },
+      "output_tokens": {
+        "mean": 36712.67,
+        "median": 37589.0
+      },
+      "cache_hit_ratio_mean": 0.972,
+      "skills_invoked": {
+        "compound-engineering:ce-plan": 137,
+        "compound-engineering:ce-work": 99,
+        "compound-engineering:ce-code-review": 7,
+        "compound-engineering:lfg": 6,
+        "Skill:compound-engineering:ce-plan": 3,
+        "Skill:compound-engineering:ce-work": 2,
+        "Skill:compound-engineering:ce-code-review": 1
+      },
+      "tools": {
+        "Bash": 108,
+        "Read": 42,
+        "Skill": 6,
+        "Write": 6,
+        "Edit": 3
+      },
+      "subagent_types": {},
+      "slash_commands": {
+        "/compound-engineering:lfg": 3
+      },
+      "skill_token_cost": {
+        "compound-engineering:lfg": {
+          "turns": 6,
+          "input": 30,
+          "output": 1162,
+          "cache_read": 95602,
+          "cache_creation": 205344
+        },
+        "compound-engineering:ce-plan": {
+          "turns": 137,
+          "input": 161,
+          "output": 56615,
+          "cache_read": 13171402,
+          "cache_creation": 369892
+        },
+        "compound-engineering:ce-work": {
+          "turns": 99,
+          "input": 115,
+          "output": 45725,
+          "cache_read": 14696294,
+          "cache_creation": 176190
+        },
+        "compound-engineering:ce-code-review": {
+          "turns": 7,
+          "input": 19,
+          "output": 6636,
+          "cache_read": 1441754,
+          "cache_creation": 101897
+        }
+      }
+    },
+    "refactor": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 15.03,
+        "median": 14.56
+      },
+      "main_turns": {
+        "mean": 165.33,
+        "median": 156.0
+      },
+      "sidechain_turns": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "subagent_dispatches": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "files_read": {
+        "mean": 22.33,
+        "median": 24.0
+      },
+      "distinct_files_read": {
+        "mean": 17.0,
+        "median": 18.0
+      },
+      "files_edited": {
+        "mean": 27.0,
+        "median": 28.0
+      },
+      "distinct_files_edited": {
+        "mean": 15.33,
+        "median": 15.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 22.0,
+        "median": 23.0
+      },
+      "input_tokens": {
+        "mean": 203.33,
+        "median": 184.0
+      },
+      "output_tokens": {
+        "mean": 97218.67,
+        "median": 92655.0
+      },
+      "cache_hit_ratio_mean": 0.983,
+      "skills_invoked": {
+        "compound-engineering:ce-work": 322,
+        "compound-engineering:ce-plan": 132,
+        "compound-engineering:ce-code-review": 29,
+        "compound-engineering:ce-commit-push-pr": 7,
+        "compound-engineering:lfg": 6,
+        "Skill:compound-engineering:ce-plan": 3,
+        "Skill:compound-engineering:ce-work": 3,
+        "Skill:compound-engineering:ce-code-review": 2
+      },
+      "tools": {
+        "Bash": 168,
+        "Edit": 81,
+        "Read": 67,
+        "Write": 15,
+        "Skill": 9
+      },
+      "subagent_types": {},
+      "slash_commands": {
+        "/compound-engineering:lfg": 3
+      },
+      "skill_token_cost": {
+        "compound-engineering:lfg": {
+          "turns": 6,
+          "input": 30,
+          "output": 1096,
+          "cache_read": 94662,
+          "cache_creation": 205822
+        },
+        "compound-engineering:ce-plan": {
+          "turns": 132,
+          "input": 156,
+          "output": 117922,
+          "cache_read": 13156657,
+          "cache_creation": 423659
+        },
+        "compound-engineering:ce-work": {
+          "turns": 322,
+          "input": 354,
+          "output": 149892,
+          "cache_read": 57606831,
+          "cache_creation": 434233
+        },
+        "compound-engineering:ce-code-review": {
+          "turns": 29,
+          "input": 53,
+          "output": 16888,
+          "cache_read": 7675923,
+          "cache_creation": 212173
+        },
+        "compound-engineering:ce-commit-push-pr": {
+          "turns": 7,
+          "input": 17,
+          "output": 5858,
+          "cache_read": 1980165,
+          "cache_creation": 15245
+        }
+      }
+    }
+  },
+  "ecc": {
+    "feature": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 634.14,
+        "median": 634.21
+      },
+      "main_turns": {
+        "mean": 215.67,
+        "median": 258.0
+      },
+      "sidechain_turns": {
+        "mean": 259.0,
+        "median": 0.0
+      },
+      "subagent_dispatches": {
+        "mean": 1.67,
+        "median": 0.0
+      },
+      "files_read": {
+        "mean": 59.0,
+        "median": 38.0
+      },
+      "distinct_files_read": {
+        "mean": 36.0,
+        "median": 23.0
+      },
+      "files_edited": {
+        "mean": 56.33,
+        "median": 40.0
+      },
+      "distinct_files_edited": {
+        "mean": 27.0,
+        "median": 17.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 59.0,
+        "median": 38.0
+      },
+      "input_tokens": {
+        "mean": 589.67,
+        "median": 448.0
+      },
+      "output_tokens": {
+        "mean": 175379.0,
+        "median": 171989.0
+      },
+      "cache_hit_ratio_mean": 0.976,
+      "skills_invoked": {
+        "everything-claude-code:plan": 82
+      },
+      "tools": {
+        "Bash": 470,
+        "Read": 177,
+        "Edit": 169,
+        "TaskUpdate": 63,
+        "TaskCreate": 34,
+        "Write": 31,
+        "Grep": 16,
+        "Agent": 5,
+        "ToolSearch": 3,
+        "Glob": 1
+      },
+      "subagent_types": {
+        "general-purpose": 4,
+        "everything-claude-code:planner": 1
+      },
+      "slash_commands": {
+        "/everything-claude-code:plan": 3
+      },
+      "skill_token_cost": {
+        "everything-claude-code:plan": {
+          "turns": 82,
+          "input": 132,
+          "output": 48956,
+          "cache_read": 5122598,
+          "cache_creation": 801840
+        }
+      }
+    },
+    "bugfix": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 22.5,
+        "median": 22.49
+      },
+      "main_turns": {
+        "mean": 46.0,
+        "median": 46.0
+      },
+      "sidechain_turns": {
+        "mean": 58.33,
+        "median": 70.0
+      },
+      "subagent_dispatches": {
+        "mean": 1.0,
+        "median": 1.0
+      },
+      "files_read": {
+        "mean": 22.67,
+        "median": 22.0
+      },
+      "distinct_files_read": {
+        "mean": 16.0,
+        "median": 15.0
+      },
+      "files_edited": {
+        "mean": 1.33,
+        "median": 1.0
+      },
+      "distinct_files_edited": {
+        "mean": 2.0,
+        "median": 2.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 22.67,
+        "median": 22.0
+      },
+      "input_tokens": {
+        "mean": 207.0,
+        "median": 196.0
+      },
+      "output_tokens": {
+        "mean": 28855.0,
+        "median": 28128.0
+      },
+      "cache_hit_ratio_mean": 0.952,
+      "skills_invoked": {
+        "everything-claude-code:plan": 206
+      },
+      "tools": {
+        "Bash": 106,
+        "Read": 68,
+        "Edit": 4,
+        "Agent": 3,
+        "Write": 3,
+        "bash": 1
+      },
+      "subagent_types": {
+        "Explore": 3
+      },
+      "slash_commands": {
+        "/everything-claude-code:plan": 3
+      },
+      "skill_token_cost": {
+        "everything-claude-code:plan": {
+          "turns": 206,
+          "input": 484,
+          "output": 40696,
+          "cache_read": 11964642,
+          "cache_creation": 856063
+        }
+      }
+    },
+    "refactor": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 26.3,
+        "median": 27.84
+      },
+      "main_turns": {
+        "mean": 144.0,
+        "median": 147.0
+      },
+      "sidechain_turns": {
+        "mean": 41.0,
+        "median": 41.0
+      },
+      "subagent_dispatches": {
+        "mean": 1.0,
+        "median": 1.0
+      },
+      "files_read": {
+        "mean": 36.67,
+        "median": 36.0
+      },
+      "distinct_files_read": {
+        "mean": 20.33,
+        "median": 21.0
+      },
+      "files_edited": {
+        "mean": 25.0,
+        "median": 19.0
+      },
+      "distinct_files_edited": {
+        "mean": 16.67,
+        "median": 15.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 36.67,
+        "median": 36.0
+      },
+      "input_tokens": {
+        "mean": 5391.0,
+        "median": 3969.0
+      },
+      "output_tokens": {
+        "mean": 80699.33,
+        "median": 72886.0
+      },
+      "cache_hit_ratio_mean": 0.975,
+      "skills_invoked": {
+        "everything-claude-code:plan": 139
+      },
+      "tools": {
+        "Bash": 140,
+        "Read": 110,
+        "Edit": 75,
+        "Grep": 32,
+        "Write": 20,
+        "Glob": 16,
+        "Agent": 3
+      },
+      "subagent_types": {
+        "everything-claude-code:planner": 2,
+        "Plan": 1
+      },
+      "slash_commands": {
+        "/everything-claude-code:plan": 3
+      },
+      "skill_token_cost": {
+        "everything-claude-code:plan": {
+          "turns": 139,
+          "input": 15717,
+          "output": 47714,
+          "cache_read": 7694038,
+          "cache_creation": 1083004
+        }
+      }
+    }
+  },
+  "gstack": {
+    "feature": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 40.98,
+        "median": 41.71
+      },
+      "main_turns": {
+        "mean": 155.67,
+        "median": 161.0
+      },
+      "sidechain_turns": {
+        "mean": 31.0,
+        "median": 15.0
+      },
+      "subagent_dispatches": {
+        "mean": 2.67,
+        "median": 2.0
+      },
+      "files_read": {
+        "mean": 21.0,
+        "median": 26.0
+      },
+      "distinct_files_read": {
+        "mean": 14.33,
+        "median": 17.0
+      },
+      "files_edited": {
+        "mean": 13.33,
+        "median": 15.0
+      },
+      "distinct_files_edited": {
+        "mean": 13.0,
+        "median": 13.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 21.0,
+        "median": 26.0
+      },
+      "input_tokens": {
+        "mean": 2800.67,
+        "median": 247.0
+      },
+      "output_tokens": {
+        "mean": 136852.67,
+        "median": 140482.0
+      },
+      "cache_hit_ratio_mean": 0.969,
+      "skills_invoked": {
+        "autoplan": 206,
+        "ship": 54
+      },
+      "tools": {
+        "Bash": 156,
+        "Read": 63,
+        "Edit": 40,
+        "Write": 31,
+        "TaskUpdate": 30,
+        "TaskCreate": 15,
+        "AskUserQuestion": 8,
+        "Agent": 8,
+        "TaskList": 2,
+        "ToolSearch": 1
+      },
+      "subagent_types": {
+        "general-purpose": 7,
+        "Explore": 1
+      },
+      "slash_commands": {
+        "/autoplan": 3,
+        "/ship": 3
+      },
+      "skill_token_cost": {
+        "autoplan": {
+          "turns": 206,
+          "input": 403,
+          "output": 163706,
+          "cache_read": 16087547,
+          "cache_creation": 1279683
+        },
+        "ship": {
+          "turns": 54,
+          "input": 82,
+          "output": 30743,
+          "cache_read": 13627642,
+          "cache_creation": 478616
+        }
+      }
+    },
+    "bugfix": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 5.93,
+        "median": 5.93
+      },
+      "main_turns": {
+        "mean": 72.0,
+        "median": 72.0
+      },
+      "sidechain_turns": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "subagent_dispatches": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "files_read": {
+        "mean": 12.67,
+        "median": 15.0
+      },
+      "distinct_files_read": {
+        "mean": 11.67,
+        "median": 14.0
+      },
+      "files_edited": {
+        "mean": 1.33,
+        "median": 1.0
+      },
+      "distinct_files_edited": {
+        "mean": 2.0,
+        "median": 2.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 12.67,
+        "median": 15.0
+      },
+      "input_tokens": {
+        "mean": 82.0,
+        "median": 82.0
+      },
+      "output_tokens": {
+        "mean": 28814.67,
+        "median": 28389.0
+      },
+      "cache_hit_ratio_mean": 0.971,
+      "skills_invoked": {
+        "investigate": 216
+      },
+      "tools": {
+        "Bash": 99,
+        "Read": 38,
+        "Edit": 4,
+        "Write": 4
+      },
+      "subagent_types": {},
+      "slash_commands": {
+        "/investigate": 3
+      },
+      "skill_token_cost": {
+        "investigate": {
+          "turns": 216,
+          "input": 246,
+          "output": 86444,
+          "cache_read": 23035833,
+          "cache_creation": 679491
+        }
+      }
+    },
+    "refactor": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 46.25,
+        "median": 33.31
+      },
+      "main_turns": {
+        "mean": 258.67,
+        "median": 254.0
+      },
+      "sidechain_turns": {
+        "mean": 42.67,
+        "median": 25.0
+      },
+      "subagent_dispatches": {
+        "mean": 2.67,
+        "median": 2.0
+      },
+      "files_read": {
+        "mean": 40.33,
+        "median": 39.0
+      },
+      "distinct_files_read": {
+        "mean": 22.33,
+        "median": 21.0
+      },
+      "files_edited": {
+        "mean": 32.67,
+        "median": 29.0
+      },
+      "distinct_files_edited": {
+        "mean": 21.0,
+        "median": 19.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 40.33,
+        "median": 39.0
+      },
+      "input_tokens": {
+        "mean": 437.33,
+        "median": 397.0
+      },
+      "output_tokens": {
+        "mean": 168735.33,
+        "median": 149486.0
+      },
+      "cache_hit_ratio_mean": 0.978,
+      "skills_invoked": {
+        "ship": 282,
+        "autoplan": 250
+      },
+      "tools": {
+        "Bash": 258,
+        "Read": 121,
+        "Edit": 98,
+        "TaskUpdate": 39,
+        "Write": 32,
+        "TaskCreate": 19,
+        "AskUserQuestion": 8,
+        "Agent": 8,
+        "ToolSearch": 2
+      },
+      "subagent_types": {
+        "general-purpose": 7,
+        "Explore": 1
+      },
+      "slash_commands": {
+        "/autoplan": 4,
+        "/ship": 4
+      },
+      "skill_token_cost": {
+        "autoplan": {
+          "turns": 250,
+          "input": 559,
+          "output": 185838,
+          "cache_read": 17651644,
+          "cache_creation": 2023604
+        },
+        "ship": {
+          "turns": 282,
+          "input": 336,
+          "output": 141331,
+          "cache_read": 74869650,
+          "cache_creation": 1044614
+        }
+      }
+    }
+  },
+  "omc": {
+    "feature": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 223.54,
+        "median": 114.64
+      },
+      "main_turns": {
+        "mean": 170.67,
+        "median": 168.0
+      },
+      "sidechain_turns": {
+        "mean": 1556.0,
+        "median": 984.0
+      },
+      "subagent_dispatches": {
+        "mean": 10.67,
+        "median": 11.0
+      },
+      "files_read": {
+        "mean": 227.0,
+        "median": 169.0
+      },
+      "distinct_files_read": {
+        "mean": 63.67,
+        "median": 59.0
+      },
+      "files_edited": {
+        "mean": 126.33,
+        "median": 82.0
+      },
+      "distinct_files_edited": {
+        "mean": 37.0,
+        "median": 28.0
+      },
+      "tool_config_reads": {
+        "mean": 17.33,
+        "median": 21.0
+      },
+      "target_repo_reads": {
+        "mean": 209.67,
+        "median": 148.0
+      },
+      "input_tokens": {
+        "mean": 7158.67,
+        "median": 4204.0
+      },
+      "output_tokens": {
+        "mean": 510524.67,
+        "median": 294491.0
+      },
+      "cache_hit_ratio_mean": 0.928,
+      "skills_invoked": {
+        "oh-my-claudecode:team": 1225,
+        "oh-my-claudecode:ralplan": 387,
+        "oh-my-claudecode:hud": 83,
+        "oh-my-claudecode:omc-setup": 36,
+        "oh-my-claudecode:cancel": 6,
+        "Skill:oh-my-claudecode:hud": 3
+      },
+      "tools": {
+        "Bash": 1620,
+        "Read": 681,
+        "Edit": 379,
+        "Write": 112,
+        "TaskUpdate": 71,
+        "ToolSearch": 53,
+        "SendMessage": 34,
+        "Agent": 32,
+        "TaskList": 29,
+        "TaskGet": 20,
+        "TaskCreate": 15,
+        "AskUserQuestion": 10
+      },
+      "subagent_types": {
+        "oh-my-claudecode:executor": 11,
+        "oh-my-claudecode:architect": 8,
+        "oh-my-claudecode:critic": 7,
+        "oh-my-claudecode:planner": 5,
+        "Explore": 1
+      },
+      "slash_commands": {
+        "/oh-my-claudecode:team": 5,
+        "/oh-my-claudecode:omc-setup": 3,
+        "/clear": 3,
+        "/oh-my-claudecode:ralplan": 3,
+        "/login": 3,
+        "/oh-my-claudecode:cancel": 1
+      },
+      "skill_token_cost": {
+        "oh-my-claudecode:omc-setup": {
+          "turns": 36,
+          "input": 194,
+          "output": 8405,
+          "cache_read": 1524665,
+          "cache_creation": 260692
+        },
+        "oh-my-claudecode:hud": {
+          "turns": 83,
+          "input": 448,
+          "output": 35625,
+          "cache_read": 5392090,
+          "cache_creation": 110225
+        },
+        "oh-my-claudecode:ralplan": {
+          "turns": 387,
+          "input": 1958,
+          "output": 175293,
+          "cache_read": 18967650,
+          "cache_creation": 6181979
+        },
+        "oh-my-claudecode:team": {
+          "turns": 1225,
+          "input": 4770,
+          "output": 290393,
+          "cache_read": 109540090,
+          "cache_creation": 5936480
+        },
+        "oh-my-claudecode:cancel": {
+          "turns": 6,
+          "input": 29,
+          "output": 1425,
+          "cache_read": 1729537,
+          "cache_creation": 21413
+        }
+      }
+    },
+    "bugfix": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 37.6,
+        "median": 28.76
+      },
+      "main_turns": {
+        "mean": 109.0,
+        "median": 109.0
+      },
+      "sidechain_turns": {
+        "mean": 122.0,
+        "median": 56.0
+      },
+      "subagent_dispatches": {
+        "mean": 3.67,
+        "median": 4.0
+      },
+      "files_read": {
+        "mean": 35.33,
+        "median": 35.0
+      },
+      "distinct_files_read": {
+        "mean": 20.33,
+        "median": 20.0
+      },
+      "files_edited": {
+        "mean": 7.67,
+        "median": 6.0
+      },
+      "distinct_files_edited": {
+        "mean": 5.67,
+        "median": 6.0
+      },
+      "tool_config_reads": {
+        "mean": 0.33,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 35.0,
+        "median": 35.0
+      },
+      "input_tokens": {
+        "mean": 1211.33,
+        "median": 909.0
+      },
+      "output_tokens": {
+        "mean": 78633.0,
+        "median": 66067.0
+      },
+      "cache_hit_ratio_mean": 0.916,
+      "skills_invoked": {
+        "oh-my-claudecode:ralplan": 302,
+        "oh-my-claudecode:team": 280,
+        "oh-my-claudecode:hud": 69,
+        "oh-my-claudecode:omc-setup": 36,
+        "Skill:oh-my-claudecode:hud": 3,
+        "Skill:oh-my-claudecode:team": 1
+      },
+      "tools": {
+        "Bash": 241,
+        "Read": 106,
+        "Edit": 23,
+        "Agent": 11,
+        "AskUserQuestion": 11,
+        "Skill": 4,
+        "Write": 4,
+        "ToolSearch": 2,
+        "ScheduleWakeup": 1
+      },
+      "subagent_types": {
+        "oh-my-claudecode:critic": 3,
+        "oh-my-claudecode:planner": 2,
+        "oh-my-claudecode:architect": 2,
+        "oh-my-claudecode:executor": 2,
+        "Explore": 2
+      },
+      "slash_commands": {
+        "/clear": 3,
+        "/oh-my-claudecode:ralplan": 3,
+        "/oh-my-claudecode:omc-setup": 3,
+        "/oh-my-claudecode:team": 2
+      },
+      "skill_token_cost": {
+        "oh-my-claudecode:ralplan": {
+          "turns": 302,
+          "input": 1377,
+          "output": 112552,
+          "cache_read": 15481868,
+          "cache_creation": 1861020
+        },
+        "oh-my-claudecode:team": {
+          "turns": 280,
+          "input": 1647,
+          "output": 84564,
+          "cache_read": 26267284,
+          "cache_creation": 1592693
+        },
+        "oh-my-claudecode:omc-setup": {
+          "turns": 36,
+          "input": 195,
+          "output": 7842,
+          "cache_read": 1564521,
+          "cache_creation": 230382
+        },
+        "oh-my-claudecode:hud": {
+          "turns": 69,
+          "input": 379,
+          "output": 28150,
+          "cache_read": 4392903,
+          "cache_creation": 104340
+        }
+      }
+    },
+    "refactor": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 185.03,
+        "median": 243.63
+      },
+      "main_turns": {
+        "mean": 186.67,
+        "median": 140.0
+      },
+      "sidechain_turns": {
+        "mean": 481.33,
+        "median": 402.0
+      },
+      "subagent_dispatches": {
+        "mean": 12.33,
+        "median": 12.0
+      },
+      "files_read": {
+        "mean": 76.0,
+        "median": 61.0
+      },
+      "distinct_files_read": {
+        "mean": 36.33,
+        "median": 29.0
+      },
+      "files_edited": {
+        "mean": 34.0,
+        "median": 33.0
+      },
+      "distinct_files_edited": {
+        "mean": 23.0,
+        "median": 23.0
+      },
+      "tool_config_reads": {
+        "mean": 4.67,
+        "median": 6.0
+      },
+      "target_repo_reads": {
+        "mean": 71.33,
+        "median": 55.0
+      },
+      "input_tokens": {
+        "mean": 3233.33,
+        "median": 3361.0
+      },
+      "output_tokens": {
+        "mean": 247132.0,
+        "median": 219312.0
+      },
+      "cache_hit_ratio_mean": 0.926,
+      "skills_invoked": {
+        "oh-my-claudecode:team": 648,
+        "oh-my-claudecode:ralplan": 411,
+        "oh-my-claudecode:hud": 78,
+        "oh-my-claudecode:omc-setup": 39,
+        "Skill:oh-my-claudecode:hud": 3
+      },
+      "tools": {
+        "Bash": 602,
+        "Read": 228,
+        "Edit": 102,
+        "TaskUpdate": 49,
+        "Write": 37,
+        "Agent": 37,
+        "ToolSearch": 30,
+        "TaskCreate": 17,
+        "ScheduleWakeup": 12,
+        "AskUserQuestion": 9,
+        "Monitor": 5,
+        "mcp__plugin_oh-my-claudecode_t__state_read": 4
+      },
+      "subagent_types": {
+        "oh-my-claudecode:executor": 11,
+        "oh-my-claudecode:planner": 9,
+        "oh-my-claudecode:critic": 8,
+        "oh-my-claudecode:architect": 7,
+        "oh-my-claudecode:explore": 1,
+        "Explore": 1
+      },
+      "slash_commands": {
+        "/clear": 3,
+        "/oh-my-claudecode:ralplan": 3,
+        "/oh-my-claudecode:team": 3,
+        "/oh-my-claudecode:omc-setup": 3,
+        "/exit": 1
+      },
+      "skill_token_cost": {
+        "oh-my-claudecode:ralplan": {
+          "turns": 411,
+          "input": 1731,
+          "output": 271305,
+          "cache_read": 20350699,
+          "cache_creation": 4215628
+        },
+        "oh-my-claudecode:team": {
+          "turns": 648,
+          "input": 3016,
+          "output": 199121,
+          "cache_read": 81974762,
+          "cache_creation": 4490750
+        },
+        "oh-my-claudecode:omc-setup": {
+          "turns": 39,
+          "input": 212,
+          "output": 8203,
+          "cache_read": 1627025,
+          "cache_creation": 305275
+        },
+        "oh-my-claudecode:hud": {
+          "turns": 78,
+          "input": 428,
+          "output": 32050,
+          "cache_read": 5044056,
+          "cache_creation": 96195
+        }
+      }
+    }
+  },
+  "pure": {
+    "feature": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 34.4,
+        "median": 32.36
+      },
+      "main_turns": {
+        "mean": 138.33,
+        "median": 169.0
+      },
+      "sidechain_turns": {
+        "mean": 131.33,
+        "median": 70.0
+      },
+      "subagent_dispatches": {
+        "mean": 1.0,
+        "median": 1.0
+      },
+      "files_read": {
+        "mean": 45.67,
+        "median": 41.0
+      },
+      "distinct_files_read": {
+        "mean": 30.33,
+        "median": 30.0
+      },
+      "files_edited": {
+        "mean": 30.33,
+        "median": 23.0
+      },
+      "distinct_files_edited": {
+        "mean": 17.33,
+        "median": 20.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 45.67,
+        "median": 41.0
+      },
+      "input_tokens": {
+        "mean": 314.33,
+        "median": 307.0
+      },
+      "output_tokens": {
+        "mean": 104981.0,
+        "median": 102914.0
+      },
+      "cache_hit_ratio_mean": 0.983,
+      "skills_invoked": {},
+      "tools": {
+        "Bash": 273,
+        "Read": 137,
+        "Edit": 91,
+        "TaskUpdate": 29,
+        "Write": 24,
+        "TaskCreate": 15,
+        "ToolSearch": 5,
+        "Agent": 3,
+        "ExitPlanMode": 3,
+        "AskUserQuestion": 1
+      },
+      "subagent_types": {
+        "Explore": 2,
+        "general-purpose": 1
+      },
+      "slash_commands": {
+        "/resume": 1
+      },
+      "skill_token_cost": {}
+    },
+    "bugfix": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 12.56,
+        "median": 13.26
+      },
+      "main_turns": {
+        "mean": 83.0,
+        "median": 80.0
+      },
+      "sidechain_turns": {
+        "mean": 25.67,
+        "median": 0.0
+      },
+      "subagent_dispatches": {
+        "mean": 0.33,
+        "median": 0.0
+      },
+      "files_read": {
+        "mean": 18.0,
+        "median": 13.0
+      },
+      "distinct_files_read": {
+        "mean": 14.0,
+        "median": 13.0
+      },
+      "files_edited": {
+        "mean": 1.33,
+        "median": 1.0
+      },
+      "distinct_files_edited": {
+        "mean": 3.0,
+        "median": 3.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 17.67,
+        "median": 13.0
+      },
+      "input_tokens": {
+        "mean": 127.0,
+        "median": 105.0
+      },
+      "output_tokens": {
+        "mean": 37833.33,
+        "median": 39058.0
+      },
+      "cache_hit_ratio_mean": 0.965,
+      "skills_invoked": {},
+      "tools": {
+        "Bash": 142,
+        "Read": 54,
+        "Write": 7,
+        "TaskUpdate": 6,
+        "ToolSearch": 4,
+        "Edit": 4,
+        "ExitPlanMode": 3,
+        "TaskCreate": 3,
+        "Agent": 1
+      },
+      "subagent_types": {
+        "Explore": 1
+      },
+      "slash_commands": {},
+      "skill_token_cost": {}
+    },
+    "refactor": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 28.17,
+        "median": 28.03
+      },
+      "main_turns": {
+        "mean": 143.0,
+        "median": 138.0
+      },
+      "sidechain_turns": {
+        "mean": 58.33,
+        "median": 51.0
+      },
+      "subagent_dispatches": {
+        "mean": 1.33,
+        "median": 1.0
+      },
+      "files_read": {
+        "mean": 42.0,
+        "median": 42.0
+      },
+      "distinct_files_read": {
+        "mean": 21.67,
+        "median": 20.0
+      },
+      "files_edited": {
+        "mean": 20.0,
+        "median": 19.0
+      },
+      "distinct_files_edited": {
+        "mean": 17.33,
+        "median": 16.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 42.0,
+        "median": 42.0
+      },
+      "input_tokens": {
+        "mean": 1005.67,
+        "median": 587.0
+      },
+      "output_tokens": {
+        "mean": 109502.67,
+        "median": 103798.0
+      },
+      "cache_hit_ratio_mean": 0.974,
+      "skills_invoked": {},
+      "tools": {
+        "Bash": 177,
+        "Read": 126,
+        "Edit": 60,
+        "TaskUpdate": 28,
+        "Write": 26,
+        "TaskCreate": 14,
+        "ToolSearch": 5,
+        "Agent": 4,
+        "ExitPlanMode": 3
+      },
+      "subagent_types": {
+        "Explore": 4
+      },
+      "slash_commands": {},
+      "skill_token_cost": {}
+    }
+  },
+  "superpower": {
+    "feature": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 229.57,
+        "median": 168.97
+      },
+      "main_turns": {
+        "mean": 183.33,
+        "median": 161.0
+      },
+      "sidechain_turns": {
+        "mean": 778.67,
+        "median": 766.0
+      },
+      "subagent_dispatches": {
+        "mean": 18.33,
+        "median": 18.0
+      },
+      "files_read": {
+        "mean": 104.33,
+        "median": 114.0
+      },
+      "distinct_files_read": {
+        "mean": 52.67,
+        "median": 65.0
+      },
+      "files_edited": {
+        "mean": 65.67,
+        "median": 77.0
+      },
+      "distinct_files_edited": {
+        "mean": 37.0,
+        "median": 37.0
+      },
+      "tool_config_reads": {
+        "mean": 1.67,
+        "median": 1.0
+      },
+      "target_repo_reads": {
+        "mean": 101.67,
+        "median": 110.0
+      },
+      "input_tokens": {
+        "mean": 5417.0,
+        "median": 1248.0
+      },
+      "output_tokens": {
+        "mean": 307885.0,
+        "median": 324616.0
+      },
+      "cache_hit_ratio_mean": 0.946,
+      "skills_invoked": {
+        "superpowers:subagent-driven-development": 2668,
+        "superpowers:brainstorming": 124,
+        "superpowers:writing-plans": 47,
+        "Skill:superpowers:brainstorming": 3,
+        "Skill:superpowers:writing-plans": 3,
+        "Skill:superpowers:subagent-driven-development": 3
+      },
+      "tools": {
+        "Bash": 1152,
+        "Read": 313,
+        "Edit": 197,
+        "TaskUpdate": 79,
+        "Agent": 55,
+        "Write": 50,
+        "TaskCreate": 38,
+        "Skill": 9,
+        "ToolSearch": 5,
+        "AskUserQuestion": 4
+      },
+      "subagent_types": {
+        "general-purpose": 55
+      },
+      "slash_commands": {},
+      "skill_token_cost": {
+        "superpowers:brainstorming": {
+          "turns": 124,
+          "input": 179,
+          "output": 58797,
+          "cache_read": 7893911,
+          "cache_creation": 377356
+        },
+        "superpowers:writing-plans": {
+          "turns": 47,
+          "input": 79,
+          "output": 162288,
+          "cache_read": 4861560,
+          "cache_creation": 162403
+        },
+        "superpowers:subagent-driven-development": {
+          "turns": 2668,
+          "input": 15796,
+          "output": 669379,
+          "cache_read": 170158857,
+          "cache_creation": 7607302
+        }
+      }
+    },
+    "bugfix": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 13.64,
+        "median": 10.79
+      },
+      "main_turns": {
+        "mean": 118.33,
+        "median": 117.0
+      },
+      "sidechain_turns": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "subagent_dispatches": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "files_read": {
+        "mean": 15.33,
+        "median": 16.0
+      },
+      "distinct_files_read": {
+        "mean": 13.67,
+        "median": 13.0
+      },
+      "files_edited": {
+        "mean": 4.67,
+        "median": 4.0
+      },
+      "distinct_files_edited": {
+        "mean": 2.67,
+        "median": 2.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 15.33,
+        "median": 16.0
+      },
+      "input_tokens": {
+        "mean": 157.67,
+        "median": 157.0
+      },
+      "output_tokens": {
+        "mean": 45974.0,
+        "median": 43696.0
+      },
+      "cache_hit_ratio_mean": 0.974,
+      "skills_invoked": {
+        "superpowers:systematic-debugging": 225,
+        "superpowers:test-driven-development": 78,
+        "superpowers:brainstorming": 43,
+        "Skill:superpowers:brainstorming": 3,
+        "Skill:superpowers:systematic-debugging": 2,
+        "Skill:superpowers:test-driven-development": 1
+      },
+      "tools": {
+        "Bash": 166,
+        "Read": 46,
+        "Edit": 14,
+        "Skill": 6,
+        "Write": 3
+      },
+      "subagent_types": {},
+      "slash_commands": {},
+      "skill_token_cost": {
+        "superpowers:brainstorming": {
+          "turns": 43,
+          "input": 83,
+          "output": 17994,
+          "cache_read": 2435696,
+          "cache_creation": 131258
+        },
+        "superpowers:test-driven-development": {
+          "turns": 78,
+          "input": 86,
+          "output": 34743,
+          "cache_read": 9426740,
+          "cache_creation": 155778
+        },
+        "superpowers:systematic-debugging": {
+          "turns": 225,
+          "input": 250,
+          "output": 83967,
+          "cache_read": 27368218,
+          "cache_creation": 410328
+        }
+      }
+    },
+    "refactor": {
+      "trials": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "wall_clock_min": {
+        "mean": 218.47,
+        "median": 218.63
+      },
+      "main_turns": {
+        "mean": 133.0,
+        "median": 136.0
+      },
+      "sidechain_turns": {
+        "mean": 42.33,
+        "median": 52.0
+      },
+      "subagent_dispatches": {
+        "mean": 0.67,
+        "median": 1.0
+      },
+      "files_read": {
+        "mean": 29.33,
+        "median": 35.0
+      },
+      "distinct_files_read": {
+        "mean": 18.0,
+        "median": 19.0
+      },
+      "files_edited": {
+        "mean": 17.67,
+        "median": 18.0
+      },
+      "distinct_files_edited": {
+        "mean": 13.67,
+        "median": 14.0
+      },
+      "tool_config_reads": {
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "target_repo_reads": {
+        "mean": 29.33,
+        "median": 35.0
+      },
+      "input_tokens": {
+        "mean": 303.33,
+        "median": 362.0
+      },
+      "output_tokens": {
+        "mean": 80370.0,
+        "median": 80540.0
+      },
+      "cache_hit_ratio_mean": 0.952,
+      "skills_invoked": {
+        "superpowers:brainstorming": 173,
+        "Skill:superpowers:brainstorming": 3
+      },
+      "tools": {
+        "Bash": 123,
+        "Read": 88,
+        "Edit": 53,
+        "TaskUpdate": 29,
+        "Write": 19,
+        "TaskCreate": 15,
+        "Skill": 3,
+        "Agent": 2,
+        "ToolSearch": 2
+      },
+      "subagent_types": {
+        "Explore": 2
+      },
+      "slash_commands": {},
+      "skill_token_cost": {
+        "superpowers:brainstorming": {
+          "turns": 173,
+          "input": 435,
+          "output": 63434,
+          "cache_read": 7558865,
+          "cache_creation": 494714
+        }
+      }
+    }
+  }
+}

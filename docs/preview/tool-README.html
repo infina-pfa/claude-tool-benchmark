@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool Profile — README</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/README.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="docstools-tool-profiles" tabindex="-1"><a class="header-anchor" href="#docstools-tool-profiles"><span>docs/tools/ — Tool profiles</span></a></h1>
+<p>One profile per setup under test. Read the individual files for mechanism detail; this index is for comparison at a glance.</p>
+<hr>
+<h2 id="setups-upstream" tabindex="-1"><a class="header-anchor" href="#setups-upstream"><span>Setups &amp; upstream</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Upstream</th>
+<th>License</th>
+<th>Version at run</th>
+<th>Profile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="tool-bmad.html"><code>bmad</code></a></td>
+<td><code>bmad-code-org/BMAD-METHOD</code></td>
+<td>MIT</td>
+<td>npx <code>bmad-method@6.6.0</code> (<code>e6cdc93b</code>)</td>
+<td><a href="tool-bmad.html">bmad.md</a></td>
+</tr>
+<tr>
+<td><a href="tool-claudekit.html"><code>claudekit</code></a></td>
+<td><code>a private Infina fork of claudekit</code> (fork of <code>carlrannaberg/claudekit</code>)</td>
+<td>MIT</td>
+<td>master <code>cf636d9</code></td>
+<td><a href="tool-claudekit.html">claudekit.md</a></td>
+</tr>
+<tr>
+<td><a href="tool-compound.html"><code>compound</code></a></td>
+<td><code>EveryInc/compound-engineering-plugin</code></td>
+<td>MIT</td>
+<td>plugin 3.7.0 (<code>0bb53dfa</code>)</td>
+<td><a href="tool-compound.html">compound.md</a></td>
+</tr>
+<tr>
+<td><a href="tool-ecc.html"><code>ecc</code></a></td>
+<td><code>affaan-m/everything-claude-code</code></td>
+<td>MIT</td>
+<td>plugin 1.10.0 (<code>846ffb75</code>)</td>
+<td><a href="tool-ecc.html">ecc.md</a></td>
+</tr>
+<tr>
+<td><a href="tool-gstack.html"><code>gstack</code></a></td>
+<td><code>garrytan/gstack</code></td>
+<td>MIT</td>
+<td>1.28.0.0 (<code>443bde05</code>)</td>
+<td><a href="tool-gstack.html">gstack.md</a></td>
+</tr>
+<tr>
+<td><a href="tool-omc.html"><code>omc</code></a></td>
+<td><code>Yeachan-Heo/oh-my-claudecode</code></td>
+<td>MIT</td>
+<td>plugin 4.13.6 (<code>8b24a29d</code>)</td>
+<td><a href="tool-omc.html">omc.md</a></td>
+</tr>
+<tr>
+<td><a href="tool-pure.html"><code>pure</code></a></td>
+<td>Anthropic Claude Code (stock)</td>
+<td>proprietary (CLI)</td>
+<td>CLI 2.1.133</td>
+<td><a href="tool-pure.html">pure.md</a></td>
+</tr>
+<tr>
+<td><a href="tool-superpower.html"><code>superpower</code></a></td>
+<td><code>obra/superpowers</code> (via <code>obra/superpowers-marketplace</code>)</td>
+<td>MIT</td>
+<td>5.1.0 (<code>f2cbfbef</code>)</td>
+<td><a href="tool-superpower.html">superpower.md</a></td>
+</tr>
+</tbody>
+</table>
+<p>All tools run on the same base executor model: <strong><code>claude-opus-4-7</code></strong>, base-model effort <code>medium</code>, context window 200k. The only thing that varies between rows is the setup (plugin, skill pack, hook kit, or bare-CLI configuration) wrapping Claude Code. Versions are pinned in <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/versions.lock.json"><code>versions.lock.json</code></a> <code>tools.*</code>.</p>
+<hr>
+<h2 id="per-task-weighted-mean-ranking" tabindex="-1"><a class="header-anchor" href="#per-task-weighted-mean-ranking"><span>Per-task weighted-mean ranking</span></a></h2>
+<p>Pulled from <code>results/&lt;task&gt;/final-report.md</code> (weighted mean of per-judge means under the pre-registered 3 / 2 / 1 / 1 / 1 panel; equal-weight comparator alongside).</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>feature /200</th>
+<th>bugfix /200</th>
+<th>refactor /200</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ecc</td>
+<td><strong>153.30 (rank 1)</strong></td>
+<td>172.31 (rank 2)</td>
+<td>173.61 (rank 6)</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td>140.16 (rank 4)</td>
+<td>166.41 (rank 4)</td>
+<td>177.56 (rank 4)</td>
+</tr>
+<tr>
+<td>pure</td>
+<td>143.13 (rank 2)</td>
+<td>169.53 (rank 3)</td>
+<td><strong>180.19 (rank 1)</strong></td>
+</tr>
+<tr>
+<td>compound</td>
+<td>134.67 (rank 7)</td>
+<td>166.25 (rank 5)</td>
+<td>174.42 (rank 5)</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td>141.33 (rank 3)</td>
+<td>165.72 (rank 6)</td>
+<td>177.74 (rank 3)</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>139.49 (rank 5)</td>
+<td>164.80 (rank 7)</td>
+<td>170.11 (rank 7)</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td>135.04 (rank 6)</td>
+<td><strong>178.93 (rank 1)</strong></td>
+<td>178.04 (rank 2)</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td>131.98 (rank 8)</td>
+<td>159.97 (rank 8)</td>
+<td>144.92 (rank 8)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cohort weighted-mean</strong> per task: feature 139.89 · bugfix 167.99 · refactor 172.07. <strong>No setup is top-2 on all three tasks.</strong> A single cross-task summary is sensitive to weighting; each cell is now 5 trials per cell, 75 judgments per cell (5 trials × 5 judges × 3 rounds) — read the three per-task <code>final-report.md</code> files together rather than collapsing to one leaderboard (README caveat 7).</p>
+<hr>
+<h2 id="mechanism-taxonomy" tabindex="-1"><a class="header-anchor" href="#mechanism-taxonomy"><span>Mechanism taxonomy</span></a></h2>
+<p>Grouping the 8 setups by the primary enhancement mechanism:</p>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>Tools</th>
+<th>Works by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>No-addon baseline</strong></td>
+<td><code>pure</code></td>
+<td>Vanilla Claude Code, no addons</td>
+</tr>
+<tr>
+<td><strong>Skill registry (model-selected)</strong></td>
+<td><code>superpower</code></td>
+<td>Named skill files the base model chooses to invoke via <code>Skill</code> tool</td>
+</tr>
+<tr>
+<td><strong>Skill pack + hook gates</strong></td>
+<td><code>claudekit</code>, <code>gstack</code></td>
+<td>Slash commands, skills, hooks enforcing gates (typecheck/eslint, freeze/scope-lock, eng-review)</td>
+</tr>
+<tr>
+<td><strong>Multi-agent orchestrator (sequential)</strong></td>
+<td><code>compound</code>, <code>ecc</code></td>
+<td>Fixed phase pipelines (plan → work → review) with stop-gates between phases</td>
+</tr>
+<tr>
+<td><strong>Multi-agent orchestrator (role-based)</strong></td>
+<td><code>bmad</code></td>
+<td>Agent personas (PM, architect, dev, QA) with hand-off between them</td>
+</tr>
+<tr>
+<td><strong>Meta-orchestrator (delegation-heavy)</strong></td>
+<td><code>omc</code></td>
+<td>Top-level planner that dispatches to specialized subagents/skills</td>
+</tr>
+</tbody>
+</table>
+<p>“Orchestrator” here means the setup adds its own agent/subagent layer on top of Claude Code, not just prompt + tool choices. The orchestrator row is <em>not</em> itself a ranking of orchestration quality — <code>compound</code> ranks 7 on feature but 5 on bugfix and refactor; <code>bmad</code> ranks 3 on refactor but 6 on bugfix. Architecture is under-determinative of outcome in this corpus.</p>
+<hr>
+<h2 id="invocation-planning-profile" tabindex="-1"><a class="header-anchor" href="#invocation-planning-profile"><span>Invocation &amp; planning profile</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Entry command</th>
+<th>Planning layer</th>
+<th>Setup turn?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pure</td>
+<td>(no prefix)</td>
+<td>Claude native plan-mode</td>
+<td>no</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td>(no prefix for feature/refactor); <code>/superpowers:systematic-debugging</code> for bugfix</td>
+<td>skill registry (model chooses)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td><code>/bmad-quick-dev</code></td>
+<td>BMad-Method phases</td>
+<td>no</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td><code>/ck:plan</code> → <code>/ck:cook --auto</code></td>
+<td><code>ck-plan</code> skill</td>
+<td>no</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td><code>/everything-claude-code:plan</code> (feat/refactor), <code>/everything-claude-code:build-fix</code> (bugfix)</td>
+<td>own <code>plan</code> skill</td>
+<td>no</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td><code>/autoplan</code> (feat/refactor), <code>/investigate</code> (bugfix); <code>/ship</code> finalizer</td>
+<td><code>/autoplan</code>, <code>/ship</code> gate</td>
+<td>no</td>
+</tr>
+<tr>
+<td>compound</td>
+<td><code>/compound-engineering:lfg</code></td>
+<td><code>/ce:plan</code> phase (step 2 of 6)</td>
+<td>no</td>
+</tr>
+<tr>
+<td>omc</td>
+<td><code>/oh-my-claudecode:ralplan</code> → operator-typed <code>/oh-my-claudecode:team</code> (after setup turn)</td>
+<td>ralplan consensus planner (planner + architect + critic) feeding <code>/team</code> workers</td>
+<td><strong>yes</strong> (<code>/oh-my-claudecode:omc-setup</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="per-task-winners" tabindex="-1"><a class="header-anchor" href="#per-task-winners"><span>Per-task winners</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Rank 1</th>
+<th>Rank 2</th>
+<th>Rank 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature (Mode-2 CD Batch)</td>
+<td>ecc</td>
+<td>pure</td>
+<td>bmad</td>
+</tr>
+<tr>
+<td>bugfix (near-maturity)</td>
+<td>claudekit</td>
+<td>ecc</td>
+<td>pure</td>
+</tr>
+<tr>
+<td>refactor (aggregate-ownership)</td>
+<td>pure</td>
+<td>claudekit</td>
+<td>bmad</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>pure</code></strong> (no addons) is the only setup top-3 on every task and rank-1 on <code>refactor</code>. The null hypothesis “tools add no value over the bare CLI” is not rejected on <code>refactor</code> (top-5 within ≈ 5.8 weighted pts); on <code>bugfix</code>, <code>claudekit</code> (+9.40 pts over pure) is <strong>below</strong> the bugfix MDE (22.17), so the strict null is <strong>not</strong> rejected there (the earlier ~5-pt-tie-envelope claim is retracted — see PAPER §3 / §4).</p>
+<hr>
+<h2 id="session-audit-transcript-mined-behavior" tabindex="-1"><a class="header-anchor" href="#session-audit-transcript-mined-behavior"><span>Session audit (transcript-mined behavior)</span></a></h2>
+<p>Each per-tool profile now includes a session-audit table with the headline behavioral metrics — wall-clock, main/sidechain turns, sub-agent dispatches, file reads (split into tool-config vs target-repo), files edited, and cache hit ratio — computed across 3 trials per task from the raw JSONL transcripts (session-audit run-time subsystem is n=3; the per-task score tables are the full n=5 cohort).</p>
+<p>Source: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a> walks <code>results/&lt;tool&gt;/t&lt;N&gt;/session-logs/*.jsonl</code> (feature) and <code>results/{bugfix,refactor}/&lt;tool&gt;/t&lt;N&gt;/session-logs/*.jsonl</code> for the other tasks, plus the <code>subagents/*.jsonl</code> files underneath. Per-trial JSON: <code>results/&lt;...&gt;/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<p>Headline cross-tool findings from the audit:</p>
+<ul>
+<li><strong>Sub-agent dispatch is not what most docs claimed.</strong> <code>bmad</code> dispatches 0 sub-agents on bugfix across all 3 trials; <code>compound</code> dispatches reviewer-personas in only 1 of 9 trials (compound/t2 feature). The “multi-reviewer gate” architecture documented upstream materialises as sequential <code>attributionSkill</code> changes inside a single thread, not as actual <code>Agent</code> tool calls.</li>
+<li><strong><code>superpower</code>’s skill activation is task-dependent.</strong> Sub-agent fan-out is 18.3 dispatches/trial on feature but ~0.5 on bugfix/refactor — the <code>subagent-driven-development</code> skill triggers on feature work only.</li>
+<li><strong><code>omc</code> is the only setup with material tool-config read overhead</strong> (~17 reads per feature trial vs ~0 for every other tool) — the “setup tax” of a self-maintaining orchestrator.</li>
+<li><strong><code>pure</code> is the only setup with zero <code>attributionSkill</code> rows</strong> — every assistant turn is base-model, confirming the no-addon mechanism.</li>
+<li><strong>Cache hit ratios</strong> are 0.97–0.98 for most tools; <code>omc</code> is lowest at 0.93 (worker fan-out forces more cache creation).</li>
+</ul>
+<h2 id="observed-failure-modes" tabindex="-1"><a class="header-anchor" href="#observed-failure-modes"><span>Observed failure modes</span></a></h2>
+<p>Cross-cutting patterns from reading the transcripts:</p>
+<ul>
+<li><strong>Over-orchestration on small tasks</strong> — <code>compound</code>, <code>omc</code>. Multi-agent setups paying a high fixed setup cost on a 30-minute task suffer when the task doesn’t use their multi-phase capacity.</li>
+<li><strong><code>--auto</code> gate-suppression</strong> — <code>claudekit</code>. <code>/ck:cook --auto</code> removes the human-review gates that the setup relies on; the scripted workflow runs end-to-end but the “stop on test failure” behavior doesn’t kick in.</li>
+<li><strong>Skill activation depends on entry-point wording</strong> — <code>superpower</code>. A registry-style skill library whose triggers are generic vocabulary (“bug”, “error”, “root cause”) is not guaranteed to activate on a terse prompt that does not pattern-match. The bugfix harness names the slash-commands explicitly to isolate skill content from trigger-phrase sensitivity.</li>
+<li><strong>Eng-review gate ≠ code-quality gate</strong> — <code>gstack</code>. <code>/ship</code> enforces process cleanliness but doesn’t catch all code-quality issues; rank-8 on <code>feature</code> and <code>bugfix</code>.</li>
+</ul>
+<hr>
+<h2 id="how-to-read-these-profiles" tabindex="-1"><a class="header-anchor" href="#how-to-read-these-profiles"><span>How to read these profiles</span></a></h2>
+<p>Each profile follows roughly:</p>
+<ol>
+<li><strong>Upstream &amp; identity</strong> — repo, version, license, maintainer.</li>
+<li><strong>Performance</strong> — per-task weighted mean, within_σ, between_σ, rank.</li>
+<li><strong>Mechanism</strong> — what actually runs: skills, hooks, sub-agents, MCP, permission layer.</li>
+<li><strong>How this benchmark invoked it</strong> — exact prompt, plan-mode flag, setup turn.</li>
+<li><strong>What the transcripts show</strong> — per-task: tool-call mix, sub-agent use, commit shape.</li>
+<li><strong>Why it ranked where it did</strong> — grounded in transcript evidence.</li>
+<li><strong>Strengths &amp; failure modes</strong> — per-task observations.</li>
+<li><strong>References</strong> — links back to upstream and to the benchmark artifacts.</li>
+</ol>
+<p>The intent is: a reader should be able to close the profile with an accurate mental model of how the tool operates <em>in practice on this corpus</em>, not a re-phrasing of the upstream README.</p>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/tools/README.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

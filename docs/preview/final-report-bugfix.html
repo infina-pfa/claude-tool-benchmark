@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Final Report — bugfix (5-judge weighted)</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/bugfix/final-report.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="bugfix-per-task-aggregation" tabindex="-1"><a class="header-anchor" href="#bugfix-per-task-aggregation"><span>bugfix — Per-Task Aggregation</span></a></h1>
+<p>Generated: 2026-05-19T04:05:40Z</p>
+<h2 id="inputs-and-source-artifacts" tabindex="-1"><a class="header-anchor" href="#inputs-and-source-artifacts"><span>Inputs and source artifacts</span></a></h2>
+<p>Everything fed into this aggregation is committed; no private state.</p>
+<ul>
+<li><strong>Trial input (task PRD).</strong> The exact prompt every tool saw for this task: <code>_blind-eval/prd.md</code> <span class="muted">(omitted from public release)</span>.</li>
+<li><strong>Per-tool prompt prefix.</strong> The tool-specific slash command bound to that PRD lives in <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/manual-bench.sh"><code>scripts/manual-bench.sh</code></a>.</li>
+<li><strong>Judge input (verbatim request payload).</strong> What each of the 5 judges received per label per round — same blinded diff + rubric, varying only by model: <code>_blind-eval/Alpha/round1/</code> <span class="muted">(omitted from public release)</span> (<code>&lt;judge&gt;-judge.json.request.json</code>).</li>
+<li><strong>Judge prompt template.</strong> <code>scripts/generate-judge-prompt-combined-v2.sh</code> <span class="muted">(omitted from public release)</span>.</li>
+<li><strong>Methodology and threats to validity.</strong> <a href="paper.html"><code>PAPER.md</code></a> (§1 methodology, §4 limitations) · <a href="readme.html"><code>README.md</code></a> · <a href="https://claude-tool-benchmark.pages.dev/">landing page</a>.</li>
+</ul>
+<h2 id="methodology" tabindex="-1"><a class="header-anchor" href="#methodology"><span>Methodology</span></a></h2>
+<ul>
+<li>Tools under test: 8</li>
+<li>Blind labels: 40</li>
+<li>Layout: 3 rounds per (artifact, judge) — the canonical run (judge files flat at the label root) plus <code>round1/</code> and <code>round2/</code> rerun directories. The aggregator reads the label root plus <code>^round[0-9]+$</code> subdirs in union; pilot/sample dirs (e.g. <code>roundcotsample*</code>) are excluded.</li>
+<li>Judges: opus, grok420, glm51, GPT-5.4, mimo25pro (5-judge panel; each artifact scored 3 times — once per round — by every judge)</li>
+<li>Rubric: 20 items × 0–10 pts = 200 pt max</li>
+<li>Canonical score per judge file: <code>sum(scores.values())</code> (not the stored <code>total</code> field)</li>
+<li>Reported tool mean: <strong>weighted mean of per-judge means</strong> (weights: opus×3, GPT-5.4×2, grok420×1, glm51×1, mimo25pro×1)</li>
+<li>Total judgments aggregated: 600</li>
+</ul>
+<h2 id="caveats-threats-to-validity" tabindex="-1"><a class="header-anchor" href="#caveats-threats-to-validity"><span>Caveats / threats to validity</span></a></h2>
+<ul>
+<li><strong>Judge weights are pre-registered, not derived.</strong> The 3 / 2 / 1 / 1 / 1 weighting is stored as <code>judges.*.weight</code> in <code>versions.lock.json</code> (committed 2026-05-12) and reflects the operator’s prior trust in the Anthropic (opus) and OpenAI (<code>GPT-5.4</code>) reviewers. An equal-weight aggregation is emitted alongside this report as <code>final-report.equal-weight.md</code>; the in-report <code>Pooled Mean</code> column is also the equal-weight comparator and lets readers verify rank-stability without leaving this file.</li>
+<li><strong>Judge scorer asymmetries.</strong> <code>GPT-5.4</code> is consistently the harshest scorer in the panel (lowest mean across labels). <code>mimo25pro</code> is the most lenient and occasionally emits 200/200 saturations; its weight of 1 dilutes the impact, but right-tail scores should be read in that context.</li>
+<li><strong>σ decomposition.</strong> The per-tool standard deviation column is split into <code>within_σ</code> (within-judge spread — mean of the per-judge stdev across the 15 samples per (tool, judge): 5 trials × 3 rounds) and <code>between_σ</code> (judge base-rate spread — stdev of per-judge means). <code>within_σ</code> now bundles trial-to-trial output variance with round-to-round judge-sampler variance; the latter is small where temperature=0 is honored (OpenRouter, OpenCode Go) and absorbed in <code>within_σ</code> where it is not (Claude CLI, OpenAI <code>/v1/responses</code>). Within &gt; between would indicate the tool’s output (combined with sampler drift) is unstable; the reverse means most variance is judge base-rate disagreement.</li>
+<li><strong>Judge sampling not pinned.</strong> Temperature is fixed to 0 where the provider exposes it (OpenRouter, OpenCode Go). Claude CLI and OpenAI <code>/v1/responses</code> do not expose temperature/seed, so residual sampler variance is absorbed in per-judge σ rather than eliminated.</li>
+<li><strong>R1 mechanical-fact override.</strong> Rubric items with deterministic answers (e.g. <code>tsc_errors == 0</code>) are rewritten post-hoc from <code>auto-metrics.json</code> to remove LLM arithmetic / classification drift. Items locked per task: <code>feature</code> 12/13/16/20, <code>bugfix</code> 14/15, <code>refactor</code> 13/14. Pre-override scores are preserved under <code>scores_pre_r1</code> on every judged file (<code>scripts/aggregate-results.sh</code> runs an idempotent R1 sweep before aggregating).</li>
+<li><strong>Blind eval is structural, not semantic.</strong> Tool identity is hidden via NATO labels and a path-/content-level scrub of tool-specific directories (<code>.omc/</code>, <code>_bmad/</code>, <code>_bmad-output/</code>, <code>_bmad-core/</code>, <code>docs/bmad/</code>, <code>docs/superpowers/</code>, <code>plans/</code>, <code>.claudekit/</code>, <code>.gstack/</code>, <code>.superpowers/</code>, <code>.compound-engineering/</code>, <code>.ecc/</code>, <code>CLAUDE.md.original</code>). <code>auto-metrics.json</code> is anonymised by stripping <code>plugin_versions</code> and <code>collected_at</code>. A skilled judge could still infer identity from idiosyncratic code style; we don’t claim semantic anonymity.</li>
+<li><strong>Cohort span:</strong> 149.7h (2026-05-10 → 2026-05-16). Spans &gt;24h indicate the cohort did not complete within a single day; <code>scripts/audit-cohort-symmetry.py</code> flags this as a soft warning. The longest spans in this report stem from the leak-fix re-judge pass (see <code>docs/RERUN-PRE-PUBLISH.md</code>).</li>
+</ul>
+<h2 id="aggregate-scores-per-tool" tabindex="-1"><a class="header-anchor" href="#aggregate-scores-per-tool"><span>Aggregate Scores per Tool</span></a></h2>
+<p><strong>Column glossary — read this first.</strong> One row per tool; the columns are:</p>
+<ul>
+<li><strong>Tool</strong> — the setup under test. Eight rows: <code>bmad</code>, <code>claudekit</code>, <code>compound</code>, <code>ecc</code>, <code>gstack</code>, <code>omc</code>, <code>pure</code> (no-addon baseline), <code>superpower</code>.</li>
+<li><strong>Weighted Mean</strong> <em>(bold; canonical rank column)</em> — weighted average over judges: <code>(3·opus + 2·</code>GPT-5.4<code> + grok420 + glm51 + mimo25pro) / 8</code>. Weights pre-registered in <code>versions.lock.json</code> and reflect operator trust in the Anthropic / OpenAI judges.</li>
+<li><strong>Pooled Mean</strong> — straight equal-weight average over all 75 judgments (every judge counts the same, 1×). Quick sensitivity check: if Weighted and Pooled order the top tools the same way, the ranking is robust to the weighting scheme. The dedicated <code>final-report.equal-weight.md</code> is the full equal-weight comparator.</li>
+<li><strong>Pooled σ</strong> — overall standard deviation across all 75 judgments (raw score spread before splitting variance sources).</li>
+<li><strong>within_σ</strong> — within-judge spread. For each judge, compute σ across its 15 samples per tool (5 trials × 3 rounds), then average across the 5 judges. High <code>within_σ</code> means the same judge gave the tool different scores across runs — either the tool’s output varies trial-to-trial or judge sampler drift (where temperature=0 isn’t honored).</li>
+<li><strong>between_σ</strong> — between-judge spread. Compute each judge’s mean for this tool, then take σ across those 5 per-judge means. High <code>between_σ</code> means judges systematically disagree (lenience drift). <code>within_σ</code> &lt; <code>between_σ</code> is the healthy case: most of the noise is judge base-rate, not tool flakiness.</li>
+<li><strong>N</strong> — total judgments aggregated for this tool. Should equal 75 when complete (5 trials × 5 judges × 3 rounds).</li>
+<li><strong>n(opus) … n(mimo25pro)</strong> — how many of those judgments came from each judge. In a complete cohort each equals 15 (5 trials × 3 rounds); a lower value exposes a missing or in-progress backfill for that judge (not silently averaged away — the weighted mean drops absent slots from both numerator and denominator).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Weighted Mean</th>
+<th>Pooled Mean</th>
+<th>Pooled σ</th>
+<th>within_σ</th>
+<th>between_σ</th>
+<th>N</th>
+<th>n(opus)</th>
+<th>n(grok420)</th>
+<th>n(glm51)</th>
+<th>n(GPT-5.4)</th>
+<th>n(mimo25pro)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>claudekit</td>
+<td><strong>178.93</strong></td>
+<td>181.53</td>
+<td>14.33</td>
+<td>11.42</td>
+<td>9.35</td>
+<td>75</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td><strong>172.31</strong></td>
+<td>175.40</td>
+<td>17.20</td>
+<td>13.54</td>
+<td>11.70</td>
+<td>75</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>pure</td>
+<td><strong>169.53</strong></td>
+<td>172.03</td>
+<td>14.64</td>
+<td>12.05</td>
+<td>9.58</td>
+<td>75</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td><strong>166.41</strong></td>
+<td>169.43</td>
+<td>14.03</td>
+<td>7.48</td>
+<td>13.28</td>
+<td>75</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>compound</td>
+<td><strong>166.25</strong></td>
+<td>169.33</td>
+<td>13.79</td>
+<td>9.57</td>
+<td>11.27</td>
+<td>75</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td><strong>165.72</strong></td>
+<td>169.13</td>
+<td>17.15</td>
+<td>12.75</td>
+<td>12.94</td>
+<td>75</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>omc</td>
+<td><strong>164.80</strong></td>
+<td>167.97</td>
+<td>20.35</td>
+<td>15.66</td>
+<td>13.74</td>
+<td>75</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td><strong>159.97</strong></td>
+<td>164.69</td>
+<td>17.18</td>
+<td>9.13</td>
+<td>16.12</td>
+<td>75</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<h2 id="inter-rater-agreement-krippendorff" tabindex="-1"><a class="header-anchor" href="#inter-rater-agreement-krippendorff"><span>Inter-rater agreement (Krippendorff α)</span></a></h2>
+<p><strong>α = 0.284</strong> (interval level, judges as coders, blind labels as units, N=40 labels × 5 judges = 200 observations).</p>
+<p>Krippendorff α measures how much the 5 judges agree on the <em>absolute</em> score for the same artifact. Conventional thresholds (Krippendorff 2011): α ≥ 0.800 supports firm conclusions; ≥ 0.667 supports tentative ones; &lt; 0.667 is unreliable for absolute claims. <strong>Caveat:</strong> α punishes per-judge lenience drift hard — <code>GPT-5.4</code> (panel-low) and mimo25pro (panel-high) are far apart on most artifacts even when they <em>order</em> tools the same way. The benchmark’s weighted-mean aggregation is less sensitive to any single judge’s base rate, but it does not make raw scores robust to per-judge lenience drift — the per-judge z-normalized table below is the actual mitigation for that; α surfaces the drift as a separate honesty metric.</p>
+<p><strong>Upper-bound caveat:</strong> α is computed on each (label, judge)'s <em>mean across rounds</em>, so round-to-round judge-sampler noise is averaged out before the reliability calculation. The reported α therefore <strong>overstates</strong> raw round-level inter-judge agreement — true per-round α is lower than the values shown here. Read these as a generous ceiling, not a point estimate.</p>
+<h2 id="power-analysis-detection-threshold-mde" tabindex="-1"><a class="header-anchor" href="#power-analysis-detection-threshold-mde"><span>Power analysis &amp; detection threshold (MDE)</span></a></h2>
+<p><strong>MDE ≈ 22.17 pts</strong> at α=0.05 (two-sided), power=0.80, n=5 trials per arm, σ_pool=11.14 pts (pooled across 8 tools using trial-level weighted means).</p>
+<p>Two tool means whose gap is below MDE cannot be statistically distinguished at the standard α=0.05 / 80%-power threshold. The current cohort uses <strong>n=5 trials per cell</strong>, which is the binding constraint — judgments within a cell are correlated (same judge across rounds, same trial across rounds), so trials are the real degree of freedom.</p>
+<ul>
+<li><strong>Rank-1 lead:</strong> 6.62 pts → <strong>below MDE — read as a tie</strong></li>
+<li><strong>Gaps rank-1 vs each lower tool</strong> (✓ = exceeds MDE, ⚠ = below MDE):
+<ul>
+<li>claudekit − ecc: <strong>6.62 pts</strong> ⚠</li>
+<li>claudekit − pure: <strong>9.40 pts</strong> ⚠</li>
+<li>claudekit − superpower: <strong>12.53 pts</strong> ⚠</li>
+<li>claudekit − compound: <strong>12.68 pts</strong> ⚠</li>
+<li>claudekit − bmad: <strong>13.22 pts</strong> ⚠</li>
+<li>claudekit − omc: <strong>14.13 pts</strong> ⚠</li>
+<li>claudekit − gstack: <strong>18.97 pts</strong> ⚠</li>
+</ul>
+</li>
+</ul>
+<p><strong>Implication for this cohort:</strong> at n=5 trials per cell, every per-task rank-1 lead falls below MDE (per-task MDEs and σ_pool for all three tasks are in <code>results/power-analysis.json</code>) — the top cluster is a statistical tie, not a ranking. The α/2 critical value is the exact Student-t quantile for df=2(n-1)=8 (≈2.306), not the normal z=1.96 — at n=5 this enlarges every MDE by ~12% (feature ≈19.33, bugfix ≈22.17, refactor ≈44.02). Under the corrected threshold the <strong>only</strong> gap that clears its task MDE anywhere in the corpus is <code>ecc</code>−<code>gstack</code> on <code>feature</code> (≈21.3 vs the 19.33 feature MDE); the previously-cited <code>ecc</code>−<code>claudekit</code> (≈18.3) and <code>ecc</code>−<code>compound</code> (≈18.6) feature gaps fall <strong>below</strong> MDE under the exact-t critical and are no longer treated as separations. No rank-1 lead on any task clears MDE; no gap on <code>bugfix</code> or <code>refactor</code> clears its own task MDE. Trial-to-trial variance (not judge noise) is the binding constraint: the n=3→n=5 expansion <em>raised</em> σ_pool on every task, so MDE did not follow the expected 1/√n drop (refactor worsened sharply, driven by <code>gstack</code>’s trial-4 refactor diff scoring ≈36/200 against ~178 on its other four). No family-wise correction is applied to the ≥21 pairwise gap tests — they are descriptive detection-threshold comparisons, not confirmatory hypothesis tests. This is exactly why post-hoc selective reruns are pre-registered as invalid. See <code>docs/IMPROVEMENT-PLAN-NEXT-COHORT.md</code>.</p>
+<h2 id="outlier-audit-rerun-verdict" tabindex="-1"><a class="header-anchor" href="#outlier-audit-rerun-verdict"><span>Outlier audit &amp; rerun verdict</span></a></h2>
+<p>Round-level outlier check per the pre-registered rerun protocol (<code>CLAUDE.md</code> § Rerun): a round-judgment flags when <code>|score − median(other rounds)| &gt; 15 pts AND &gt; 1.41 × spread(other rounds)</code> (≈ 2σ on the 2 remaining samples).</p>
+<ul>
+<li><strong>Outlier rate:</strong> <strong>22 / 600</strong> round-judgments = <strong>3.67%</strong> (vs ~5% expected under 2σ chance) — point estimate below the ~5% 2σ-chance baseline, but the 95% CI [2.43%, 5.49%] straddles it — the result is consistent with chance, not significantly below it. Note the per-round 2σ trigger did fire on these 22 individual rounds; the rerun verdict below is a class-level judgment, not an absence of tripped triggers.</li>
+<li><strong>Tier-1 skill failures</strong> (non-baseline tool with skills_invoked = subagent_dispatches = 0): <strong>0</strong> across the <strong>21</strong> t1–t3 cells with a <code>session-audit.json</code>. t4–t5 session audits were not collected, so this trigger is evaluated over t1–t3 only (not the full n=5 cohort); no audited cell shows a skill failure.</li>
+<li><strong>Outliers by judge:</strong> GPT-5.4: 8, grok420: 5, glm51: 4, mimo25pro: 4, opus: 1. Outliers cluster on the panel’s lenience-extreme judges (<code>mimo25pro</code>, <code>GPT-5.4</code>) and on <code>grok420</code>’s root-round drift — these are judge-sampler artifacts, not tool artifacts.</li>
+</ul>
+<p>Sample flagged rounds (first 5):</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Trial</th>
+<th>Judge</th>
+<th>Round</th>
+<th>Score</th>
+<th>Others</th>
+<th>Δ from median</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ecc</td>
+<td>t3</td>
+<td>grok420</td>
+<td>round2</td>
+<td>174.0</td>
+<td>[191.0, 189.0]</td>
+<td>16.0</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>t3</td>
+<td>grok420</td>
+<td>round2</td>
+<td>174.0</td>
+<td>[193.0, 189.0]</td>
+<td>17.0</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>t1</td>
+<td>opus</td>
+<td>round1</td>
+<td>155.0</td>
+<td>[167.0, 176.0]</td>
+<td>16.5</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>t1</td>
+<td>glm51</td>
+<td>round2</td>
+<td>187.0</td>
+<td>[165.0, 149.0]</td>
+<td>30.0</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td>t2</td>
+<td>gpt54pro</td>
+<td>round2</td>
+<td>139.0</td>
+<td>[154.0, 155.0]</td>
+<td>15.5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rerun verdict: no action.</strong> No Tier-1 (skill failure, t1–t3 audited) or Tier-3 (harness bug) triggers fired. The Tier-2 per-round 2σ trigger did fire on the individual rounds counted above, but the <em>aggregate</em> outlier rate is statistically consistent with the 2σ-chance baseline (point estimate at/below ~5%, 95% CI overlapping it), so this is treated as a class-level no-action decision rather than per-round re-rolling. Selectively re-rolling the flagged rounds would bias the cohort toward the mean (extreme values re-roll closer to median while in-distribution values stay), shrinking the cohort’s apparent variance without removing real noise. The correct fix for round-level noise is <strong>deterministic judge sampling</strong> (caveat 09); the correct fix for trial-level variance is <strong>more trials per cell</strong> (see <code>docs/IMPROVEMENT-PLAN-NEXT-COHORT.md</code> item #1).</p>
+<h2 id="robust-statistics-sensitivity-median-trimmed-mean-companion" tabindex="-1"><a class="header-anchor" href="#robust-statistics-sensitivity-median-trimmed-mean-companion"><span>Robust-statistics sensitivity (median / trimmed-mean companion)</span></a></h2>
+<p>Sensitivity view: per-tool <strong>median</strong> and <strong>trimmed mean</strong> (drop hi/lo) of the 5 trial-level weighted means, instead of the arithmetic mean used above. Rank-1 is invariant on every task under mean / median / trimmed; the largest middle-rank shift in this corpus is <code>gstack</code> refactor (rank-8 → rank-7 under median, driven by one bad trial — the canonical mean correctly retains it). Full table: <a href="robust-statistics-companion.html"><code>../robust-statistics-companion.md</code></a>; raw figures in <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/robust-statistics.json"><code>../robust-statistics.json</code></a>; recompute with <code>scripts/compute-robust-stats.py</code>. <em>Not</em> the pre-registered primary statistic — a sensitivity view alongside the equal-weight companion.</p>
+<h2 id="per-judge-z-normalized-sensitivity" tabindex="-1"><a class="header-anchor" href="#per-judge-z-normalized-sensitivity"><span>Per-judge z-normalized sensitivity</span></a></h2>
+<p>Tool ordering when each judge is z-normalized (<code>(score − judge_mean) / judge_sd</code>) before averaging — cancels per-judge lenience drift so each judge contributes ordering signal, not absolute lenience. Useful as a sensitivity check against the canonical Weighted Mean: rank-1 should be invariant under both rules.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Judge-Z mean</th>
+<th>Weighted-Mean rank</th>
+<th>Judge-Z rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>claudekit</td>
+<td>+0.810</td>
+<td>1</td>
+<td><strong>1</strong></td>
+</tr>
+<tr>
+<td>ecc</td>
+<td>+0.336</td>
+<td>2</td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td>pure</td>
+<td>+0.033</td>
+<td>3</td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>superpower</td>
+<td>-0.138</td>
+<td>4</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td>compound</td>
+<td>-0.161</td>
+<td>5</td>
+<td><strong>5</strong></td>
+</tr>
+<tr>
+<td>bmad</td>
+<td>-0.173</td>
+<td>6</td>
+<td><strong>6</strong></td>
+</tr>
+<tr>
+<td>omc</td>
+<td>-0.234</td>
+<td>7</td>
+<td><strong>7</strong></td>
+</tr>
+<tr>
+<td>gstack</td>
+<td>-0.472</td>
+<td>8</td>
+<td><strong>8</strong></td>
+</tr>
+</tbody>
+</table>
+<p><code>Δ</code> is <code>Weighted-Mean rank − Judge-Z rank</code>. Δ=0 means the canonical and z-normalized rules agree; |Δ|≥2 means the ordering moves materially under judge normalization (worth investigating).</p>
+<h2 id="comparative-rank-validity-probe-opus-1m-parallel-signal" tabindex="-1"><a class="header-anchor" href="#comparative-rank-validity-probe-opus-1m-parallel-signal"><span>Comparative-rank validity probe (Opus-1M, parallel signal)</span></a></h2>
+<p><strong>Spearman ρ vs panel weighted-mean rank: -0.405</strong> (n_cells = 25 comparative-judge runs; 5 tools flagged with |Δrank| ≥ 2)</p>
+<p>Independent of the per-artifact panel above: one Opus-1M call ranks all 8 tools’ artifacts for a (task, trial) cell side-by-side, then averaged across 5 rounds with fresh per-round Greek-suffix labels and shuffled prompt order. <strong>Comparative-rank is a parallel signal — it does NOT enter the weighted mean.</strong> High ρ means both judgment regimes agree on tool ordering; low or negative ρ flags a calibration disagreement worth investigating (panel sees artifacts in isolation and can drift; comparative sees the cohort range and recalibrates each round). This in-report table is the <strong>Opus-1M lane only</strong>, shown as a quick signal; the full two-lane (Opus-1M + GPT-5.4) triangulation with all three pairwise Spearman ρ per task lives in <code>_comparative-eval/_triangulation.md</code> <span class="muted">(omitted from public release)</span>. Methodology and per-round outputs: <code>_comparative-eval/</code> <span class="muted">(omitted from public release)</span>.</p>
+<p><strong>[!] Blinding observations volunteered by Opus</strong> (rounds where the judge noted potentially-identifying patterns — treat as soft warnings):</p>
+<ul>
+<li>t1/round4: No confident identification. Weak, non-actionable signal only: R4-Zeta’s unusually large multi-file footprint (639+/270-) suggests a heavier agentic harness, but this is speculative and I did not rank on suspected identity.</li>
+<li>t2/round2: No confident identification. Theta’s large multi-file churn (776/274, 10 files) and Beta’s cross-cutting shared-policy refactor suggest heavier-orchestration tooling, but I cannot map either to a specific named tool with confidence, so I am</li>
+<li>t3/round1: R1-Theta’s large multi-file rewrite (10 files, +737/-274) is characteristic of a heavier autonomous-orchestration tool, but this is weak speculation, not a confident identification. No other label exposed identifying style.</li>
+<li>t5/round3: Low confidence. Gamma’s 6-file/710-line footprint suggests a heavier multi-agent orchestration setup, and Beta’s two-layer engine+inventory fix suggests a more exploratory agent, but neither is specific enough to name a tool. No definitive</li>
+<li>t5/round5: No confident tool identification. Mild generic observation only: Delta’s outsized 710/272-line, 6-file diff for a narrow bugfix suggests a more refactor-prone agentic setup, but this is not specific enough to name a tool, and I did not let</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Panel rank</th>
+<th>Comparative rank</th>
+<th>Δ</th>
+<th>Panel weighted-mean</th>
+<th>Comparative mean-rank ± σ</th>
+<th>n obs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compound</td>
+<td>5</td>
+<td><strong>1</strong></td>
+<td>+4 ⚠</td>
+<td>166.25</td>
+<td>3.00 ± 1.58</td>
+<td>25</td>
+</tr>
+<tr>
+<td>pure</td>
+<td>3</td>
+<td><strong>2</strong></td>
+<td>+1</td>
+<td>169.53</td>
+<td>3.32 ± 1.57</td>
+<td>25</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td>6</td>
+<td><strong>3</strong></td>
+<td>+3 ⚠</td>
+<td>165.72</td>
+<td>3.72 ± 2.35</td>
+<td>25</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td>8</td>
+<td><strong>4</strong></td>
+<td>+4 ⚠</td>
+<td>159.97</td>
+<td>4.36 ± 2.61</td>
+<td>25</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td>4</td>
+<td><strong>5</strong></td>
+<td>-1</td>
+<td>166.41</td>
+<td>4.60 ± 1.87</td>
+<td>25</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>7</td>
+<td><strong>6</strong></td>
+<td>+1</td>
+<td>164.80</td>
+<td>5.00 ± 2.68</td>
+<td>25</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td>2</td>
+<td><strong>7</strong></td>
+<td>-5 ⚠</td>
+<td>172.31</td>
+<td>5.64 ± 2.00</td>
+<td>25</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td>1</td>
+<td><strong>8</strong></td>
+<td>-7 ⚠</td>
+<td>178.93</td>
+<td>6.36 ± 1.44</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+<p><code>Δ = panel_rank − comparative_rank</code>. Positive Δ means comparative ranks the tool higher than the panel; ⚠ marks |Δ| ≥ 2.</p>
+<h2 id="ranking-weighted-mean" tabindex="-1"><a class="header-anchor" href="#ranking-weighted-mean"><span>Ranking (Weighted Mean)</span></a></h2>
+<ol>
+<li><strong>claudekit</strong> — 178.93/200</li>
+<li><strong>ecc</strong> — 172.31/200</li>
+<li><strong>pure</strong> — 169.53/200</li>
+<li><strong>superpower</strong> — 166.41/200</li>
+<li><strong>compound</strong> — 166.25/200</li>
+<li><strong>bmad</strong> — 165.72/200</li>
+<li><strong>omc</strong> — 164.80/200</li>
+<li><strong>gstack</strong> — 159.97/200</li>
+</ol>
+<h2 id="per-trial-breakdown" tabindex="-1"><a class="header-anchor" href="#per-trial-breakdown"><span>Per-Trial Breakdown</span></a></h2>
+<p>Weighted-mean score for each individual trial (same 3·opus + 2·<code>GPT-5.4</code> + others weighting as the canonical column). Surfaces trial-to-trial drift inside a tool — a wide spread means the cohort mean is averaging over disagreeing runs rather than stable ones. The Δ column is <code>max − min</code> across all trials; ≥ 15 pts is flagged as <strong>noisy</strong> (the tool’s output is bimodal at this sample size).</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>t1</th>
+<th>t2</th>
+<th>t3</th>
+<th>t4</th>
+<th>t5</th>
+<th>Δ (max − min)</th>
+<th>Flag</th>
+<th>Skills (t1/t2/t3/t4/t5)</th>
+<th>Subagents (t1/t2/t3/t4/t5)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>claudekit</td>
+<td>188.75</td>
+<td>189.71</td>
+<td>172.54</td>
+<td>184.25</td>
+<td>159.42</td>
+<td>30.29</td>
+<td><strong>noisy</strong></td>
+<td>134/112/148/—/—</td>
+<td>1/0/1/—/—</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td>186.04</td>
+<td>170.38</td>
+<td>180.83</td>
+<td>149.21</td>
+<td>175.08</td>
+<td>36.83</td>
+<td><strong>noisy</strong></td>
+<td>89/77/40/—/—</td>
+<td>1/1/1/—/—</td>
+</tr>
+<tr>
+<td>pure</td>
+<td>160.96</td>
+<td>182.33</td>
+<td>182.00</td>
+<td>157.37</td>
+<td>165.00</td>
+<td>24.96</td>
+<td><strong>noisy</strong></td>
+<td>0/0/0/—/—</td>
+<td>0/0/1/—/—</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td>164.42</td>
+<td>170.88</td>
+<td>167.12</td>
+<td>167.17</td>
+<td>162.46</td>
+<td>8.42</td>
+<td></td>
+<td>111/117/124/—/—</td>
+<td>0/0/0/—/—</td>
+</tr>
+<tr>
+<td>compound</td>
+<td>174.96</td>
+<td>159.04</td>
+<td>164.12</td>
+<td>174.83</td>
+<td>158.29</td>
+<td>16.67</td>
+<td><strong>noisy</strong></td>
+<td>105/75/75/—/—</td>
+<td>0/0/0/—/—</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td>158.67</td>
+<td>182.29</td>
+<td>174.92</td>
+<td>160.25</td>
+<td>152.46</td>
+<td>29.83</td>
+<td><strong>noisy</strong></td>
+<td>69/71/110/—/—</td>
+<td>0/0/0/—/—</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>159.67</td>
+<td>153.00</td>
+<td>182.92</td>
+<td>149.67</td>
+<td>178.75</td>
+<td>33.25</td>
+<td><strong>noisy</strong></td>
+<td>163/371/157/—/—</td>
+<td>4/6/1/—/—</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td>156.25</td>
+<td>162.67</td>
+<td>153.58</td>
+<td>165.96</td>
+<td>161.38</td>
+<td>12.38</td>
+<td></td>
+<td>72/77/67/—/—</td>
+<td>0/0/0/—/—</td>
+</tr>
+</tbody>
+</table>
+<p>Reading: a <code>noisy</code> flag here means the cohort mean for that tool is averaging over runs that disagree by ≥ 15 weighted pts. Use this column to read the headline rank with calibration — a tool whose trials cluster tightly is a more reliable signal than one with a wide spread. The pre-registered rerun protocol triggers on <strong>per-round</strong> outliers within a trial (not trial-to-trial), so a wide Δ here is real tool variance, not a harness artifact.</p>
+<p><strong>Skills (t1/t2/t3/t4/t5)</strong> = number of distinct skill / slash-command invocations per trial (from <code>session-audit.json</code> → <code>skills_invoked</code>). <strong>Subagents (t1/t2/t3/t4/t5)</strong> = sub-agent dispatches per trial. A tool whose primary mechanism is a skill/sub-agent and reads <code>0</code> for a trial likely failed to invoke its mechanism — under the rerun protocol this is a Tier-1 trigger (“Skill failure”), distinct from the statistical-outlier trigger. Cross-reference these counts when a trial scores far from its siblings.</p>
+<h2 id="per-judge-means" tabindex="-1"><a class="header-anchor" href="#per-judge-means"><span>Per-Judge Means</span></a></h2>
+<p>Each cell is one judge’s mean score for one tool, averaged over that judge’s 15 samples (5 trials × 3 rounds). The columns:</p>
+<ul>
+<li><strong>Tool</strong> — same 8 setups as above, ordered by Weighted Mean (rank-1 first).</li>
+<li><strong>opus / grok420 / glm51 / GPT-5.4 / mimo25pro</strong> — that judge’s mean score (0–200 rubric) for this tool. Reads vertically to expose <strong>judge base-rate effects</strong>: <code>GPT-5.4</code> consistently scores ~20–30 pts below the panel mean (harshest in the panel), <code>mimo25pro</code> ~5–15 pts above (most lenient, occasionally saturates at 200). Reads horizontally to see whether the judges agree on the ordering: if a tool is rank-1 under one judge and rank-7 under another, the consensus is weak.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>opus</th>
+<th>grok420</th>
+<th>glm51</th>
+<th>gpt54pro</th>
+<th>mimo25pro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>claudekit</td>
+<td>177.9</td>
+<td>187.5</td>
+<td>181.8</td>
+<td>168.1</td>
+<td>192.5</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td>172.1</td>
+<td>182.9</td>
+<td>177.0</td>
+<td>157.3</td>
+<td>187.7</td>
+</tr>
+<tr>
+<td>pure</td>
+<td>169.7</td>
+<td>177.3</td>
+<td>174.9</td>
+<td>156.7</td>
+<td>181.5</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td>168.3</td>
+<td>175.5</td>
+<td>173.0</td>
+<td>147.6</td>
+<td>182.8</td>
+</tr>
+<tr>
+<td>compound</td>
+<td>165.7</td>
+<td>178.2</td>
+<td>170.8</td>
+<td>152.0</td>
+<td>180.0</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td>165.9</td>
+<td>174.1</td>
+<td>175.5</td>
+<td>148.3</td>
+<td>181.8</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>165.0</td>
+<td>170.4</td>
+<td>168.9</td>
+<td>148.5</td>
+<td>187.0</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td>157.3</td>
+<td>176.3</td>
+<td>165.7</td>
+<td>141.6</td>
+<td>182.5</td>
+</tr>
+</tbody>
+</table>
+<h2 id="provenance-defects-2" tabindex="-1"><a class="header-anchor" href="#provenance-defects-2"><span>Provenance Defects (2)</span></a></h2>
+<p>Files whose internal <code>judge</code> field disagrees with the filename slot the aggregator dispatched by. The score is still counted (not retroactively pulled); listed here for transparency.</p>
+<ul>
+<li><code>_blind-eval/Tango/gpt54pro-judge.json</code> — slot <code>gpt54pro</code> but <code>.judge</code> = <code>openai-o3</code></li>
+<li><code>_blind-eval/Tango/round1/gpt54pro-judge.json</code> — slot <code>gpt54pro</code> but <code>.judge</code> = <code>gpt-5</code></li>
+</ul>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>results/bugfix/final-report.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

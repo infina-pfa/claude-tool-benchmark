@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 516 402" role="img" aria-label="Wall-clock minutes per trial" style="font-family:Inter,system-ui,sans-serif;">
+<text x="110" y="24" font-size="15" font-weight="600" fill="#0f172a">Wall-clock minutes per trial</text>
+<text x="110" y="44" font-size="11" fill="#64748b">First→last assistant timestamp; ecc-feature ≈634 min is session lifetime.</text>
+<text x="175.0" y="60" text-anchor="middle" font-size="11" font-weight="500" fill="#334155">feature</text>
+<text x="305.0" y="60" text-anchor="middle" font-size="11" font-weight="500" fill="#334155">bugfix</text>
+<text x="435.0" y="60" text-anchor="middle" font-size="11" font-weight="500" fill="#334155">refactor</text>
+<text x="102" y="91.0" text-anchor="end" font-size="12" fill="#0f172a">bmad</text>
+<rect x="110" y="68" width="130" height="38" fill="#e1ecfe" stroke="#e2e8f0" />
+<text x="175.0" y="91.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">21.4</text>
+<rect x="240" y="68" width="130" height="38" fill="#e4effe" stroke="#e2e8f0" />
+<text x="305.0" y="91.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">9.5</text>
+<rect x="370" y="68" width="130" height="38" fill="#cddcfa" stroke="#e2e8f0" />
+<text x="435.0" y="91.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">82.1</text>
+<text x="102" y="129.0" text-anchor="end" font-size="12" fill="#0f172a">claudekit</text>
+<rect x="110" y="106" width="130" height="38" fill="#c9d8f9" stroke="#e2e8f0" />
+<text x="175.0" y="129.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">97.2</text>
+<rect x="240" y="106" width="130" height="38" fill="#e1ecfe" stroke="#e2e8f0" />
+<text x="305.0" y="129.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">21.2</text>
+<rect x="370" y="106" width="130" height="38" fill="#dbe7fc" stroke="#e2e8f0" />
+<text x="435.0" y="129.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">38.2</text>
+<text x="102" y="167.0" text-anchor="end" font-size="12" fill="#0f172a">compound</text>
+<rect x="110" y="144" width="130" height="38" fill="#e0ebfe" stroke="#e2e8f0" />
+<text x="175.0" y="167.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">22</text>
+<rect x="240" y="144" width="130" height="38" fill="#e5effe" stroke="#e2e8f0" />
+<text x="305.0" y="167.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">7.2</text>
+<rect x="370" y="144" width="130" height="38" fill="#e3edfe" stroke="#e2e8f0" />
+<text x="435.0" y="167.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">15.0</text>
+<text x="102" y="205.0" text-anchor="end" font-size="12" fill="#0f172a">ecc</text>
+<rect x="110" y="182" width="130" height="38" fill="#1f4ed8" stroke="#e2e8f0" />
+<text x="175.0" y="205.0" text-anchor="middle" font-size="13" font-weight="500" fill="#ffffff">634.1</text>
+<rect x="240" y="182" width="130" height="38" fill="#e0ebfd" stroke="#e2e8f0" />
+<text x="305.0" y="205.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">22.5</text>
+<rect x="370" y="182" width="130" height="38" fill="#dfeafd" stroke="#e2e8f0" />
+<text x="435.0" y="205.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">26.3</text>
+<text x="102" y="243.0" text-anchor="end" font-size="12" fill="#0f172a">gstack</text>
+<rect x="110" y="220" width="130" height="38" fill="#dae6fc" stroke="#e2e8f0" />
+<text x="175.0" y="243.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">41.0</text>
+<rect x="240" y="220" width="130" height="38" fill="#e6f0ff" stroke="#e2e8f0" />
+<text x="305.0" y="243.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">5.9</text>
+<rect x="370" y="220" width="130" height="38" fill="#d9e5fc" stroke="#e2e8f0" />
+<text x="435.0" y="243.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">46.2</text>
+<text x="102" y="281.0" text-anchor="end" font-size="12" fill="#0f172a">omc</text>
+<rect x="110" y="258" width="130" height="38" fill="#a1b7f1" stroke="#e2e8f0" />
+<text x="175.0" y="281.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">223.5</text>
+<rect x="240" y="258" width="130" height="38" fill="#dbe7fd" stroke="#e2e8f0" />
+<text x="305.0" y="281.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">37.6</text>
+<rect x="370" y="258" width="130" height="38" fill="#adc1f3" stroke="#e2e8f0" />
+<text x="435.0" y="281.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">185.0</text>
+<text x="102" y="319.0" text-anchor="end" font-size="12" fill="#0f172a">pure</text>
+<rect x="110" y="296" width="130" height="38" fill="#dce8fd" stroke="#e2e8f0" />
+<text x="175.0" y="319.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">34.4</text>
+<rect x="240" y="296" width="130" height="38" fill="#e3eefe" stroke="#e2e8f0" />
+<text x="305.0" y="319.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">12.6</text>
+<rect x="370" y="296" width="130" height="38" fill="#deeafd" stroke="#e2e8f0" />
+<text x="435.0" y="319.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">28.2</text>
+<text x="102" y="357.0" text-anchor="end" font-size="12" fill="#0f172a">superpower</text>
+<rect x="110" y="334" width="130" height="38" fill="#9fb6f1" stroke="#e2e8f0" />
+<text x="175.0" y="357.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">229.6</text>
+<rect x="240" y="334" width="130" height="38" fill="#e3eefe" stroke="#e2e8f0" />
+<text x="305.0" y="357.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">13.6</text>
+<rect x="370" y="334" width="130" height="38" fill="#a2b9f1" stroke="#e2e8f0" />
+<text x="435.0" y="357.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">218.5</text>
+</svg>

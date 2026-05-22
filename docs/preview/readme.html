@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>README — AI Tool Benchmark</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/README.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="ai-coding-tool-benchmark" tabindex="-1"><a class="header-anchor" href="#ai-coding-tool-benchmark"><span>AI Coding Tool Benchmark</span></a></h1>
+<p>A multi-task, 5-judge evaluation of <strong>8 Claude Code setups</strong> (plugins, skill packs, hook kits, and a no-addon baseline) on 3 real-world software-engineering tasks from the <a href="#"><code>a private TypeScript NX monorepo</code></a> monorepo. All runs on <code>claude-opus-4-7</code>.</p>
+<ul>
+<li><strong><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/PAPER.md">PAPER.md</a></strong> — research-paper-style report (method, results, caveats, reproducibility)</li>
+<li><strong><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/final-report.md">results/final-report.md</a></strong> — feature task, weighted-mean ranking + caveats</li>
+<li><strong><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/bugfix/final-report.md">results/bugfix/final-report.md</a></strong> — bugfix task</li>
+<li><strong><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/refactor/final-report.md">results/refactor/final-report.md</a></strong> — refactor task</li>
+<li><strong><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/README.md">docs/README.md</a></strong> — docs folder index (guides, tool profiles, analysis)</li>
+<li><strong><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/guides/verification.md">docs/guides/verification.md</a></strong> — how to independently verify any claim</li>
+<li><strong><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/PAPER.md#6-reproducibility">PAPER.md §6</a></strong> — end-to-end run/judge/aggregate pipeline</li>
+</ul>
+<hr>
+<h2 id="tldr-rank-1-by-task-weighted-mean-200" tabindex="-1"><a class="header-anchor" href="#tldr-rank-1-by-task-weighted-mean-200"><span>TL;DR — Rank-1 by task (weighted mean / 200)</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Rank 1</th>
+<th>Rank 2</th>
+<th>Rank 3</th>
+<th>Cohort spread</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td><strong>ecc</strong> (153.30)</td>
+<td>pure (143.13)</td>
+<td>bmad (141.33)</td>
+<td>top-to-bottom span 21.3</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td><strong>claudekit</strong> (178.93)</td>
+<td>ecc (172.31)</td>
+<td>pure (169.53)</td>
+<td>top-to-bottom span 19.0</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td><strong>pure</strong> (180.19)</td>
+<td>claudekit (178.04)</td>
+<td>bmad (177.74)</td>
+<td>gstack collapses to 144.92 (−25 vs rank-7)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>No rank-1 lead is statistically significant.</strong> The rank table above is <strong>point-estimate only</strong>: under the exact Student-t detection threshold every per-task rank-1 gap falls below MDE, and the <em>only</em> pairwise gap that clears its task MDE anywhere in the 1800-judgment corpus is <code>ecc</code>−<code>gstack</code> on <code>feature</code>. <code>ecc</code> is rank-1 on <code>feature</code>, <code>claudekit</code> on <code>bugfix</code>, <code>pure</code> (no addons) on <code>refactor</code> <strong>by point estimate only — none is distinguishable from rank-2 at standard significance</strong>; no setup is top-2 on all three tasks. The per-task reports compute MDE at the cohort’s actual <strong>n=5</strong> trials per arm using the <strong>exact Student-t critical value</strong> for df=2(n-1)=8 (t≈2.306, not the normal z=1.96 — at n=5 this enlarges every MDE ~12%): <strong>19.33 pts (feature) · 22.17 (bugfix) · 44.02 (refactor)</strong> (α=0.05 two-sided, power=0.80; σ_pool 9.72 / 11.14 / 22.13; β-term keeps the normal z=0.84 as a conservative approximation; see <code>results/power-analysis.json</code>). Expanding from n=3 → n=5 did <strong>not</strong> scale MDE down as 1/√n: σ_pool rose on every task (more trials exposed larger true trial-to-trial variance), most sharply on refactor — driven by one high-variance arm, <code>gstack</code>, whose trial-4 refactor diff judges scored ≈36/200 against ~178 on its other four (a mechanically clean run, so a valid in-distribution trial under the pre-registered no-selective-rerun rule). The rank-1 leads (feature 10.17, bugfix 6.62, refactor 2.15 pts) all fall well below MDE: the top-cluster orderings are <em>point-estimate first, statistically tied.</em> No rank-1 lead on any task clears MDE; under the exact-t threshold the <strong>only</strong> separation that clears MDE anywhere in the corpus is <code>ecc</code> − <code>gstack</code> on <code>feature</code> (21.3 &gt; the 19.33 feature MDE). An earlier z-based analysis additionally flagged <code>ecc</code> − <code>claudekit</code> (18.3) and <code>ecc</code> − <code>compound</code> (18.6) as clearing the feature MDE; both fall <strong>below</strong> MDE under the corrected exact-t critical and are no longer treated as separations. No separation clears MDE on <code>bugfix</code> or <code>refactor</code>. An earlier version of this paragraph claimed <code>claudekit − pure</code> rejected the strict null on bugfix based on a heuristic ~5-pt tie envelope; the formal power analysis retracts that claim (9.4 ≪ 22.17). <code>pure</code> is top-3 on every task and rank-1 on refactor — the strongest counter-claim to the “you need addons” prior, <em>within the tie band.</em> Rank-1 is stable across weighted-mean (opus×3, gpt54pro×2, others×1) and equal-weight aggregation on every task; top-3 is identical under both rules on bugfix, and reorders within the top cluster on feature (weighted ecc / pure / bmad vs equal-weight ecc / bmad / pure) and refactor (weighted rank-3 bmad vs equal-weight rank-3 superpower). Inter-rater agreement is low for absolute scores (Krippendorff α: feature 0.124, bugfix 0.284, refactor 0.626 — punished by lenience drift; refactor (0.626) sits just below the tentative band, feature/bugfix far below; <strong>these α are an upper bound — computed on round-averaged scores, so true per-round agreement is lower</strong>); the weighted mean and the per-judge z-normalized sensitivity column are the intended mitigations. <code>between_σ &gt; within_σ</code> on 19 of 24 (tool, task) cells — the dominant uncertainty is judge disagreement, not tool instability. Outlier audit: 0 skill-failure triggers (evaluated over the t1–t3 cells where session audits exist), per-task round-outlier rates 4.17% / 3.67% / 1.33% (feature / bugfix / refactor; 55 of 1800 pooled ≈ 3.1%) vs ~5% 2σ-chance baseline — point estimates at/below chance but 95% CIs straddle it → <strong>no reruns triggered</strong>. <strong>Corpus:</strong> 1800 judgments (3 tasks × 8 tools × 5 trials × 5 judges × 3 rounds). <strong>Preregistration scope:</strong> only the judge weights and the rerun protocol are pre-registered; the tasks, the 20-item rubric, the judge panel, and the R1 mechanical-fact lock list were operator-iterative (see PAPER §4 “Not preregistered”). Treat the rankings as descriptive — the strongest claim this design supports is the <em>negative result</em> (no rank-1 lead clears MDE on any task) and the <em>calibration-study</em> finding (α=0.124 on feature means LLM judges fundamentally disagree on absolute scores), not a confirmatory leaderboard. See <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/PAPER.md#2-results">PAPER.md §2</a> for per-task tables, <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/PAPER.md#4-limitations-and-threats-to-validity">§4</a> for threats to validity, and <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/IMPROVEMENT-PLAN-NEXT-COHORT.md"><code>docs/IMPROVEMENT-PLAN-NEXT-COHORT.md</code></a> for the runbook to raise statistical power.</p>
+<hr>
+<h2 id="reproduce" tabindex="-1"><a class="header-anchor" href="#reproduce"><span>Reproduce</span></a></h2>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># One (task, tool, trial) run:</span>
+TASK=refactor ./scripts/create-clones.sh 1
+TASK=refactor ./scripts/manual-bench.sh bmad 1
+
+<span class="hljs-comment"># Blind labels + mapping (path/content scrub + auto-metrics anonymisation):</span>
+TASK=refactor ./scripts/blind-eval-setup.sh
+
+<span class="hljs-comment"># Judge every label × 5 judges:</span>
+TASK=refactor ./scripts/judge-all.sh            <span class="hljs-comment"># no args = judge every label in the mapping</span>
+
+<span class="hljs-comment"># Aggregate per-task (R1 sweep → weighted-mean → equal-weight comparator):</span>
+TASK=refactor ./scripts/aggregate-results.sh
+
+<span class="hljs-comment"># Cohort-symmetry audit:</span>
+python3 scripts/audit-cohort-symmetry.py
+</code></pre>
+<p>See <strong><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/PAPER.md#6-reproducibility">PAPER.md §6</a></strong> for the full pipeline and judge-prompt locations. All script sources live under <a href="https://github.com/infina-pfa/claude-tool-benchmark/tree/main/scripts"><code>scripts/</code></a>.</p>
+<hr>
+<h2 id="layout" tabindex="-1"><a class="header-anchor" href="#layout"><span>Layout</span></a></h2>
+<pre class="hljs"><code>scripts/                 — pipeline (create-clones, manual-bench, judge-*, aggregate)
+docs/                    — task briefs, pipeline notes, tool profiles, analyses
+config/                  — per-tool config templates
+results/
+  final-report.md        — feature, weighted-mean + caveats
+  final-report.equal-weight.md — feature, equal-weight comparator
+  _blind-eval/           — feature judged artifacts (5-judge panel × 3 rounds per artifact)
+
+  bugfix/, refactor/     — task-scoped results (per-task final-report.md inside)
+  &lt;tool&gt;/t&lt;N&gt;/           — per-trial execution artifacts
+versions.lock.json       — base model, 5-judge panel + weights, 8 tool versions, base SHAs
+CLAUDE.md                — internal operator notes
+</code></pre>
+<p>Browse the tree on GitHub: <a href="https://github.com/infina-pfa/claude-tool-benchmark">infina-pfa/claude-tool-benchmark</a>.</p>
+<hr>
+<h2 id="caveats" tabindex="-1"><a class="header-anchor" href="#caveats"><span>Caveats</span></a></h2>
+<blockquote>
+<p><strong>Framing — approve-only “vibecode” execution.</strong> Trials are run by an operator who accepts whatever each tool proposes — no mid-flight steering, no plan rejection, no “try a different approach”. The per-tool slash command is fired once and the operator only clicks through permission prompts. This deliberately measures <em>autonomous one-shot capability under a pinned base model</em>. Setups whose realised quality depends on iterative human feedback (plan revision, rejecting a sub-task, mid-edit course correction) will rank lower here than they would in interactive pair-programming use. Read these rankings as <strong>“best when the operator just keeps approving”</strong>, not as a measure of effectiveness with human-in-the-loop steering — a tool that ranks second here under vibecode may well rank first under active human direction.</p>
+</blockquote>
+<ol>
+<li><strong>Single codebase, single language</strong> (TypeScript NX monorepo). Don’t assume these rankings generalize to Python/Go/Rust.</li>
+<li><strong>Single executor base model</strong> (<code>claude-opus-4-7</code>). A setup that specializes on sonnet/haiku/GPT/Gemini may rank differently.</li>
+<li><strong>Self-preference is not identified.</strong> Every executor uses an Anthropic base, so we cannot disentangle Anthropic-family judge favouritism from intrinsic judge-calibration drift; this benchmark deliberately does not report a self-preference diagnostic. As non-causal descriptive checks (not self-preference estimates), the equal-weight comparator and each report’s per-judge z-normalized sensitivity section show rank-1 is stable when opus’s 3× weight and per-judge base rates are removed.</li>
+<li><strong>LLM judges diverge by 32–42 pts (full panel spread, per task).</strong> <code>gpt54pro</code> is consistently the harshest scorer (19–27 pts below the per-task panel mean), <code>mimo25pro</code> the most lenient. The 5-judge weighted panel (opus×3, gpt54pro×2, grok420/glm51/mimo25pro×1, pre-registered in <code>versions.lock.json</code>) is the intended mitigation; an equal-weight comparator is emitted alongside every report for sensitivity. Rank-1 is stable under both rules on every task in this corpus; top-3 is identical on bugfix, and reorders within the top cluster on feature and refactor (see TL;DR above and PAPER §5). <strong>Judge-model note:</strong> the <code>gpt54pro</code> slot is heterogeneous across the cohort — t1–t3 answered as <code>gpt-5.4-pro</code> (OpenAI <code>/v1/responses</code>), t4+ as <code>gpt-5.4</code> (local cliproxy); the slot key is frozen for aggregation continuity. Full provenance in <code>versions.lock.json</code> <code>judges.gpt54pro.routing_history</code> and PAPER §1.6 / §2.5.</li>
+<li><strong><code>between_σ &gt; within_σ</code> on 19 of 24 (tool, task) cells.</strong> The five exceptions are <code>claudekit</code> (within 11.42 vs between 9.35), <code>ecc</code> (13.54 vs 11.70), <code>pure</code> (12.05 vs 9.58) and <code>omc</code> (15.66 vs 13.74) on bugfix, plus <code>gstack</code> on refactor (within 58.43 vs between 12.52 — one trial scored far below gstack’s other four). On the remaining 19 cells most variance is judge disagreement, not tool instability. Close rank pairs (within ~5 weighted pts) should be read as ties.</li>
+<li><strong>R1 mechanical-fact override is post-hoc.</strong> Deterministic rubric items (tsc/eslint counts, core-test failures, lines removed in scope-discipline) are rewritten from <code>auto-metrics.json</code> after judging. Pre-override scores are preserved per-file under <code>scores_pre_r1</code>; the sweep is idempotent and runs before every aggregation.</li>
+<li><strong>Cross-task synthesis not reported as a canonical claim.</strong> A single cross-task z̄ summary is sensitive to weighting (multi-rank swings in middle tiers across plausible weightings) and noisy even at 5 trials per cell; read the 3 per-task <code>final-report.md</code> files together rather than collapsing to a single leaderboard. The landing page renders an equal-weight z̄ visualization at the top of the page as a visual aid; it is explicitly labeled as such and is not the canonical ranking.</li>
+<li><strong>Judge sampling not pinned.</strong> Temperature is fixed to 0 where the provider exposes it (OpenRouter, OpenCode Go); Claude CLI and OpenAI <code>/v1/responses</code> do not expose temperature/seed.</li>
+<li><strong>Not preregistered.</strong> Tasks, rubric, judge panel, weight scheme, and R1 lock list were chosen iteratively. The weight scheme is committed to <code>versions.lock.json</code> before aggregation; earlier choices of tasks and rubric items are not preregistered. The leak-fix re-judge pass was symmetric over the 6 detected-leak labels, not all 40 feature labels — a disclosed deviation from the strict cohort-rerun rule (see PAPER §4).</li>
+<li><strong>Tool-version snapshot, 2026-05.</strong> Versions captured in <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/versions.lock.json"><code>versions.lock.json</code></a>; re-run for current-version claims.</li>
+</ol>
+<p>See <strong><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/PAPER.md#4-limitations-and-threats-to-validity">PAPER.md §4</a></strong> for the full threats-to-validity list.</p>
+<hr>
+<h2 id="license" tabindex="-1"><a class="header-anchor" href="#license"><span>License</span></a></h2>
+<p>Results and methodology published openly for reference and independent re-analysis. See individual files for upstream tool licenses. Source repository: <a href="https://github.com/infina-pfa/claude-tool-benchmark">infina-pfa/claude-tool-benchmark</a>.</p>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>README.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

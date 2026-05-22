@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool Profile — ecc</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/ecc.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="ecc-everything-claude-code" tabindex="-1"><a class="header-anchor" href="#ecc-everything-claude-code"><span>ecc — everything-claude-code</span></a></h1>
+<blockquote>
+<p>A plugin pack from an Anthropic hackathon winner: a large catalog of commands, agents, skills, and hooks, invoked here through a single command — <code>/everything-claude-code:plan</code>, fired on every task.</p>
+</blockquote>
+<h2 id="upstream" tabindex="-1"><a class="header-anchor" href="#upstream"><span>Upstream</span></a></h2>
+<ul>
+<li>Repository: <code>affaan-m/everything-claude-code</code> (https://github.com/affaan-m/everything-claude-code)</li>
+<li>Author: Affaan Mustafa</li>
+<li>License: MIT</li>
+<li>Plugin version pinned at install: <code>1.10.0</code> (commit <code>846ffb75</code>)</li>
+<li>Claude Code plugin identifier: <code>everything-claude-code@everything-claude-code</code></li>
+</ul>
+<h2 id="performance" tabindex="-1"><a class="header-anchor" href="#performance"><span>Performance</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">Weighted mean /200</th>
+<th style="text-align:right">within_σ</th>
+<th style="text-align:right">between_σ</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right"><strong>153.30</strong></td>
+<td style="text-align:right">8.96</td>
+<td style="text-align:right">15.29</td>
+<td><strong>1 / 8</strong></td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">172.31</td>
+<td style="text-align:right">13.54</td>
+<td style="text-align:right">11.70</td>
+<td>2 / 8</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">173.61</td>
+<td style="text-align:right">8.71</td>
+<td style="text-align:right">16.12</td>
+<td>6 / 8</td>
+</tr>
+</tbody>
+</table>
+<p>ecc is <strong>rank-1 on feature</strong> (by ≈ 10 weighted pts over <code>pure</code> at 143.13 and <code>bmad</code> at 141.33) and rank-2 on bugfix. <code>within_σ</code> on feature (8.96) is mid-pack among orchestrators — the <code>/plan</code> planner pass produces moderately stable run-to-run quality. The mid-pack rank on refactor (6) is consistent with the rest of the orchestrator class on a task where the bare baseline takes rank-1.</p>
+<h2 id="mechanism" tabindex="-1"><a class="header-anchor" href="#mechanism"><span>Mechanism</span></a></h2>
+<p>ECC ships a sprawling plugin surface — its own documentation claims 38 agents, 156 skills, and 72 legacy command shims at v1.10.0, with additional components for cost, security, and operator workflows. The config directory confirms an MIT plugin registered through the Anthropic marketplace and a single <code>enabledPlugins</code> entry (<code>everything-claude-code@everything-claude-code</code>); no skills were manually re-keyed into <code>~/.claude/</code>.</p>
+<p>For the benchmark, a single entry point out of the full catalog was reached:</p>
+<ul>
+<li><code>/everything-claude-code:plan</code> — the only command the harness fires (on all three tasks). Invokes the planner subagent, which restates requirements, writes a step-by-step implementation plan, and waits for explicit confirmation before editing code.</li>
+<li><code>/everything-claude-code:build-fix</code> exists in the catalog (a build/bug fixer that investigates, edits, then runs language-appropriate build + test commands) but <strong>was never invoked by this benchmark</strong> — it appears in zero ecc session logs across all 40 trials.</li>
+<li>Everything else in the catalog (TDD, review, harness audit, memory, instincts, multi-plan, etc.) was available but never triggered by the harness.</li>
+</ul>
+<h2 id="how-this-benchmark-invoked-it" tabindex="-1"><a class="header-anchor" href="#how-this-benchmark-invoked-it"><span>How this benchmark invoked it</span></a></h2>
+<p><code>scripts/manual-bench.sh</code> (case <code>ecc)</code>, L176–178) fires the <strong>same command on every task</strong> — there is no per-task split:</p>
+<ul>
+<li><code>feature</code> → <code>/everything-claude-code:plan &lt;shared task prompt&gt;</code></li>
+<li><code>refactor</code> → <code>/everything-claude-code:plan &lt;shared task prompt&gt;</code></li>
+<li><code>bugfix</code> → <code>/everything-claude-code:plan &lt;shared task prompt&gt;</code></li>
+</ul>
+<blockquote>
+<p><strong>Correction (2026-05-18).</strong> Earlier versions of this profile described a load-bearing <code>/plan</code>-vs-<code>/build-fix</code> split (bugfix routed to <code>/build-fix</code>). That split was never implemented: <code>scripts/manual-bench.sh</code> has a single <code>ecc)</code> case with no task branch, and <code>/everything-claude-code:build-fix</code> is absent from every ecc transcript (feature/bugfix/refactor × t1–t5). The bugfix-performance explanation built on that premise was unfounded and has been re-derived below from the actual plan-only session data.</p>
+</blockquote>
+<h2 id="what-the-transcripts-show-session-audit" tabindex="-1"><a class="header-anchor" href="#what-the-transcripts-show-session-audit"><span>What the transcripts show (session audit)</span></a></h2>
+<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/ecc/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/ecc/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">wall min</th>
+<th style="text-align:right">main turns</th>
+<th style="text-align:right">sidechain turns</th>
+<th style="text-align:right">sub-agent disp.</th>
+<th style="text-align:right">files read (config / target)</th>
+<th style="text-align:right">files edited</th>
+<th style="text-align:right">cache hit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">634.1¹</td>
+<td style="text-align:right">215.7</td>
+<td style="text-align:right">259.0</td>
+<td style="text-align:right">1.7</td>
+<td style="text-align:right">59.0 (0 / 59.0)</td>
+<td style="text-align:right">56.3</td>
+<td style="text-align:right">0.98</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">22.5</td>
+<td style="text-align:right">46.0</td>
+<td style="text-align:right">58.3</td>
+<td style="text-align:right">1.0</td>
+<td style="text-align:right">22.7 (0 / 22.7)</td>
+<td style="text-align:right">1.3</td>
+<td style="text-align:right">0.95</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">26.3</td>
+<td style="text-align:right">144.0</td>
+<td style="text-align:right">41.0</td>
+<td style="text-align:right">1.0</td>
+<td style="text-align:right">36.7 (0 / 36.7)</td>
+<td style="text-align:right">25.0</td>
+<td style="text-align:right">0.98</td>
+</tr>
+</tbody>
+</table>
+<p>¹ ecc’s feature wall-clock is suspect — all 3 trials land near 634 min regardless of turn count (t1: 633.1 / 258 turns; t2: 635.2 / 353 turns; t3: 634.2 / 813 turns). This is likely the session-lifetime of the harness (kept open past task completion), not in-flight agent time.</p>
+<ul>
+<li><strong>One driving skill on every task:</strong> <code>everything-claude-code:plan</code> is the only attributed skill across all 40 ecc trials (feature/bugfix/refactor × t1–t5). There is no <code>build-fix</code> skill or slash command in any transcript.</li>
+<li><strong>Slash commands typed:</strong> <code>/everything-claude-code:plan</code> only, across the whole corpus. (Earlier text claiming <code>/build-fix</code> “shows up in the harness prompt” was incorrect — corrected 2026-05-18.)</li>
+<li><strong>Sub-agent types dispatched:</strong> <code>general-purpose</code> (6), <code>everything-claude-code:planner</code> (6), <code>Explore</code> (3), <code>Plan</code> (1) — <strong>16 dispatches across 15 (tool,task,trial) cells</strong>. Bugfix averages ≈ 0.6 dispatches/trial at n=5.</li>
+<li><strong>The planner subagent fires inconsistently on bugfix.</strong> At n=5: t1–t3 dispatched the <code>everything-claude-code:planner</code> subagent (sub-agent ≥ 1, non-zero sidechain: 79/70/26 turns); t4–t5 ran <code>/plan</code> entirely in the main thread (0 sub-agents, 0 sidechain). The <code>/plan</code> flow itself degrades to an inline single-thread plan on some trials — there is no guaranteed planner round trip.</li>
+<li><strong>Bugfix sessions are short and tightly scoped</strong> (n=5 means: ≈ 56 main turns, ≈ 1.4 files edited, ≈ 19 wall min — among the lowest edit footprints in the cohort on bugfix). The <code>/plan</code> entry restates requirements and scope-gates to 1–2 files before editing.</li>
+</ul>
+<h2 id="why-it-ranked-where-it-did" tabindex="-1"><a class="header-anchor" href="#why-it-ranked-where-it-did"><span>Why it ranked where it did</span></a></h2>
+<p>ecc’s bugfix rank-2 comes from the <code>/plan</code> entry’s upfront requirement restatement and scope-gating, which yields tight, small-footprint edits (≈ 1.4 files/trial) and a reproduction-test that other tools in this benchmark did not consistently produce — <strong>not</strong> from any <code>/build-fix</code> fast path, which does not exist in this harness. The <code>everything-claude-code:planner</code> subagent contributes on t1–t3 but is absent on t4–t5, so the lift is the in-context plan-and-confirm discipline, not reliable sub-agent fan-out.</p>
+<p>On feature the same <code>/plan</code> upfront pass is load-bearing — ecc takes rank-1 by ≈ 10 weighted pts over the next setup. On refactor the same <code>/plan</code> entry point does not separate from the orchestrator pack; the bare baseline takes rank-1 across the cohort.</p>
+<h2 id="strengths-and-failure-modes" tabindex="-1"><a class="header-anchor" href="#strengths-and-failure-modes"><span>Strengths and failure modes</span></a></h2>
+<p>Strengths observed: the <code>/plan</code> planner pass produces reviewable plans with explicit confirm gates and tight edit scope; fact-forcing gate catches blast-radius before each edit; willingness to separate pre-existing failures from regressions. (No task-to-command mapping exists — one command, <code>/plan</code>, serves all three tasks.)</p>
+<p>Failure modes observed: 14 eslint errors on the feature diff, 6 on the refactor — the workflow does not round-trip lint before committing. Large catalog is mostly dormant (TDD, quality-gate, code-review commands never fire unless the harness picks them). On tasks without a clear “this is a bug” framing (refactor), the tool reduces to vanilla Claude with an extra planning prelude.</p>
+<p>Unverified items: 140K-star / 21K-fork counts on the upstream README — README claim only, not checked against GitHub.</p>
+<h2 id="references" tabindex="-1"><a class="header-anchor" href="#references"><span>References</span></a></h2>
+<ul>
+<li>Upstream repo and README: <code>https://github.com/affaan-m/everything-claude-code</code></li>
+<li>Install case: <code>scripts/setup-tool-config.sh</code> (case <code>ecc)</code>)</li>
+<li>Prompt switch: <code>scripts/manual-bench.sh</code> (case <code>ecc)</code>)</li>
+<li>Config surface: <code>config/ecc-t&lt;N&gt;/settings.json</code>, <code>config/ecc-t&lt;N&gt;/plugins/installed_plugins.json</code></li>
+<li>Transcripts: <code>results/{ecc,bugfix/ecc,refactor/ecc}/t&lt;N&gt;/session-logs/</code></li>
+<li>Per-task reports: <a href="final-report-feature.html"><code>results/final-report.md</code></a>, <a href="final-report-bugfix.html"><code>results/bugfix/final-report.md</code></a>, <a href="final-report-refactor.html"><code>results/refactor/final-report.md</code></a></li>
+</ul>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/tools/ecc.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Extending — Add a Tool or Judge</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/guides/extending.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="extending-add-a-new-tool-or-a-new-judge" tabindex="-1"><a class="header-anchor" href="#extending-add-a-new-tool-or-a-new-judge"><span>Extending — Add a new tool or a new judge</span></a></h1>
+<p>The benchmark is built to be forked. The scripts are shell, the aggregation is ~500 lines of Python + bash, every artifact is on disk. No database, no service. This guide walks through the two extension paths.</p>
+<hr>
+<h2 id="add-a-new-tool" tabindex="-1"><a class="header-anchor" href="#add-a-new-tool"><span>Add a new tool</span></a></h2>
+<h3 id="1-use-the-scaffolding-script" tabindex="-1"><a class="header-anchor" href="#1-use-the-scaffolding-script"><span>1. Use the scaffolding script</span></a></h3>
+<pre class="hljs"><code class="language-bash">./scripts/add-tool.sh --dry-run     <span class="hljs-comment"># preview the edits</span>
+./scripts/add-tool.sh               <span class="hljs-comment"># interactive: name, install command, entry-point slash command</span>
+</code></pre>
+<p>The script interactively wires your tool into:</p>
+<ul>
+<li><code>scripts/env.sh</code> — appends to the <code>TOOLS</code> array.</li>
+<li><code>scripts/setup-tool-config.sh</code> — inserts the per-tool install block (plugin marketplace, git clone, or npm install).</li>
+<li><code>scripts/create-clones.sh</code> — adds <code>.gitignore</code> safety patterns (so your tool’s state files stay out of the benchmark commits).</li>
+<li><code>versions.lock.json</code> <code>tools.&lt;name&gt;</code> — bump the count and pin the version + SHA.</li>
+</ul>
+<p>It <code>bash -n</code> checks every modified script and can optionally run <code>create-clones.sh</code> to provision trial clones immediately.</p>
+<h3 id="2-decide-plan-mode-vs-native-planning" tabindex="-1"><a class="header-anchor" href="#2-decide-plan-mode-vs-native-planning"><span>2. Decide plan-mode vs. native-planning</span></a></h3>
+<table>
+<thead>
+<tr>
+<th>Your tool has …</th>
+<th>Configure it as</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A native planning/review workflow (e.g. <code>/mytool:plan</code>, <code>/mytool:cook</code>)</td>
+<td>Just a <code>PROMPT=</code> case. No plan-mode flag.</td>
+</tr>
+<tr>
+<td>A mixed mode (<code>plan</code> for feature/refactor, <code>build-fix</code> for bugfix)</td>
+<td>A per-task <code>case &quot;$TASK&quot;</code> inside your tool’s branch. See <code>ecc)</code> for the template.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Do not stack ceremonies.</strong> If your tool runs its own eng-review gate (like <code>gstack</code>’s <code>/ship</code>), don’t also set <code>--permission-mode plan</code>. The benchmark excludes <code>gstack</code> from plan-mode for exactly this reason.</p>
+<h3 id="3-run-the-cohort" tabindex="-1"><a class="header-anchor" href="#3-run-the-cohort"><span>3. Run the cohort</span></a></h3>
+<pre class="hljs"><code class="language-bash"><span class="hljs-keyword">for</span> trial <span class="hljs-keyword">in</span> 1 2 3 4 5; <span class="hljs-keyword">do</span>
+  TASK=feature  ./scripts/manual-bench.sh &lt;yourtool&gt; <span class="hljs-variable">$trial</span>
+  TASK=bugfix   ./scripts/manual-bench.sh &lt;yourtool&gt; <span class="hljs-variable">$trial</span>
+  TASK=refactor ./scripts/manual-bench.sh &lt;yourtool&gt; <span class="hljs-variable">$trial</span>
+<span class="hljs-keyword">done</span>
+</code></pre>
+<p><strong>Cohort symmetry:</strong> if you re-run any trial for your tool, you must re-run it for all 8 tools in the same cohort. Judge-side artifacts must all come from the same trial SHA. <code>scripts/audit-cohort-symmetry.py</code> exits non-zero if this is violated. See <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/CLAUDE.md#rerun-protocol-pre-registered"><code>../../CLAUDE.md</code></a> for the rerun protocol (valid triggers, archival procedure).</p>
+<h3 id="4-judge" tabindex="-1"><a class="header-anchor" href="#4-judge"><span>4. Judge</span></a></h3>
+<p>Judging needs no changes. <code>blind-eval-setup.sh</code> auto-discovers your runs from <code>results/&lt;task&gt;/&lt;tool&gt;/t&lt;N&gt;/commits.txt</code> and blind-labels them in the rotation.</p>
+<pre class="hljs"><code class="language-bash">TASK=feature ./scripts/blind-eval-setup.sh
+TASK=feature ./scripts/judge-all.sh &lt;label&gt;     <span class="hljs-comment"># 5-judge panel, single round</span>
+<span class="hljs-comment"># Repeat for bugfix and refactor</span>
+TASK=feature ./scripts/aggregate-results.sh
+</code></pre>
+<h3 id="5-verify-the-cohort" tabindex="-1"><a class="header-anchor" href="#5-verify-the-cohort"><span>5. Verify the cohort</span></a></h3>
+<pre class="hljs"><code class="language-bash">python3 scripts/audit-cohort-symmetry.py
+TASK=feature  ./scripts/aggregate-results.sh
+TASK=bugfix   ./scripts/aggregate-results.sh
+TASK=refactor ./scripts/aggregate-results.sh
+</code></pre>
+<p>Your tool now appears in <code>results/&lt;task&gt;/final-report.md</code> (per-tool weighted-mean ranking with σ decomposition) and the landing page bench-data block.</p>
+<h3 id="6-write-the-tool-profile" tabindex="-1"><a class="header-anchor" href="#6-write-the-tool-profile"><span>6. Write the tool profile</span></a></h3>
+<p>Add <code>docs/tools/&lt;yourtool&gt;.md</code> following the <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools">template in this folder</a>. Sections: Upstream, Performance, Mechanism, How this benchmark invoked it, What actually happened in the transcripts (per task), Why it ranked where it did, Strengths &amp; failure modes, References. Keep it transcript-grounded.</p>
+<hr>
+<h2 id="add-a-new-judge" tabindex="-1"><a class="header-anchor" href="#add-a-new-judge"><span>Add a new judge</span></a></h2>
+<p>Judges are OpenCode CLI sessions (for <code>grok420</code>, <code>glm51</code>, <code>mimo25pro</code>), Claude Code sessions (for <code>opus</code>), or direct <code>/v1/responses</code> HTTP calls (for <code>gpt54pro</code>). They receive a fully-inlined prompt and return structured JSON scores. No tool access, no retrieval, no internet.</p>
+<h3 id="1-copy-the-closest-existing-judge" tabindex="-1"><a class="header-anchor" href="#1-copy-the-closest-existing-judge"><span>1. Copy the closest existing judge</span></a></h3>
+<pre class="hljs"><code class="language-bash"><span class="hljs-built_in">cp</span> scripts/judge-opus.sh scripts/judge-&lt;yourjudge&gt;.sh        <span class="hljs-comment"># Claude-CLI shape</span>
+<span class="hljs-comment"># or</span>
+<span class="hljs-built_in">cp</span> scripts/judge-grok420.sh scripts/judge-&lt;yourjudge&gt;.sh     <span class="hljs-comment"># OpenRouter shape</span>
+<span class="hljs-comment"># or</span>
+<span class="hljs-built_in">cp</span> scripts/judge-gpt54pro.sh scripts/judge-&lt;yourjudge&gt;.sh    <span class="hljs-comment"># OpenAI /v1/responses shape</span>
+</code></pre>
+<p>Pick the matching shape based on which API route your judge will use.</p>
+<h3 id="2-edit-the-judge-script" tabindex="-1"><a class="header-anchor" href="#2-edit-the-judge-script"><span>2. Edit the judge script</span></a></h3>
+<p>Update:</p>
+<ul>
+<li><strong>Model ID.</strong> The exact string your CLI / API accepts.</li>
+<li><strong>Sampler settings.</strong> Document where temperature/seed are pinned and where they aren’t (most providers don’t expose both). See <code>scripts/judge-opus.sh</code> header for the template.</li>
+<li><strong>Reasoning mode.</strong> If your judge supports reasoning modes, pin it explicitly and document in the header.</li>
+</ul>
+<h3 id="3-vet-the-judge-on-one-round-before-committing-it" tabindex="-1"><a class="header-anchor" href="#3-vet-the-judge-on-one-round-before-committing-it"><span>3. Vet the judge on one round before committing it</span></a></h3>
+<pre class="hljs"><code class="language-bash">TASK=refactor ROUND=sanitycheck ./scripts/judge-&lt;yourjudge&gt;.sh Alpha
+<span class="hljs-built_in">cat</span> results/refactor/_blind-eval/Alpha/roundsanitycheck/&lt;yourjudge&gt;-judge.json
+</code></pre>
+<p>Check: does the JSON validate against <code>scripts/judge-schema-v2.json</code>? Are the rubric items all scored 0-10? Does the reasoning block look coherent? If any judge returns malformed JSON more than once in five rounds, retire it.</p>
+<h3 id="4-pre-register-the-weight" tabindex="-1"><a class="header-anchor" href="#4-pre-register-the-weight"><span>4. Pre-register the weight</span></a></h3>
+<p>The panel is 5-judge with weights in <code>versions.lock.json</code> <code>judges.*.weight</code>. Decide:</p>
+<ul>
+<li><strong>Replace one existing judge.</strong> Add your judge with the outgoing judge’s weight; move the retired judge to <code>judges_retired</code>. Document the retirement reason in the lockfile’s <code>_comment</code> block.</li>
+<li><strong>Extend to 6-judge.</strong> Pick a pre-registered weight and document the rationale. <code>scripts/aggregate-results.sh</code> reads weights generically, so any 0…N-judge panel with declared weights works; just ensure every judge has judged every trial at least once.</li>
+</ul>
+<p>The aggregator is forward-compatible with asymmetric per-judge <code>n</code> (missing judges drop out of both numerator and denominator).</p>
+<h3 id="5-re-run-the-cohort-aggregations" tabindex="-1"><a class="header-anchor" href="#5-re-run-the-cohort-aggregations"><span>5. Re-run the cohort aggregations</span></a></h3>
+<pre class="hljs"><code class="language-bash">TASK=feature  ./scripts/aggregate-results.sh
+TASK=bugfix   ./scripts/aggregate-results.sh
+TASK=refactor ./scripts/aggregate-results.sh
+</code></pre>
+<h3 id="6-document-the-new-judge" tabindex="-1"><a class="header-anchor" href="#6-document-the-new-judge"><span>6. Document the new judge</span></a></h3>
+<p>In <code>versions.lock.json</code> <code>judges.&lt;name&gt;</code> — model id, route, temperature setting, vendor, weight, and a brief justification in <code>_weight_comment</code>. In <code>docs/tools/README.md</code> (or a new <code>docs/tools/judges.md</code>) — cost and speed per round. A judge that costs 10× but only nudges the cohort mean by &lt; 1 weighted point is a bad addition.</p>
+<hr>
+<h2 id="checklist-before-opening-a-pr" tabindex="-1"><a class="header-anchor" href="#checklist-before-opening-a-pr"><span>Checklist before opening a PR</span></a></h2>
+<h3 id="new-tool" tabindex="-1"><a class="header-anchor" href="#new-tool"><span>New tool</span></a></h3>
+<ul>
+<li>[ ] <code>add-tool.sh --dry-run</code> preview matches intent</li>
+<li>[ ] <code>scripts/env.sh</code> TOOLS array includes the new tool</li>
+<li>[ ] <code>versions.lock.json</code> <code>tools.&lt;name&gt;</code> pins version + SHA</li>
+<li>[ ] <code>config/&lt;task&gt;/&lt;tool&gt;-t&lt;N&gt;/</code> populated cleanly for N=1…5 across all 3 tasks</li>
+<li>[ ] All 15 runs (3 tasks × 5 trials) complete with <code>commits.txt</code>, <code>auto-metrics.json</code>, <code>sessions/*.meta.json</code></li>
+<li>[ ] All 5 judges completed on every label across all 3 rounds (label root + <code>round1/</code> + <code>round2/</code> per artifact)</li>
+<li>[ ] <code>audit-cohort-symmetry.py</code> exits 0</li>
+<li>[ ] <code>aggregate-results.sh</code> re-runs without error on all 3 tasks; new tool appears in every <code>final-report.md</code></li>
+<li>[ ] <code>docs/tools/&lt;tool&gt;.md</code> written — Upstream, Performance, Mechanism, Transcripts, Why-it-ranked, Strengths, Failure modes</li>
+<li>[ ] Landing page bench-data block (<code>docs/index.html</code>) updated with new tool’s entries across all 3 tasks</li>
+<li>[ ] Previews re-rendered via <code>node tooling/render-md-previews.mjs</code></li>
+</ul>
+<h3 id="new-judge" tabindex="-1"><a class="header-anchor" href="#new-judge"><span>New judge</span></a></h3>
+<ul>
+<li>[ ] <code>scripts/judge-&lt;name&gt;.sh</code> written, header documents model + sampler-limitation disclaimer</li>
+<li>[ ] Sanity round produces valid JSON with all 20 rubric items scored 0-10</li>
+<li>[ ] <code>versions.lock.json</code> <code>judges.&lt;name&gt;</code> entry with weight + retirement-or-extension rationale</li>
+<li>[ ] <code>aggregate-results.sh</code> re-runs cleanly with the new panel</li>
+<li>[ ] New judge’s cost + speed characterized</li>
+</ul>
+<hr>
+<p>See <a href="paper.html#1-methodology"><code>../../PAPER.md</code> §1</a> for the canonical methodology reference and <a href="guide-verification.html"><code>verification.md</code></a> for the “how do I independently verify a claim?” walkthrough.</p>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/guides/extending.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

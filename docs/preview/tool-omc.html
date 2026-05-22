@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool Profile — omc</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/omc.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="omc-oh-my-claudecode" tabindex="-1"><a class="header-anchor" href="#omc-oh-my-claudecode"><span>omc (oh-my-claudecode)</span></a></h1>
+<p><strong>Disclosure.</strong> <code>omc</code> is maintained by the benchmark author (<code>Yeachan-Heo/oh-my-claudecode</code>). The ranking below should be read in that light — the tool was evaluated on a benchmark its own author designed, and it still lands near the bottom. That is the expected direction for an honest self-report, but it does not cancel the conflict of interest. Every rubric item, task brief, and judge prompt was chosen by the same author; an external replication is the only thing that would remove the concern.</p>
+<h2 id="identity" tabindex="-1"><a class="header-anchor" href="#identity"><span>Identity</span></a></h2>
+<ul>
+<li><strong>Repo:</strong> <code>github.com/Yeachan-Heo/oh-my-claudecode</code></li>
+<li><strong>Plugin version at run:</strong> 4.13.6 (<code>8b24a29d</code>)</li>
+<li><strong>License:</strong> MIT, Copyright 2025 Yeachan Heo</li>
+<li><strong>Install mechanism:</strong> Claude Code plugin marketplace</li>
+<li><strong>Invocation in this benchmark:</strong> two-message flow — <code>/oh-my-claudecode:omc-setup</code>, then <code>/oh-my-claudecode:ralplan &lt;task&gt;</code>; after ralplan lands the consensus plan the operator manually types <code>/oh-my-claudecode:team</code> to execute it via team workers</li>
+</ul>
+<h2 id="mechanism" tabindex="-1"><a class="header-anchor" href="#mechanism"><span>Mechanism</span></a></h2>
+<p>omc is an orchestration layer. It ships a large surface area — agents, hooks, skills, a status line, a <code>.omc/</code> state directory, and an experimental agent-teams flag — and routes work through specialized subagents. The stated model is delegate-first: <code>ralplan</code> produces a consensus plan via planner + architect + critic agents, then <code>team</code> auto-decomposes that in-context plan and spawns worker agents to execute it. Parent transcripts are large; the tool spends tokens coordinating.</p>
+<h2 id="what-the-transcripts-show-session-audit" tabindex="-1"><a class="header-anchor" href="#what-the-transcripts-show-session-audit"><span>What the transcripts show (session audit)</span></a></h2>
+<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/omc/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/omc/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">wall min</th>
+<th style="text-align:right">main turns</th>
+<th style="text-align:right">sidechain turns</th>
+<th style="text-align:right">sub-agent disp.</th>
+<th style="text-align:right">files read (config / target)</th>
+<th style="text-align:right">files edited</th>
+<th style="text-align:right">cache hit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">223.5</td>
+<td style="text-align:right">170.7</td>
+<td style="text-align:right"><strong>1556.0</strong></td>
+<td style="text-align:right"><strong>10.7</strong></td>
+<td style="text-align:right"><strong>227.0</strong> (17.3 / 209.7)</td>
+<td style="text-align:right">126.3</td>
+<td style="text-align:right">0.93</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">37.6</td>
+<td style="text-align:right">109.0</td>
+<td style="text-align:right">122.0</td>
+<td style="text-align:right">3.7</td>
+<td style="text-align:right">35.3 (0.3 / 35.0)</td>
+<td style="text-align:right">7.7</td>
+<td style="text-align:right">0.92</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">185.0</td>
+<td style="text-align:right">186.7</td>
+<td style="text-align:right">481.3</td>
+<td style="text-align:right">12.3</td>
+<td style="text-align:right">76.0 (4.7 / 71.3)</td>
+<td style="text-align:right">34.0</td>
+<td style="text-align:right">0.93</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Highest sidechain volume in the cohort.</strong> Feature averages 1,556 sidechain turns vs the cohort median of ~50 — the <code>team</code> skill spawns workers that each carry their own long thread.</li>
+<li><strong>Skills observed:</strong> <code>oh-my-claudecode:team</code> (2,153 turns), <code>oh-my-claudecode:ralplan</code> (1,100), <code>oh-my-claudecode:hud</code> (230), <code>oh-my-claudecode:omc-setup</code> (111), <code>oh-my-claudecode:cancel</code> (6). The two-message harness (<code>omc-setup</code> → <code>ralplan</code> → operator-typed <code>team</code>) is visible end-to-end.</li>
+<li><strong>Sub-agent types dispatched:</strong> <code>oh-my-claudecode:executor</code> (24), <code>oh-my-claudecode:critic</code> (18), <code>oh-my-claudecode:architect</code> (17), <code>oh-my-claudecode:planner</code> (16), <code>Explore</code> (4) — the planner/architect/critic split the ralplan docs describe materialises in <code>attributionSkill</code> + <code>subagent_type</code> rows.</li>
+<li><strong>Only setup with material tool-config read overhead.</strong> Mean 17.3 tool-config reads per feature trial (vs 0 for almost all other tools). <code>.omc/</code>, <code>.claude/skills/</code>, and the project’s CLAUDE.md are re-read during execution — the “setup tax” of an orchestrator that maintains its own scaffolding.</li>
+<li><strong>Cache hit ratio is the cohort’s lowest</strong> (~0.93 vs others’ 0.96–0.98) — the sidechain fan-out forces more cache creation per worker.</li>
+<li><strong>Slash commands typed:</strong> <code>/oh-my-claudecode:team</code> (10), <code>/oh-my-claudecode:omc-setup</code> (9), <code>/clear</code> (9), <code>/oh-my-claudecode:ralplan</code> (9), <code>/login</code> (3), <code>/oh-my-claudecode:cancel</code> (1).</li>
+</ul>
+<h2 id="results" tabindex="-1"><a class="header-anchor" href="#results"><span>Results</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">Weighted mean /200</th>
+<th style="text-align:right">within_σ</th>
+<th style="text-align:right">between_σ</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">139.49</td>
+<td style="text-align:right">10.88</td>
+<td style="text-align:right">17.29</td>
+<td>5 / 8</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">164.80</td>
+<td style="text-align:right">15.66</td>
+<td style="text-align:right">13.74</td>
+<td>7 / 8</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">170.11</td>
+<td style="text-align:right">7.43</td>
+<td style="text-align:right">17.52</td>
+<td>7 / 8</td>
+</tr>
+</tbody>
+</table>
+<p>omc lands in the bottom half on every task — rank 5 on feature, 7 on bugfix, 7 on refactor. On feature omc edges ahead of <code>claudekit</code> (139.49 vs 135.04) for rank-5. The bugfix <code>within_σ</code> of 15.66 is still the highest in the cohort on that task — the autopilot loop produces unusually variable bugfix output run-to-run.</p>
+<h2 id="what-the-mechanism-did-here" tabindex="-1"><a class="header-anchor" href="#what-the-mechanism-did-here"><span>What the mechanism did here</span></a></h2>
+<p><strong>The ceremony entry point costs a full message.</strong> <code>/oh-my-claudecode:omc-setup</code> is a setup step — it bootstraps CLAUDE.md injection, hooks, and the <code>.omc/</code> state directory — and no other tool in the cohort requires it. The bench runner has a dedicated <code>OMC_TWO_MSG=1</code> branch precisely to accommodate this. In a single-session evaluation the setup message contributes no code; it is pure prelude. That alone does not explain the cohort-bottom finish, but it sets the tone for the rest of the trace.</p>
+<p><strong>Orchestration did not substitute for scope discipline.</strong> The premise of a ralplan→team pipeline with planner / architect / critic agents and team workers is that it catches scope-and-quality mistakes the bare baseline would miss. On these three tasks it did not — <code>pure</code>, the unadorned baseline, is top-3 on every task and rank-1 on refactor, while omc lands rank-5 on feature and rank-7 on both bugfix and refactor.</p>
+<h2 id="honest-read" tabindex="-1"><a class="header-anchor" href="#honest-read"><span>Honest read</span></a></h2>
+<p>omc is a plausible design. The problem is not noise per se: refactor <code>within_σ</code> is 7.43 — above the 4–6 range the rest of the orchestrators sit in, but well below gstack’s 58.43 refactor outlier. The bigger story is that the orchestration surface, on these three tasks, did not produce code that judges preferred over a plain Claude session. The bench author’s own tool underperforms a zero-ceremony baseline; this disclosure is retained at the top of the file for the reader.</p>
+<h2 id="reproducing" tabindex="-1"><a class="header-anchor" href="#reproducing"><span>Reproducing</span></a></h2>
+<pre class="hljs"><code class="language-bash">TASK=feature ./scripts/create-clones.sh 1
+TASK=feature ./scripts/manual-bench.sh omc 1
+<span class="hljs-comment"># MSG1: paste /oh-my-claudecode:omc-setup, wait for setup to complete.</span>
+<span class="hljs-comment"># MSG2: paste /oh-my-claudecode:ralplan &quot;&lt;task&gt;&quot;, wait for the consensus plan.</span>
+<span class="hljs-comment"># MSG3 (operator-typed): type /oh-my-claudecode:team to spawn workers.</span>
+<span class="hljs-comment"># Exit when the tool has committed.</span>
+</code></pre>
+<p>Artifacts live under <code>results/{omc,bugfix/omc,refactor/omc}/t&lt;N&gt;/</code>. Session logs and subagent transcripts are retained verbatim; the <code>.omc/</code> state directory is gitignored by the benchmark safety rules and does not leave the clone.</p>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/tools/omc.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

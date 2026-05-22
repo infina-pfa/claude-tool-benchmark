@@ -1,0 +1,1256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Coding Tool Benchmark — 8 Claude Code setups · 3 tasks · 5 judges · 1800 judgments</title>
+<meta name="description" content="A blind, multi-judge evaluation of eight Claude Code setups (plugins, skill packs, hook kits, and a no-addon baseline) on three real-world software-engineering tasks. 1800 judgments across 5 judges and 5 trials per cell; all artifacts open for re-analysis." />
+<link rel="canonical" href="https://claude-tool-benchmark.pages.dev/" />
+<meta property="og:title" content="AI Coding Tool Benchmark — task-specific specialisation, not a single ranking" />
+<meta property="og:description" content="Eight Claude Code setups, three tasks, five judges, five trials per cell, 1800 judgments. No setup is top-2 on all three tasks." />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="https://claude-tool-benchmark.pages.dev/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AI Coding Tool Benchmark" />
+<meta name="twitter:description" content="Eight Claude Code setups, three tasks, five judges, 1800 judgments. Task-specific specialisation, not a single ranking." />
+<meta name="twitter:image" content="https://claude-tool-benchmark.pages.dev/og-image.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="stylesheet" href="styles.css?v=5" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "AI Coding Tool Benchmark",
+  "description": "Blind, multi-judge evaluation of eight Claude Code setups across feature, bugfix, and refactor tasks. 1800 judgments (8 tools × 5 trials × 5 judges × 3 rounds × 3 tasks; N=75 per cell).",
+  "url": "https://claude-tool-benchmark.pages.dev/",
+  "license": "https://opensource.org/licenses/MIT",
+  "creator": { "@type": "Organization", "name": "infina-pfa" },
+  "keywords": ["Claude Code", "benchmark", "LLM evaluation", "coding agents", "blind evaluation"],
+  "variableMeasured": ["weighted mean rubric score", "per-task z-score", "trial wall-clock", "token usage"],
+  "distribution": {
+    "@type": "DataDownload",
+    "encodingFormat": "application/json",
+    "contentUrl": "https://raw.githubusercontent.com/infina-pfa/claude-tool-benchmark/main/versions.lock.json"
+  }
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#top">Skip to content</a>
+
+<nav class="nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="brand" href="#top">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">☰</button>
+    <div class="nav-links" id="nav-links">
+      <a href="#per-task">Per task</a>
+      <a href="#leaderboard">Cross-task</a>
+      <a href="#findings">Findings</a>
+      <a href="#behavior">Behavior</a>
+      <a href="#explore">Docs</a>
+      <a href="#trust">Method</a>
+      <a href="#caveats">Caveats</a>
+      <a href="#verify">Reproduce</a>
+      <a href="https://github.com/infina-pfa/claude-tool-benchmark" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Open benchmark · 2026-05 snapshot</p>
+      <h1 class="display">
+        Eight setups. Three tasks. Five judges.
+        <em>No single winner.</em>
+      </h1>
+      <p class="lede">
+        A blind, multi-judge evaluation of the Claude Code ecosystem — plugins, skill packs, hook kits, and a
+        no-addon baseline — on feature, bugfix, and refactor work in a real
+        TypeScript monorepo. 1800 judgments (5 trials per cell, 75 per (tool, task) cell). No setup is top-2 on all three tasks — every
+        prompt, transcript, diff, and judge score is checked in for independent re-analysis.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="preview/paper.html">Read the paper <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="#per-task">Per-task results <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href="preview/guide-verification.html">How to verify <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== META STRIP ========== -->
+  <section class="container">
+    <div class="meta-strip">
+      <div class="meta-cell"><div class="n">8</div><div class="label">Claude Code setups (plugins, skill packs, hook kits, and a no-addon baseline), all on <code class="mono">claude-opus-4-7</code></div></div>
+      <div class="meta-cell"><div class="n">3</div><div class="label">Tasks: feature · bugfix · refactor (TypeScript NX monorepo)</div></div>
+      <div class="meta-cell"><div class="n">5</div><div class="label">Judges (<span class="term" tabindex="0" data-tip="Each judge's score is multiplied by a pre-registered weight (3/2/1/1/1) before averaging — so Opus 4.7 counts 3× more than Grok in the final tool score.">weighted</span>): Opus 4.7 ×3 · GPT-5.4 ×2 · Grok-4.20 ×1 · GLM-5.1 ×1 · MiMo-2.5-pro ×1</div></div>
+      <div class="meta-cell"><div class="n">1800</div><div class="label">Blind-labeled judgments: 3 tasks × 8 tools × 5 trials × 5 judges (N=75 per cell; every trial ran 3 rounds — symmetric)</div></div>
+    </div>
+    <div class="meta-strip" style="margin-top: 12px;">
+      <div class="meta-cell"><div class="n">120</div><div class="label">Tool trials (8 tools × 5 trials × 3 tasks), every clone pinned to the task's base SHA</div></div>
+      <div class="meta-cell"><div class="n">40</div><div class="label">NATO-codename blind labels per task (8 tools × 5 trials) — diff scrubbed for tool-state directories, mapping sealed until aggregation</div></div>
+      <div class="meta-cell"><div class="n">4 / 2 / 2</div><div class="label">R1 mechanical-fact items locked per task from <code class="mono">auto-metrics.json</code> (feature locks 4: tsc / eslint / core-test failures / lines removed; bugfix locks 2; refactor locks 2 — see PAPER §1.5)</div></div>
+      <div class="meta-cell"><div class="n">3 / 2 / 1</div><div class="label">Judge weights pre-registered in <code class="mono">versions.lock.json</code>: Anthropic ×3 · OpenAI ×2 · xAI / Z.ai / Xiaomi ×1</div></div>
+    </div>
+  </section>
+
+  <!-- ========== METHODOLOGY OVERVIEW (split diagram) ========== -->
+  <section class="section" id="how-it-works" style="padding-top: 32px; padding-bottom: 8px;">
+    <div class="container">
+      <h2 class="h2">How a trial flows to a score</h2>
+      <p class="kicker">
+        Same PRD, same base commit, isolated worktrees produce the artifacts. Then judging runs in <strong>two parallel modes</strong>:
+        a <strong>5-judge panel</strong> scores each diff independently (canonical, weighted mean), and a <strong>comparative-rank sidecar</strong>
+        has a single judge rank all 8 diffs head-to-head, run as two independent model lanes (validity probe). Their Spearman ρ measures whether the rank order
+        survives a different judging regime.
+      </p>
+
+      <!-- ============ ① TRIAL PIPELINE ============ -->
+      <div class="meth-pipeline" data-meth-pipeline="trial">
+        <div class="meth-pipeline-title">① Trial generation · same setup, every tool</div>
+        <div class="flow-row flow-row-main">
+          <article class="flow-card">
+            <header class="flow-card-head">
+              <span class="flow-stage-num">1</span>
+              <span class="flow-stage-label">Setup</span>
+            </header>
+            <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+            <h4 class="flow-card-title">Worktree clone</h4>
+            <p class="flow-card-body">Pinned base SHA · isolated <span class="mono">HOME</span> · PRD prepared</p>
+          </article>
+
+          <div class="flow-arrow" aria-hidden="true">
+            <svg viewBox="0 0 60 14" preserveAspectRatio="none">
+              <path d="M0 7 L52 7" />
+              <polyline points="48 3 56 7 48 11" />
+            </svg>
+          </div>
+
+          <article class="flow-card">
+            <header class="flow-card-head">
+              <span class="flow-stage-num">2</span>
+              <span class="flow-stage-label">Install</span>
+            </header>
+            <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <h4 class="flow-card-title">Tool config</h4>
+            <p class="flow-card-body">Skills · agents · hooks · MCP dropped into <span class="mono">HOME</span></p>
+          </article>
+
+          <div class="flow-arrow" aria-hidden="true">
+            <svg viewBox="0 0 60 14" preserveAspectRatio="none">
+              <path d="M0 7 L52 7" />
+              <polyline points="48 3 56 7 48 11" />
+            </svg>
+          </div>
+
+          <article class="flow-card flow-card-accent">
+            <header class="flow-card-head">
+              <span class="flow-stage-num">3</span>
+              <span class="flow-stage-label">Execute</span>
+            </header>
+            <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            <h4 class="flow-card-title">Vibecode mode</h4>
+            <p class="flow-card-body">Fire slash command · approve-only · tool implements the task</p>
+          </article>
+
+          <div class="flow-arrow" aria-hidden="true">
+            <svg viewBox="0 0 60 14" preserveAspectRatio="none">
+              <path d="M0 7 L52 7" />
+              <polyline points="48 3 56 7 48 11" />
+            </svg>
+          </div>
+
+          <article class="flow-card">
+            <header class="flow-card-head">
+              <span class="flow-stage-num">4</span>
+              <span class="flow-stage-label">Collect</span>
+            </header>
+            <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <h4 class="flow-card-title">Capture metrics</h4>
+            <p class="flow-card-body"><span class="mono">auto-metrics</span> · <span class="mono">diff</span> · <span class="mono">session-logs</span> · time · tokens</p>
+          </article>
+
+          <div class="flow-arrow" aria-hidden="true">
+            <svg viewBox="0 0 60 14" preserveAspectRatio="none">
+              <path d="M0 7 L52 7" />
+              <polyline points="48 3 56 7 48 11" />
+            </svg>
+          </div>
+
+          <article class="flow-card flow-card-accent">
+            <header class="flow-card-head">
+              <span class="flow-stage-num">5</span>
+              <span class="flow-stage-label">Archive</span>
+            </header>
+            <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+              <path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/>
+            </svg>
+            <h4 class="flow-card-title">Commit artifact</h4>
+            <p class="flow-card-body">Committed under <span class="mono">results/&lt;tool&gt;/t&lt;N&gt;/</span></p>
+          </article>
+
+        </div>
+        <div class="meth-pipeline-output">
+          <strong>8 tools × 5 trials × 3 tasks = 120 artifacts on disk</strong> — every commit fed into the two judging modes below
+        </div>
+      </div>
+
+      <!-- ============ ② JUDGE PIPELINE (two parallel modes) ============ -->
+      <div class="meth-pipeline" data-meth-pipeline="judge">
+        <div class="meth-pipeline-title">② Judging · two parallel modes</div>
+
+        <div class="judge-split">
+
+          <!-- ===== MODE A: PANEL (absolute scoring) ===== -->
+          <article class="judge-mode judge-mode-panel">
+            <header class="judge-mode-head">
+              <span class="judge-tag judge-tag-canonical">Mode A · canonical</span>
+              <h3 class="judge-mode-title">Panel · <em>absolute</em> scoring</h3>
+              <p class="judge-mode-sub">Each blinded diff scored independently by 5 judges against a 20-item / 200-pt rubric. Weighted mean is the headline number.</p>
+            </header>
+
+            <div class="panel-diagram" data-panel-diagram aria-hidden="true">
+              <div class="panel-artifact">
+                <svg class="panel-artifact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
+                  <path d="M14 3v5h5"/>
+                  <path d="M8 13h8M8 17h5"/>
+                </svg>
+                <span class="panel-artifact-name">Alpha</span>
+                <span class="panel-artifact-sub">1 blinded diff</span>
+              </div>
+
+              <div class="panel-row">
+                <div class="panel-connector"></div>
+                <div class="panel-judge"><span class="judge-dot" style="--judge-c:#1a1a1a"></span><span class="judge-name">Opus 4.7</span><span class="panel-weight" data-w="3"><i></i><i></i><i></i></span></div>
+                <div class="panel-arrow"></div>
+                <div class="panel-chip">XXX/200</div>
+              </div>
+              <div class="panel-row">
+                <div class="panel-connector"></div>
+                <div class="panel-judge"><span class="judge-dot" style="--judge-c:#10a37f"></span><span class="judge-name">GPT-5.4</span><span class="panel-weight" data-w="2"><i></i><i></i></span></div>
+                <div class="panel-arrow"></div>
+                <div class="panel-chip">XXX/200</div>
+              </div>
+              <div class="panel-row">
+                <div class="panel-connector"></div>
+                <div class="panel-judge"><span class="judge-dot" style="--judge-c:#000"></span><span class="judge-name">Grok-4.20</span><span class="panel-weight" data-w="1"><i></i></span></div>
+                <div class="panel-arrow"></div>
+                <div class="panel-chip">XXX/200</div>
+              </div>
+              <div class="panel-row">
+                <div class="panel-connector"></div>
+                <div class="panel-judge"><span class="judge-dot" style="--judge-c:#3262eb"></span><span class="judge-name">GLM-5.1</span><span class="panel-weight" data-w="1"><i></i></span></div>
+                <div class="panel-arrow"></div>
+                <div class="panel-chip">XXX/200</div>
+              </div>
+              <div class="panel-row">
+                <div class="panel-connector"></div>
+                <div class="panel-judge"><span class="judge-dot" style="--judge-c:#f86600"></span><span class="judge-name">MiMo-2.5</span><span class="panel-weight" data-w="1"><i></i></span></div>
+                <div class="panel-arrow"></div>
+                <div class="panel-chip">XXX/200</div>
+              </div>
+
+              <div class="panel-mean">
+                <span class="panel-mean-label">R1 override (4/2/2)</span>
+                <span class="panel-mean-formula">μ = Σ(w · score) / Σw</span>
+                <span class="panel-mean-out">→ <code class="mono">final-report.md</code></span>
+              </div>
+            </div>
+
+            <footer class="judge-mode-foot">
+              <span>20-item rubric</span>
+              <span>5 trials × 5 judges × 3 rounds = 75 / cell · 600 / task</span>
+            </footer>
+          </article>
+
+          <!-- ===== MODE B: COMPARATIVE (relative ranking) ===== -->
+          <article class="judge-mode judge-mode-compare">
+            <header class="judge-mode-head">
+              <span class="judge-tag judge-tag-sidecar">Mode B · sidecar</span>
+              <h3 class="judge-mode-title">Comparative · <em>relative</em> ranking</h3>
+              <p class="judge-mode-sub">All 8 blinded diffs ranked 1–8 head-to-head by a single judge in one prompt — run as two independent lanes (Opus 4.7 1M + GPT-5.4) and triangulated against the panel. Produces a relative order; never enters the weighted mean.</p>
+            </header>
+
+            <div class="compare-diagram" data-compare-diagram aria-hidden="true">
+              <div class="compare-col compare-col-input">
+                <span class="compare-col-label">Input · 8 diffs</span>
+                <div class="compare-input">
+                  <div class="ctile"><svg class="ctile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><span>Alpha</span></div>
+                  <div class="ctile"><svg class="ctile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><span>Bravo</span></div>
+                  <div class="ctile"><svg class="ctile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><span>Charlie</span></div>
+                  <div class="ctile"><svg class="ctile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><span>Delta</span></div>
+                  <div class="ctile"><svg class="ctile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><span>Echo</span></div>
+                  <div class="ctile"><svg class="ctile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><span>Foxtrot</span></div>
+                  <div class="ctile"><svg class="ctile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><span>Golf</span></div>
+                  <div class="ctile"><svg class="ctile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><span>Hotel</span></div>
+                </div>
+              </div>
+
+              <div class="compare-judge-col">
+                <div class="compare-judge-anchor">
+                  <svg class="compare-arrow compare-arrow-in" viewBox="0 0 32 12" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M0 6 L26 6" />
+                    <polyline points="22 2 28 6 22 10" />
+                  </svg>
+                  <div class="compare-judge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 3v18"/>
+                      <path d="M5 7h14"/>
+                      <path d="M5 7l-3 8a4 4 0 0 0 8 0L7 7"/>
+                      <path d="M19 7l-3 8a4 4 0 0 0 8 0l-3-8"/>
+                    </svg>
+                  </div>
+                  <svg class="compare-arrow compare-arrow-out" viewBox="0 0 32 12" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M0 6 L26 6" />
+                    <polyline points="22 2 28 6 22 10" />
+                  </svg>
+                </div>
+                <div class="compare-judge-label">single-judge regime<br><span class="mono">Opus 4.7 (1M)</span> + <span class="mono">GPT-5.4</span><br><span style="font-size:0.82em;color:var(--olive-gray)">two independent lanes → triangulated</span></div>
+              </div>
+
+              <div class="compare-col compare-col-output">
+                <span class="compare-col-label">Output · ranks 1–8</span>
+                <ol class="compare-output">
+                  <li><span class="rank-medal rank-gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 14.5L7 21l5-3 5 3-1.5-6.5"/></svg></span><span class="rank-tile">Charlie</span></li>
+                  <li><span class="rank-medal rank-silver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 14.5L7 21l5-3 5 3-1.5-6.5"/></svg></span><span class="rank-tile">Foxtrot</span></li>
+                  <li><span class="rank-medal rank-bronze"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 14.5L7 21l5-3 5 3-1.5-6.5"/></svg></span><span class="rank-tile">Alpha</span></li>
+                  <li><span class="rank-num">4</span><span class="rank-tile">Hotel</span></li>
+                  <li><span class="rank-num">5</span><span class="rank-tile">Echo</span></li>
+                  <li><span class="rank-num">6</span><span class="rank-tile">Bravo</span></li>
+                  <li><span class="rank-num">7</span><span class="rank-tile">Delta</span></li>
+                  <li><span class="rank-num">8</span><span class="rank-tile">Golf</span></li>
+                </ol>
+              </div>
+            </div>
+
+            <footer class="judge-mode-foot">
+              <span>5 rounds × 5 trials = 25 cells / (task, model)</span>
+              <span><code class="mono">_comparative-eval/_aggregate.md</code> <span class="muted">(omitted from public release)</span></span>
+            </footer>
+          </article>
+
+        </div>
+
+        <div class="judge-join">
+          <span class="judge-join-tag">Convergent validity</span>
+          <strong>Spearman ρ</strong> between the two modes (per task) — does the rank order survive a different judging regime? Cross-model ρ separates regime drift from vendor bias.
+        </div>
+        <div class="judge-rho-strip" aria-label="Comparative-rank triangulation — panel vs Opus-1M vs GPT-5.4, by task">
+          <div class="rho-strip-head">
+            <span class="rho-strip-tag">2 comparative lanes · n = 25 / task / lane</span>
+            <span class="rho-strip-sub">Spearman ρ across panel ↔ opus-comp ↔ gpt-comp · <code>triangulation &amp; per-tool Δ →</code> <span class="muted">(omitted from public release)</span></span>
+          </div>
+          <div class="rho-strip-grid">
+            <div class="rho-cell rho-cell-pos">
+              <div class="rho-task">feature</div>
+              <div class="rho-tri">
+                <div class="rho-tri-row"><span class="rho-tri-lab">panel ↔ opus</span><span class="rho-tri-val">+0.571</span></div>
+                <div class="rho-tri-row"><span class="rho-tri-lab">panel ↔ gpt</span><span class="rho-tri-val rho-tri-hi">+0.833</span></div>
+                <div class="rho-tri-row"><span class="rho-tri-lab">opus ↔ gpt</span><span class="rho-tri-val rho-tri-hi">+0.857</span></div>
+              </div>
+              <div class="rho-note">vendor bias — opus-comp diverges, gpt-comp tracks panel</div>
+            </div>
+            <div class="rho-cell rho-cell-neg">
+              <div class="rho-task">bugfix</div>
+              <div class="rho-tri">
+                <div class="rho-tri-row"><span class="rho-tri-lab">panel ↔ opus</span><span class="rho-tri-val rho-tri-neg">−0.405</span></div>
+                <div class="rho-tri-row"><span class="rho-tri-lab">panel ↔ gpt</span><span class="rho-tri-val">+0.167</span></div>
+                <div class="rho-tri-row"><span class="rho-tri-lab">opus ↔ gpt</span><span class="rho-tri-val rho-tri-hi">+0.667</span></div>
+              </div>
+              <div class="rho-note">mixed — both comp lanes diverge from panel, agree with each other (regime gap)</div>
+            </div>
+            <div class="rho-cell rho-cell-pos">
+              <div class="rho-task">refactor</div>
+              <div class="rho-tri">
+                <div class="rho-tri-row"><span class="rho-tri-lab">panel ↔ opus</span><span class="rho-tri-val">+0.310</span></div>
+                <div class="rho-tri-row"><span class="rho-tri-lab">panel ↔ gpt</span><span class="rho-tri-val rho-tri-hi">+0.810</span></div>
+                <div class="rho-tri-row"><span class="rho-tri-lab">opus ↔ gpt</span><span class="rho-tri-val">+0.500</span></div>
+              </div>
+              <div class="rho-note">vendor bias — opus-comp diverges, gpt-comp tracks panel</div>
+            </div>
+          </div>
+          <div class="rho-strip-foot">
+            Headline implication: the two comparative lanes are internally consistent (opus ↔ gpt ρ never weak), so where comparative disagrees with the panel the gap is concentrated in the <em>opus-comp</em> lane on feature/refactor (vendor bias) — only <em>bugfix</em> is a true cross-vendor regime gap (both lanes prefer surgical fixes over the panel's high-completeness picks). Read mid-pack ranks as an operational tie cluster; rank-1 / rank-8 anchors are the strongest claims.
+            See <a href="preview/paper.html#25-comparative-rank-validity-probe-opus-1m-gpt-54-parallel-signals">PAPER §2.5</a> for the full table and tool-level Δ.
+          </div>
+        </div>
+
+        <div class="comp-rank-block" style="margin-top:1.6rem;border:1px solid var(--border-warm);border-radius:10px;padding:1.1rem 1.2rem;background:rgba(0,0,0,0.015)">
+          <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:0.5rem 0.9rem;margin-bottom:0.35rem">
+            <strong>Comparative-only ranking</strong>
+            <span class="judge-tag judge-tag-sidecar">parallel signal · NOT canonical</span>
+          </div>
+          <p class="judge-mode-sub" style="margin:0 0 0.7rem">
+            Built <em>purely</em> from the head-to-head lanes — the canonical benchmark ranking is the 5-judge panel weighted mean (per-task <code>final-report.md</code>); this never enters it. One judgment = one model ranking all 8 tools 1–8 in one prompt; per (task) = 50 pooled observations (Opus-1M + GPT-5.4, 25 cells each, equal weight). Score = mean pooled rank, <strong>lower = better</strong>. Overall = mean of the 3 per-task mean ranks.
+          </p>
+          <table class="comp-rank-table" style="width:100%;border-collapse:collapse;font-size:0.92rem">
+            <thead>
+              <tr style="text-align:right;color:var(--olive-gray);border-bottom:1px solid var(--border-warm)">
+                <th style="text-align:left;padding:0.35rem 0.5rem">#</th>
+                <th style="text-align:left;padding:0.35rem 0.5rem">Tool</th>
+                <th style="padding:0.35rem 0.5rem">Comp. mean rank</th>
+                <th style="padding:0.35rem 0.5rem">feature</th>
+                <th style="padding:0.35rem 0.5rem">bugfix</th>
+                <th style="padding:0.35rem 0.5rem">refactor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="text-align:right;border-bottom:1px solid var(--border-warm)"><td style="text-align:left;padding:0.3rem 0.5rem">1</td><td style="text-align:left;padding:0.3rem 0.5rem"><code>pure</code></td><td style="padding:0.3rem 0.5rem"><strong>3.03</strong></td><td style="padding:0.3rem 0.5rem">3.32</td><td style="padding:0.3rem 0.5rem">3.86</td><td style="padding:0.3rem 0.5rem">1.92</td></tr>
+              <tr style="text-align:right;border-bottom:1px solid var(--border-warm)"><td style="text-align:left;padding:0.3rem 0.5rem">2</td><td style="text-align:left;padding:0.3rem 0.5rem"><code>claudekit</code></td><td style="padding:0.3rem 0.5rem"><strong>4.27</strong></td><td style="padding:0.3rem 0.5rem">3.06</td><td style="padding:0.3rem 0.5rem">5.42</td><td style="padding:0.3rem 0.5rem">4.34</td></tr>
+              <tr style="text-align:right;border-bottom:1px solid var(--border-warm)"><td style="text-align:left;padding:0.3rem 0.5rem">3</td><td style="text-align:left;padding:0.3rem 0.5rem"><code>superpower</code></td><td style="padding:0.3rem 0.5rem"><strong>4.45</strong></td><td style="padding:0.3rem 0.5rem">4.38</td><td style="padding:0.3rem 0.5rem">4.20</td><td style="padding:0.3rem 0.5rem">4.76</td></tr>
+              <tr style="text-align:right;border-bottom:1px solid var(--border-warm)"><td style="text-align:left;padding:0.3rem 0.5rem">4</td><td style="text-align:left;padding:0.3rem 0.5rem"><code>compound</code></td><td style="padding:0.3rem 0.5rem"><strong>4.48</strong></td><td style="padding:0.3rem 0.5rem">5.84</td><td style="padding:0.3rem 0.5rem">2.62</td><td style="padding:0.3rem 0.5rem">4.98</td></tr>
+              <tr style="text-align:right;border-bottom:1px solid var(--border-warm)"><td style="text-align:left;padding:0.3rem 0.5rem">5</td><td style="text-align:left;padding:0.3rem 0.5rem"><code>bmad</code></td><td style="padding:0.3rem 0.5rem"><strong>4.71</strong></td><td style="padding:0.3rem 0.5rem">5.64</td><td style="padding:0.3rem 0.5rem">4.10</td><td style="padding:0.3rem 0.5rem">4.38</td></tr>
+              <tr style="text-align:right;border-bottom:1px solid var(--border-warm)"><td style="text-align:left;padding:0.3rem 0.5rem">6</td><td style="text-align:left;padding:0.3rem 0.5rem"><code>ecc</code></td><td style="padding:0.3rem 0.5rem"><strong>4.79</strong></td><td style="padding:0.3rem 0.5rem">2.54</td><td style="padding:0.3rem 0.5rem">5.72</td><td style="padding:0.3rem 0.5rem">6.10</td></tr>
+              <tr style="text-align:right;border-bottom:1px solid var(--border-warm)"><td style="text-align:left;padding:0.3rem 0.5rem">7</td><td style="text-align:left;padding:0.3rem 0.5rem"><code>omc</code></td><td style="padding:0.3rem 0.5rem"><strong>5.07</strong></td><td style="padding:0.3rem 0.5rem">4.78</td><td style="padding:0.3rem 0.5rem">5.48</td><td style="padding:0.3rem 0.5rem">4.96</td></tr>
+              <tr style="text-align:right"><td style="text-align:left;padding:0.3rem 0.5rem">8</td><td style="text-align:left;padding:0.3rem 0.5rem"><code>gstack</code></td><td style="padding:0.3rem 0.5rem"><strong>5.20</strong></td><td style="padding:0.3rem 0.5rem">6.44</td><td style="padding:0.3rem 0.5rem">4.60</td><td style="padding:0.3rem 0.5rem">4.56</td></tr>
+            </tbody>
+          </table>
+          <p class="judge-mode-sub" style="margin:0.7rem 0 0">
+            This ordering <strong>diverges from the canonical panel</strong> (panel per-task rank-1s: ecc / claudekit / pure) — e.g. <code>ecc</code> is feature-1 head-to-head but falls to overall rank-6 on bugfix/refactor: the <em>regime drift</em> §2.5 quantifies. Per-task tables + σ + per-lane means: <code>_comparative-ranking.md →</code> <span class="muted">(omitted from public release)</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PER-TASK CHARTS (canonical) ========== -->
+  <section class="section" id="per-task">
+    <div class="container">
+      <h2 class="h2">Per-task score intervals — the canonical view</h2>
+      <p class="kicker">
+        Rank-1 by task is the canonical claim of this benchmark. Each panel plots the <span class="term" tabindex="0" data-tip="Weighted average — each judge's score is multiplied by its pre-registered weight (Opus×3, GPT-5.4×2, Grok/GLM/MiMo×1) before averaging. An equal-weight version is linked alongside every report.">weighted mean</span> (200 max) with a <span class="term" tabindex="0" data-tip="μ ± SE. Standard error of the mean — how precisely the cohort estimates the true mean. Shrinks as the sample grows; the horizontal bars show this band.">mean ± standard-error envelope</span> (N=75 judgments per cell: 5 trials × 5 judges × 3 rounds — every trial ran 3 rounds, the canonical run plus two added stability rounds, so 15 judgments per judge per cell).
+        The dashed line is the <span class="term" tabindex="0" data-tip="μ — arithmetic mean across all 8 tools on this task. Plotted as the dashed vertical line on each chart.">cohort mean</span>. Where the horizontal bars overlap, the pair should be read as a tie at this sample size.
+      </p>
+
+      <div class="task-grid" id="panels"></div>
+    </div>
+  </section>
+
+  <!-- ========== CROSS-TASK LEADERBOARD (informational only) ========== -->
+  <section class="section" style="padding-top: 0;" id="leaderboard">
+    <div class="container">
+      <h2 class="h2">Cross-task <span class="term" tabindex="0" data-tip="z̄ ('z-bar') — the simple average of a tool's three per-task z-scores. Positive = above the typical tool overall; negative = below.">z̄</span> — informational only</h2>
+      <p class="kicker">
+        <span class="term" tabindex="0" data-tip="z̄ ('z-bar') — the simple average of a tool's three per-task z-scores. Positive = above the typical tool overall; negative = below.">z̄</span> is the <span class="term" tabindex="0" data-tip="Each task contributes the same weight (1×) instead of the judges' pre-registered 3/2/1/1/1 weighting. Used here to combine z-scores across tasks without privileging any single task.">equal-weight</span> mean of per-task <span class="term" tabindex="0" data-tip="z = (tool mean − cohort mean) / cohort σ. How many standard deviations a tool sits above (+) or below (−) the 8-tool average on that task.">z-scores</span> (each task's z computed against its 8-tool <span class="term" tabindex="0" data-tip="The 8 tools evaluated on the same task. z-scores and cohort statistics are computed relative to this group, not across tasks.">cohort</span> mean / <span class="term" tabindex="0" data-tip="Standard deviation (σ) — the typical spread of tool means around the cohort mean. ~68% of values fall within ±1σ.">stdev</span>).
+        This benchmark deliberately does <em>not</em> publish a cross-task z̄ leaderboard as a headline (see caveat 08) — read the per-task panels above for the canonical claim.
+        Shown here as a visual aid only; collapsing three tasks into one number masks the task-specific specialisation that is the main finding.
+      </p>
+
+      <div class="leaderboard" id="lb"></div>
+
+      <p class="lb-footnote">
+        Chips show per-task z-scores. <strong style="color:var(--terracotta)">★ Orange</strong> = tool's best task · <span style="border:1px dashed var(--ring-warm); padding:0 4px; border-radius:3px;">· dashed</span> = tool's worst task.
+        Click a row for the tool's transcript-grounded profile — mechanism, invocation, observed behaviors, failure modes.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== WHAT WE LEARNED ========== -->
+  <section class="section" id="findings" style="padding-top: 32px;">
+    <div class="container">
+      <h2 class="h2">What we learned</h2>
+      <p class="kicker">
+        No setup is top-2 on all three tasks. The right framing is "best by task", not "best overall".
+        Three task-rooted observations; read the per-task reports for the full per-tool breakdown.
+      </p>
+
+      <div class="insight-grid">
+        <a class="insight-card" href="preview/final-report-feature.html">
+          <div class="insight-num">01 · Feature</div>
+          <h3>ecc is point-estimate rank-1; the top cluster is a statistical tie.</h3>
+          <p>
+            On the greenfield Mode-2 CD Batch feature, ecc (153.30) leads pure (143.13, rank-2) and <strong>bmad (141.33, rank-3)</strong>,
+            but the rank-1 lead (10.17 pts) is within the 19.33-pt feature <span class="term" tabindex="0" data-tip="Minimum Detectable Effect — the smallest tool-vs-tool gap distinguishable at α=0.05 (two-sided), power=0.80, at the cohort's n=5. Uses the exact Student-t critical value t(0.975, df=2(n-1)=8) ≈ 2.306, not the normal z=1.96 (at n=5 this enlarges MDE ~12%); the β/power term keeps the normal z=0.84 as a deliberate conservative approximation. Gaps below MDE are statistical ties.">MDE</span> — a statistical tie, like every per-task rank-1 lead. The only separation that clears MDE anywhere in the corpus is ecc − gstack on feature (21.3 &gt; 19.33); gstack at 131.98 (z = −1.28) is the lowest. On the per-judge z-normalized sensitivity, ecc is the only setup cleanly outside the pack (z = +2.17 vs next +0.23).
+          </p>
+          <span class="insight-link">Read the feature report →</span>
+        </a>
+        <a class="insight-card" href="preview/final-report-bugfix.html">
+          <div class="insight-num">02 · Bugfix</div>
+          <h3>claudekit and ecc lead by point estimate; statistically tied.</h3>
+          <p>
+            On a near-maturity filter bugfix, claudekit (178.93) and ecc (172.31) sit ≈ 3–9 pts above
+            the rest by point estimate. <strong>pure (baseline)</strong> lands rank-3 at 169.53. The formal
+            <span class="term" tabindex="0" data-tip="Minimum Detectable Effect at α=0.05, power=0.80, computed at the cohort's n=5 trials per arm using the exact Student-t critical value t(0.975, df=8) ≈ 2.306, not the normal z=1.96. Bugfix MDE = 22.17 pts (σ_pool 11.14). See bugfix report § Power analysis.">MDE</span>
+            at the cohort's n=5 is <strong>22.17 pts</strong> (bugfix) — claudekit's 9.4-pt lead over pure
+            is well below detection threshold, so the strict "tools add no value over the bare CLI" <span class="term" tabindex="0" data-tip="The null hypothesis being tested — that addon tools do not measurably outperform the bare CLI. Rejected when a gap exceeds MDE at standard significance.">null</span>
+            is <strong>not</strong> rejected at α=0.05 / 80% power. An earlier reading rejected it against a heuristic ~5-pt
+            tie envelope; the power analysis retracts that claim.
+          </p>
+          <span class="insight-link">Read the bugfix report →</span>
+        </a>
+        <a class="insight-card" href="preview/final-report-refactor.html">
+          <div class="insight-num">03 · Refactor</div>
+          <h3>pure (no addons) is rank-1.</h3>
+          <p>
+            On the aggregate-ownership refactor, the bare CLI takes rank-1 (180.19) over a 3-way tied cluster:
+            claudekit (178.04), bmad (177.74), and superpower (177.56). The top-4 span is 2.6 weighted pts — well within the <span class="term" tabindex="0" data-tip="σ = standard deviation. Between-judge σ measures how much the 5 judges disagree with each other (different lenience). If a gap between tools is smaller than this, they are tied within judge noise.">between-judge σ envelope</span> —
+            so this is "tools do not outperform baseline" rather than "pure dominates".
+            <strong>Across the corpus pure is the only setup that lands top-3 on all three tasks</strong>
+            (feature rank-2, bugfix rank-3, refactor rank-1) — the strongest counter-claim to the "you need addons" prior.
+          </p>
+          <span class="insight-link">Read the refactor report →</span>
+        </a>
+      </div>
+
+      <p style="margin-top: 28px; font-size: 14px; color: var(--olive-gray); line-height: 1.6;">
+        <strong>Source artifacts per task</strong> — what the tool saw, what the judges saw, the aggregated report.
+      </p>
+      <table class="artifacts-table">
+        <thead>
+          <tr>
+            <th scope="col">Task</th>
+            <th scope="col">PRD</th>
+            <th scope="col">Blind labels &amp; judge requests</th>
+            <th scope="col">Report</th>
+            <th scope="col">Equal-weight</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">feature</th>
+            <td><code>PRD →</code> <span class="muted">(omitted from public release)</span></td>
+            <td><span class="muted">labels &amp; requests → (omitted from public release)</span></td>
+            <td><a href="preview/final-report-feature.html">aggregated →</a></td>
+            <td><a href="preview/final-report-feature-eqw.html">equal-weight →</a></td>
+          </tr>
+          <tr>
+            <th scope="row">bugfix</th>
+            <td><code>PRD →</code> <span class="muted">(omitted from public release)</span></td>
+            <td><span class="muted">labels &amp; requests → (omitted from public release)</span></td>
+            <td><a href="preview/final-report-bugfix.html">aggregated →</a></td>
+            <td><a href="preview/final-report-bugfix-eqw.html">equal-weight →</a></td>
+          </tr>
+          <tr>
+            <th scope="row">refactor</th>
+            <td><code>PRD →</code> <span class="muted">(omitted from public release)</span></td>
+            <td><span class="muted">labels &amp; requests → (omitted from public release)</span></td>
+            <td><a href="preview/final-report-refactor.html">aggregated →</a></td>
+            <td><a href="preview/final-report-refactor-eqw.html">equal-weight →</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ========== BEHAVIORAL FINGERPRINTS ========== -->
+  <section class="section" id="behavior" style="padding-top: 8px;">
+    <div class="container">
+      <h2 class="h2">Behavioral fingerprints (transcript-mined)</h2>
+      <p class="kicker">
+        <span class="term" tabindex="0" data-tip="Arithmetic average. The session-audit covers t1–t3 only; the t4–t5 audit re-run is pending. The headline score panel (above) is at the full n=5 cohort.">Mean</span> across t1–t3 per (tool, task) cell, mined from the raw session JSONL. <em style="color:var(--olive-gray);">(t4–t5 session-audit re-run pending — the score panel above is already at n=5.)</em>
+        Surfaces the most surprising finding: most setups' multi-agent architecture either does not
+        fire on this corpus, or fires inconsistently. Generated by
+        <code class="mono">scripts/audit-sessions.py</code> from
+        <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md" target="_blank" rel="noopener" class="link-accent">results/_audits/session-audit.md</a>.
+      </p>
+      <div class="behavior-grid">
+        <figure class="behavior-figure">
+          <table class="behavior-table">
+            <caption>Sub-agent dispatches per trial</caption>
+            <thead>
+              <tr><th>Tool</th><th>feature</th><th>bugfix</th><th>refactor</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>bmad</td><td>1.0</td><td>0.0</td><td>1.3</td></tr>
+              <tr><td>claudekit</td><td>2.3</td><td>0.7</td><td>0.3</td></tr>
+              <tr><td>compound</td><td>1.7</td><td>0.0</td><td>0.0</td></tr>
+              <tr><td>ecc</td><td>1.7</td><td>1.0</td><td>1.0</td></tr>
+              <tr><td>gstack</td><td>2.7</td><td>0.0</td><td>2.7</td></tr>
+              <tr><td>omc</td><td class="hi">10.7</td><td class="hi">3.7</td><td class="hi">12.3</td></tr>
+              <tr><td>pure</td><td>1.0</td><td>0.3</td><td>1.3</td></tr>
+              <tr><td>superpower</td><td class="hi">18.3</td><td>0.0</td><td>0.7</td></tr>
+            </tbody>
+          </table>
+          <p class="behavior-caption">
+            <strong>compound</strong> and <strong>bmad</strong> dispatch ~0 sub-agents on bugfix/refactor.
+            <strong>superpower</strong> fan-out is 18.3 on feature, ~0 on bugfix.
+            "Multi-agent" is task-conditional, not architectural.
+          </p>
+        </figure>
+        <figure class="behavior-figure">
+          <table class="behavior-table">
+            <caption>Tool-config reads per trial ("setup tax")</caption>
+            <thead>
+              <tr><th>Tool</th><th>feature</th><th>bugfix</th><th>refactor</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>bmad</td><td>6.0</td><td>2.7</td><td>4.7</td></tr>
+              <tr><td>claudekit</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+              <tr><td>compound</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+              <tr><td>ecc</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+              <tr><td>gstack</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+              <tr><td>omc</td><td class="hi">17.3</td><td>0.3</td><td class="hi">4.7</td></tr>
+              <tr><td>pure</td><td>0.0</td><td>0.0</td><td>0.0</td></tr>
+              <tr><td>superpower</td><td>1.7</td><td>0.0</td><td>0.0</td></tr>
+            </tbody>
+          </table>
+          <p class="behavior-caption">
+            "Setup tax": reads of the tool's own scaffolding during execution.
+            <strong>omc</strong> dominates this metric (~17 per feature trial); <strong>bmad</strong> is the only other tool that re-reads its scaffolding on every task (2.7–6.0 per trial).
+            The other six tools load their scaffolding once into the prompt and are done with it.
+          </p>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TOKEN & COST RANKING ========== -->
+  <section class="section" id="cost" style="padding-top: 8px;">
+    <div class="container">
+      <h2 class="h2">Token spend &amp; cost per trial — ranked most-efficient first</h2>
+      <p class="kicker">
+        <span class="term" tabindex="0" data-tip="Arithmetic mean across the full n=5 trials per (tool, task) cell, sourced from each trial's phase1-metrics.json (cost_usd is Anthropic billing-derived; input tokens include cache_creation + cache_read).">Mean</span> per trial across the full n=5 cohort (24 (tool, task) cells × 5 trials = 120 trials). Each table is ordered by <strong>$ cost ascending</strong> so the row at the top is the cheapest setup for that task. <em style="color:var(--olive-gray);">Input tokens include cache-creation and cache-read volume — Anthropic prices cache reads at 0.1× input, so dollar cost is the better cross-tool axis than raw input volume.</em> Score column is the canonical n=5 weighted-mean per task (opus×3, gpt54pro×2, others×1). The <code class="mono">$/pt</code> column is cost-efficiency: dollars per rubric point.
+      </p>
+      <div class="behavior-grid" style="grid-template-columns: minmax(420px, 580px); justify-content: center;">
+        <figure class="behavior-figure">
+          <table class="behavior-table">
+            <caption>feature — ranked by $ cost (n=5)</caption>
+            <thead>
+              <tr><th>Tool</th><th>$ cost</th><th>Out tok</th><th>In tok</th><th>Score</th><th>$/pt</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>bmad</strong></td><td><strong>$38.92</strong></td><td>72.6K</td><td>15.9M</td><td>141.3</td><td><strong>0.275</strong></td></tr>
+              <tr><td>compound</td><td>$52.15</td><td>87.1K</td><td>24.0M</td><td>134.7</td><td>0.387</td></tr>
+              <tr><td>gstack</td><td>$68.69</td><td>137.2K</td><td>30.3M</td><td>132.0</td><td>0.520</td></tr>
+              <tr><td>pure</td><td>$70.98</td><td>101.5K</td><td>36.0M</td><td>143.1</td><td>0.496</td></tr>
+              <tr><td>ecc</td><td>$118.23</td><td>132.2K</td><td>57.6M</td><td><strong>153.3</strong></td><td>0.771</td></tr>
+              <tr><td>superpower</td><td>$127.51</td><td class="hi">223.6K</td><td>47.8M</td><td>140.2</td><td>0.910</td></tr>
+              <tr><td>claudekit</td><td>$132.47</td><td>175.4K</td><td>63.3M</td><td>135.0</td><td>0.981</td></tr>
+              <tr><td>omc</td><td class="hi">$417.92</td><td class="hi">422.9K</td><td class="hi">148.0M</td><td>139.5</td><td class="hi">2.996</td></tr>
+            </tbody>
+          </table>
+          <p class="behavior-caption">
+            <strong>bmad</strong> is the cheapest setup on feature (~$39/trial) and the most cost-efficient at $0.275/pt despite a mid-pack score.
+            <strong>omc</strong> spends 10.7× more dollars per trial than bmad for a comparable score — driven by the highest sub-agent fan-out and ~17 setup-tax re-reads per trial (see Behavioral fingerprints above).
+            <strong>ecc</strong> is the only tool to top rank-1 by score and still come in under $120.
+          </p>
+        </figure>
+      </div>
+      <div class="behavior-grid">
+        <figure class="behavior-figure">
+          <table class="behavior-table">
+            <caption>bugfix — ranked by $ cost (n=5)</caption>
+            <thead>
+              <tr><th>Tool</th><th>$ cost</th><th>Out tok</th><th>In tok</th><th>Score</th><th>$/pt</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>ecc</strong></td><td><strong>$18.27</strong></td><td>27.6K</td><td>7.5M</td><td>172.3</td><td><strong>0.106</strong></td></tr>
+              <tr><td>pure</td><td>$20.43</td><td>38.2K</td><td>8.3M</td><td>169.5</td><td>0.121</td></tr>
+              <tr><td>bmad</td><td>$21.14</td><td>45.2K</td><td>8.3M</td><td>165.7</td><td>0.128</td></tr>
+              <tr><td>compound</td><td>$22.41</td><td>35.9K</td><td>9.7M</td><td>166.2</td><td>0.135</td></tr>
+              <tr><td>claudekit</td><td>$24.00</td><td>39.9K</td><td>10.9M</td><td><strong>178.9</strong></td><td>0.134</td></tr>
+              <tr><td>superpower</td><td>$27.18</td><td>42.5K</td><td>12.0M</td><td>166.4</td><td>0.163</td></tr>
+              <tr><td>gstack</td><td>$27.32</td><td>48.6K</td><td>11.1M</td><td>160.0</td><td>0.171</td></tr>
+              <tr><td>omc</td><td class="hi">$59.97</td><td class="hi">85.0K</td><td class="hi">17.7M</td><td>164.8</td><td class="hi">0.364</td></tr>
+            </tbody>
+          </table>
+          <p class="behavior-caption">
+            Cost spread compresses on bugfix: rank-1 to rank-7 fits in $18–$27, all 7 within ~1.5× of each other.
+            <strong>ecc</strong> is both rank-2 by score and rank-1 by efficiency at $0.106/pt.
+            <strong>omc</strong> is the lone outlier — 2.2× the median trial cost for a mid-pack score.
+          </p>
+        </figure>
+        <figure class="behavior-figure">
+          <table class="behavior-table">
+            <caption>refactor — ranked by $ cost (n=5)</caption>
+            <thead>
+              <tr><th>Tool</th><th>$ cost</th><th>Out tok</th><th>In tok</th><th>Score</th><th>$/pt</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>ecc</strong></td><td><strong>$50.26</strong></td><td>80.5K</td><td>21.9M</td><td>173.6</td><td><strong>0.290</strong></td></tr>
+              <tr><td>pure</td><td>$52.14</td><td>109.5K</td><td>23.6M</td><td><strong>180.2</strong></td><td>0.289</td></tr>
+              <tr><td>superpower</td><td>$54.02</td><td>103.7K</td><td>19.8M</td><td>177.6</td><td>0.304</td></tr>
+              <tr><td>bmad</td><td>$56.03</td><td>114.7K</td><td>22.1M</td><td>177.7</td><td>0.315</td></tr>
+              <tr><td>claudekit</td><td>$56.70</td><td>91.2K</td><td>27.5M</td><td>178.0</td><td>0.318</td></tr>
+              <tr><td>compound</td><td>$61.45</td><td>101.3K</td><td>30.6M</td><td>174.4</td><td>0.352</td></tr>
+              <tr><td>gstack</td><td class="hi">$95.87</td><td>147.4K</td><td class="hi">45.8M</td><td>144.9</td><td class="hi">0.662</td></tr>
+              <tr><td>omc</td><td class="hi">$191.23</td><td class="hi">216.7K</td><td class="hi">60.6M</td><td>170.1</td><td class="hi">1.124</td></tr>
+            </tbody>
+          </table>
+          <p class="behavior-caption">
+            On refactor the top six tools cluster tightly ($50–$62, all under $0.36/pt).
+            <strong>pure</strong> (no-addons baseline) is rank-1 by score at near-cheapest cost — the strongest "addons don't pay for themselves" signal in the corpus.
+            <strong>gstack</strong> and <strong>omc</strong> separate into a high-cost tail; gstack also drops to rank-8 by score.
+          </p>
+        </figure>
+      </div>
+      <p class="kicker" style="margin-top: 16px; color: var(--olive-gray); font-size: 0.92em;">
+        <strong>Read this column-by-column, not row-aligned across tables.</strong> The same tool can be cheap on one task and a high spender on another (compare omc's $/pt of 2.996 on feature vs 0.364 on bugfix — an 8× swing). Source: per-trial <code class="mono">phase1-metrics.json</code> (<code class="mono">cost_usd</code> Anthropic-billing-derived) aggregated by <code class="mono">scripts/audit-sessions.py</code>; scores from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/final-report.md" target="_blank" rel="noopener" class="link-accent">results/&lt;task&gt;/final-report.md</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== EXPLORE THE DOCS ========== -->
+  <section class="section" id="explore" style="padding-top: 8px;">
+    <div class="container">
+      <h2 class="h2">Explore the docs</h2>
+      <p class="kicker">
+        The repository's <code class="mono">docs/</code> folder is organized by reader intent.
+        Four routes in, depending on what you want.
+      </p>
+
+      <div class="explore-grid">
+        <a class="explore-card" href="preview/guide-quickstart.html">
+          <div class="explore-eyebrow">Guides</div>
+          <h4>Run one trial in ~10 minutes</h4>
+          <p>Clone → pick → tool run → judge → aggregate. Minimum viable reproduction path with the full command sequence.</p>
+          <span class="explore-link">Quickstart →</span>
+        </a>
+        <a class="explore-card" href="preview/paper.html#6-reproducibility">
+          <div class="explore-eyebrow">Methodology</div>
+          <h4>Pipeline end-to-end</h4>
+          <p>The canonical flow: tasks, tools, trials, judging, aggregation, and the cohort-symmetry rule.
+             Plus the interaction protocol between operator and tool.</p>
+          <span class="explore-link">Pipeline reference →</span>
+        </a>
+        <a class="explore-card" href="preview/tool-README.html">
+          <div class="explore-eyebrow">Tools</div>
+          <h4>Eight setups, profiled</h4>
+          <p>Per-tool: upstream, version, mechanism (skills / hooks / sub-agents), exact invocation, per-task
+             transcript notes, strengths, and failure modes. Grounded in the session logs.</p>
+          <span class="explore-link">Tool profiles →</span>
+        </a>
+        <a class="explore-card" href="preview/analysis-feature-cohort.html">
+          <div class="explore-eyebrow">Analysis</div>
+          <h4>What did we learn?</h4>
+          <p>The feature-cohort write-up: where the top cluster separates, where it ties, and what the
+             session transcripts show about the planning/orchestration patterns that drove it.</p>
+          <span class="explore-link">Feature-cohort analysis →</span>
+        </a>
+        <a class="explore-card" href="preview/analysis-skill-cost-efficiency.html">
+          <div class="explore-eyebrow">Analysis</div>
+          <h4>What does each skill cost?</h4>
+          <p>Output tokens per score point and per line, joined from the session JSONL audit. ecc clears 25 tok/line;
+             superpower's subagent skill burns 6,353 tok/pt with no measurable lift over the bare baseline.</p>
+          <span class="explore-link">Skill cost efficiency →</span>
+        </a>
+        <a class="explore-card" href="preview/guide-extending.html">
+          <div class="explore-eyebrow">Extending</div>
+          <h4>Add a tool or judge</h4>
+          <p>The scaffolding flow, the plan-mode-vs-native-planning decision matrix, the cohort-symmetry obligation,
+             and two PR checklists.</p>
+          <span class="explore-link">Extending guide →</span>
+        </a>
+        <a class="explore-card" href="preview/guide-verification.html">
+          <div class="explore-eyebrow">Verification</div>
+          <h4>Reproduce a specific claim</h4>
+          <p>"Why is pure rank-1 on refactor?" — step-by-step walkthroughs that re-compute headline claims
+             from the committed artifacts.</p>
+          <span class="explore-link">Verification guide →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WHY TRUST (DARK) ========== -->
+  <section class="section section-dark" id="trust">
+    <div class="container">
+      <h2 class="h2">How we kept the measurement honest</h2>
+      <p class="kicker" style="color: var(--warm-silver);">
+        A benchmark is only as credible as its protocol. Four commitments you can audit in <code style="font-family:var(--mono); color:var(--coral);">results/</code>:
+      </p>
+
+      <div class="trust-grid">
+        <div class="trust-block">
+          <h3 class="h3">Blind evaluation</h3>
+          <p>
+            Every diff is relabeled with a NATO codename (Alpha, Bravo, Charlie…) before judging.
+            Markdown plan files are stripped. The label-to-tool mapping
+            (<code class="mono">.mapping-DO-NOT-OPEN.json</code>) is sealed until scoring finishes — any review
+            that reads it during scoring is invalid by protocol.
+          </p>
+        </div>
+        <div class="trust-block">
+          <h3 class="h3">Five-judge weighted panel</h3>
+          <p>
+            Claude Opus 4.7 (Anthropic), GPT-5.4 (OpenAI), Grok-4.20 (xAI), GLM-5.1 (Z.ai), and MiMo-2.5-pro
+            (Xiaomi) each score the same 20-item rubric independently. Per-judge means are combined under the
+            pre-registered <strong>3 / 2 / 1 / 1 / 1</strong> weighting in
+            <code class="mono">versions.lock.json</code>. An equal-weight comparator is emitted
+            alongside every report; rank-1 is identical under both rules on every task, and top-3 is identical on bugfix but reorders on feature and at rank-3 on refactor under equal weighting (see PAPER §5).
+          </p>
+        </div>
+        <div class="trust-block">
+          <h3 class="h3">Everything committed</h3>
+          <p>
+            <strong>Trial inputs:</strong> the exact task PRD fed to every tool —
+            <code>feature</code> <span class="muted">(omitted from public release)</span> ·
+            <code>bugfix</code> <span class="muted">(omitted from public release)</span> ·
+            <code>refactor</code> <span class="muted">(omitted from public release)</span>
+            — plus per-tool prompt prefix in <code class="mono">scripts/manual-bench.sh</code>.
+            <strong>Per trial:</strong> full session transcript (<code class="mono">session-logs/*.jsonl</code>), the byte-exact prompt,
+            wall-clock + token metrics, TSC / ESLint / Jest output, diff stats, and task-specific hard gates.
+            <strong>Judge inputs:</strong> the verbatim request payload sent to each of the 5 judges per label per round —
+            e.g.
+            <code>Alpha/round1/*-judge.json.request.json</code> <span class="muted">(omitted from public release)</span>
+            — built from the
+            <code>judge-prompt template</code> <span class="muted">(omitted from public release)</span>
+            over the blinded diff. <strong>Per label:</strong> the diff the judges saw and all five judges' raw JSON outputs (with <code class="mono">scores_pre_r1</code> snapshot for the R1 audit trail).
+          </p>
+        </div>
+        <div class="trust-block">
+          <h3 class="h3">Deterministic aggregation</h3>
+          <p>
+            Two scripts re-generate every number: <code class="mono">aggregate-results.sh</code>
+            (R1 sweep → <span class="term" tabindex="0" data-tip="Weighted average — each judge's score is multiplied by its pre-registered weight (3/2/1/1/1) before averaging.">weighted mean</span> → <span class="term" tabindex="0" data-tip="Each judge counts the same (1×) instead of the pre-registered 3/2/1/1/1 weighting. Emitted as a sensitivity check.">equal-weight</span> comparator → <span class="term" tabindex="0" data-tip="Splitting total variance into within-judge (same judge differs across rounds/trials = sampling noise) and between-judge (judges disagree with each other = systematic lenience drift) components.">σ decomposition</span>) and
+            <code class="mono">audit-cohort-symmetry.py</code> (no-cherry-picking audit). No network, no private state.
+          </p>
+        </div>
+        <div class="trust-block">
+          <h3 class="h3">Read this as a calibration study, not a leaderboard</h3>
+          <p>
+            The ranks above are <strong>point-estimate only</strong>. The strongest claims this design supports are the <strong>negative result</strong> (no rank-1 lead clears MDE on any task — every top-cluster gap is a statistical tie) and the <strong>calibration finding</strong> (Krippendorff α = 0.124 on <code class="mono">feature</code> — LLM judges fundamentally disagree on absolute scores under this rubric). Tasks, the 20-item rubric, and the judge panel were operator-iterative — only weights and the rerun protocol are pre-registered (see <a href="preview/paper.html#4-limitations-and-threats-to-validity" class="link-accent">PAPER §4</a>). The value is methodological: a published 1800-judgment corpus and an honest threats-to-validity audit, not a tool leaderboard.
+          </p>
+        </div>
+        <div class="trust-block">
+          <h3 class="h3">Statistical honesty (added 2026-05)</h3>
+          <p>
+            Every per-task report now publishes <span class="term" tabindex="0" data-tip="Krippendorff's alpha (interval level): inter-rater agreement adjusted for chance. ≥0.800 supports firm claims; ≥0.667 tentative; below = unreliable for absolute claims. Punishes per-judge lenience drift hard — GPT-5.4 and mimo25pro are far apart on absolute scores even when their orderings agree.">Krippendorff α</span>
+            (feature 0.124 · bugfix 0.284 · refactor 0.626 — judges disagree on absolute scores due to lenience drift, even where orderings concur; refactor (0.626) sits just below the tentative band; these α are an upper bound — computed on round-averaged scores, so true per-round agreement is lower), the
+            <span class="term" tabindex="0" data-tip="Minimum Detectable Effect: smallest tool-vs-tool gap detectable at α=0.05 (two-sided), power=0.80, computed at the cohort's n=5 trials per arm using the exact Student-t critical value t(0.975, df=2(n-1)=8) ≈ 2.306, not the normal z=1.96 (at n=5 this enlarges MDE ~12%); the β/power term keeps the normal z=0.84 as a deliberate conservative approximation. Recomputed n=5 MDE: 19.33 / 22.17 / 44.02 pts (feature / bugfix / refactor); σ_pool 9.72 / 11.14 / 22.13. Adding trials 4–5 raised σ_pool on every task (7.87→9.72 / 9.99→11.14 / 6.07→22.13), so MDE did not scale down as 1/√n.">MDE</span>
+            for tool-vs-tool comparison (<strong>19.33 / 22.17 / 44.02 pts</strong> at the cohort's n=5 — feature / bugfix / refactor), and a per-judge z-normalized sensitivity column to verify rank stability under lenience normalization.
+            See any report's <em>Power analysis</em> and <em>Inter-rater agreement</em> sections —
+            <a href="preview/final-report-bugfix.html#power-analysis-detection-threshold-mde" class="link-accent">e.g. bugfix MDE</a>.
+            Computed by
+            <code class="mono">compute-krippendorff.py</code> + <code class="mono">compute-power-analysis.py</code>
+            (auto-run before each aggregation; outputs in <code class="mono">results/</code>).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CAVEATS ========== -->
+  <section class="section" id="caveats">
+    <div class="container">
+      <h2 class="h2">Caveats, in plain English</h2>
+      <p class="kicker">
+        These limitations are why we publish all artifacts and refuse to cite rank-positions within the top cluster.
+        Read <a href="preview/paper.html" style="color:var(--terracotta); text-decoration:none; border-bottom:1px solid var(--border-warm);">PAPER §4</a>
+        for the full threats-to-validity list.
+      </p>
+
+      <div class="caveats">
+        <div class="caveat-item" style="background: var(--surface-2); border-left: 4px solid var(--terracotta);"><div class="caveat-num" style="color: var(--terracotta);">!</div><div class="caveat-body"><b>Approve-only "vibecode" execution.</b> Trials are run by an operator who accepts whatever each tool proposes — no mid-flight steering, no plan rejection, no "try a different approach". The per-tool slash command is fired once and the operator only clicks through permission prompts. This measures <em>autonomous one-shot capability</em> under the pinned base model. Setups that depend on iterative human feedback (plan revision, rejecting a sub-task, mid-edit course correction) will rank lower here than in interactive pair-programming use. Read rankings as <b>"best when the operator just keeps approving"</b>, not as effectiveness in a human-in-the-loop workflow.</div></div>
+        <div class="caveat-item"><div class="caveat-num">01</div><div class="caveat-body"><b>Single codebase, single language</b> — TypeScript. Don't assume the rankings carry to Python, Go, or Rust.</div></div>
+        <div class="caveat-item"><div class="caveat-num">02</div><div class="caveat-body"><b>Single executor base model</b> — <code class="mono">claude-opus-4-7</code>. A setup tuned for Sonnet or Haiku could rank differently.</div></div>
+        <div class="caveat-item"><div class="caveat-num">03</div><div class="caveat-body"><b>LLM judges diverge 32–42 pts (full panel spread).</b> GPT-5.4 is consistently the harshest (19–27 pts below the per-task panel mean), MiMo-2.5-pro the most lenient. The 5-judge weighted panel and the <span class="term" tabindex="0" data-tip="σ (standard deviation) split into within-judge (same judge differs across rounds/trials = sampling noise) and between-judge (judges disagree with each other = systematic lenience drift).">within / between σ split</span> are the intended mitigations — they expose drift rather than hide it.</div></div>
+        <div class="caveat-item"><div class="caveat-num">04</div><div class="caveat-body"><b>Pure (no addons) is rank-1 on refactor, rank-3 on bugfix, and rank-2 on feature — top-3 on every task in this corpus.</b> The per-task reports now compute the <span class="term" tabindex="0" data-tip="Minimum Detectable Effect at α=0.05 (two-sided), power=0.80, computed at the cohort's actual n=5 trials per arm using the exact Student-t critical value t(0.975, df=2(n-1)=8) ≈ 2.306, not the normal z=1.96 (at n=5 this enlarges MDE ~12%); the β/power term keeps the normal z=0.84 as a deliberate conservative approximation.">MDE</span> at the cohort's actual n=5 trials per arm: <strong>19.33 pts (feature) · 22.17 pts (bugfix) · 44.02 pts (refactor)</strong> (σ_pool 9.72 / 11.14 / 22.13). Counter-intuitively the n=3 → n=5 expansion did <em>not</em> cut MDE the way 1/√n predicts — σ_pool rose on every task as more trials exposed true trial-to-trial variance (feature 7.87→9.72, bugfix 9.99→11.14, refactor 6.07→22.13), driven on refactor by gstack's trial-4 refactor diff scoring ≈36/200 against ~178 on its other four (a mechanically clean run, valid under the pre-registered no-selective-rerun rule). Every rank-1 lead falls below MDE (feature 10.17, bugfix 6.62, refactor 2.15); an earlier reading rejected the strict null on bugfix via claudekit's lead over pure against a heuristic ~5-pt tie envelope — it does not survive the formal power analysis (9.4 ≪ 22.17). The only separation that clears MDE anywhere in the 1800-judgment corpus is ecc − gstack on feature (≈21.3 &gt; 19.33); no separation clears MDE on bugfix or refactor. Treat all top-cluster rank-1 claims as <em>"point-estimate first, statistically tied"</em>; use cost, speed, and DX as the real differentiator. See <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/IMPROVEMENT-PLAN-NEXT-COHORT.md" target="_blank" rel="noopener" style="color:var(--terracotta); border-bottom:1px solid var(--border-warm);">IMPROVEMENT-PLAN-NEXT-COHORT.md</a>.</div></div>
+      </div>
+
+      <details class="caveats-more">
+        <summary>Show 7 more methodological caveats</summary>
+        <div class="caveats" style="margin-top:8px;">
+        <div class="caveat-item"><div class="caveat-num">05</div><div class="caveat-body"><b>R1 mechanical-fact override is post-hoc.</b> Deterministic items are rewritten from <code class="mono">auto-metrics.json</code>; the lock list varies per task (feature locks 4 items: tsc / eslint / core-test failures / lines removed; bugfix locks 2; refactor locks 2 — see PAPER §1.5). Pre-override scores are preserved per-file under <code class="mono">scores_pre_r1</code>.</div></div>
+        <div class="caveat-item"><div class="caveat-num">06</div><div class="caveat-body"><b>Judge weights pre-registered, not derived.</b> The <strong>3 / 2 / 1 / 1 / 1</strong> scheme reflects operator trust in the Anthropic and OpenAI judges; equal-weight aggregations are emitted alongside as sensitivity. Rank-1 is identical under both rules on every task; top-3 is identical on bugfix, reorders on feature (weighted ecc / pure / bmad → equal-weight ecc / bmad / pure), and swaps at rank-3 on refactor (weighted bmad → equal-weight superpower).</div></div>
+        <div class="caveat-item"><div class="caveat-num">07</div><div class="caveat-body"><b>Self-preference is not identified by this design.</b> Every executor uses a Claude base model, so judge-family favoritism cannot be isolated. A proper audit needs a non-Anthropic executor as control.</div></div>
+        <div class="caveat-item"><div class="caveat-num">08</div><div class="caveat-body"><b>Cross-task synthesis is informational only.</b> A single cross-task <span class="term" tabindex="0" data-tip="z̄ ('z-bar') — the simple average of a tool's three per-task z-scores.">z̄</span> leaderboard is sensitive to weighting and noisy at this sample size — read the per-task reports together. The leaderboard above is a visual aid, not a ranking.</div></div>
+        <div class="caveat-item"><div class="caveat-num">09</div><div class="caveat-body"><b>Judge sampling not pinned.</b> Temperature is fixed to 0 where the provider exposes it (OpenRouter, OpenCode Go); Claude CLI and OpenAI <code class="mono">/v1/responses</code> do not expose temperature/seed.</div></div>
+        <div class="caveat-item"><div class="caveat-num">10</div><div class="caveat-body"><b>Not preregistered.</b> Tasks, rubric, judge panel, weight scheme, and R1 lock list were chosen iteratively. The weight scheme is committed to <code class="mono">versions.lock.json</code> before aggregation; earlier choices of tasks and rubric items are not preregistered.</div></div>
+        <div class="caveat-item"><div class="caveat-num">11</div><div class="caveat-body"><b>Tool-version snapshot, 2026-05.</b> Versions captured in <code class="mono">versions.lock.json</code>. Re-run for current-version claims.</div></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== VERIFY (DARK) ========== -->
+  <section class="section section-dark" id="verify">
+    <div class="container">
+      <h2 class="h2">Reproduce every number in one command</h2>
+      <p class="kicker" style="color: var(--warm-silver);">
+        Nothing is hidden. Run the three aggregation scripts and diff against the committed report —
+        output should byte-match (seed 42, stdlib + numpy only, no network).
+      </p>
+
+      <div class="verify-grid">
+        <div class="verify-card">
+          <h4>Per-task aggregation</h4>
+          <p>Runs the R1 sweep, weighted mean, equal-weight comparator, and σ decomposition. Writes <code>final-report.md</code> + <code>final-report.equal-weight.md</code>.</p>
+          <code>TASK=feature ./scripts/aggregate-results.sh</code>
+        </div>
+        <div class="verify-card">
+          <h4>R1 mechanical-fact override</h4>
+          <p>Rewrites deterministic rubric items from <code>auto-metrics.json</code>; idempotent; preserves <code>scores_pre_r1</code>.</p>
+          <code>TASK=feature python3 scripts/apply-r1-override.py results/_blind-eval/Alpha</code>
+        </div>
+        <div class="verify-card">
+          <h4>Cohort symmetry</h4>
+          <p>Verifies no trial or rerun was cherry-picked. Exits non-zero on hard violations.</p>
+          <code>python3 scripts/audit-cohort-symmetry.py</code>
+        </div>
+        <div class="verify-card">
+          <h4>Open every artifact</h4>
+          <p>Trial inputs:
+            <code>feature PRD</code> <span class="muted">(omitted from public release)</span> ·
+            <code>bugfix PRD</code> <span class="muted">(omitted from public release)</span> ·
+            <code>refactor PRD</code> <span class="muted">(omitted from public release)</span>.
+            Judge inputs: <code>sample request payloads</code> <span class="muted">(omitted from public release)</span> ·
+            <code>prompt template</code> <span class="muted">(omitted from public release)</span>.
+            Reports: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/final-report.md" target="_blank" rel="noopener">feature</a> ·
+            <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/bugfix/final-report.md" target="_blank" rel="noopener">bugfix</a> ·
+            <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/refactor/final-report.md" target="_blank" rel="noopener">refactor</a>.</p>
+          <code>open results/final-report.md</code>
+        </div>
+      </div>
+
+      <p style="margin-top: 40px; font-size: 15px;">
+        Full walkthrough: <a href="preview/guide-verification.html">Verification guide</a> ·
+        Pre-publish runbook: <a href="preview/rerun-pre-publish.html">RERUN-PRE-PUBLISH</a> ·
+        Paper: <a href="preview/paper.html">PAPER.md</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container" style="display:flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+      <div>Tool-version snapshot 2026-05 · base model <code class="mono">claude-opus-4-7</code>. Published openly for reference and independent re-analysis.</div>
+      <div>
+        <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a> ·
+        <a href="https://github.com/infina-pfa/claude-tool-benchmark/issues/new" target="_blank" rel="noopener">Report an issue</a> ·
+        <a href="https://github.com/infina-pfa/claude-tool-benchmark#citation" target="_blank" rel="noopener">Cite (BibTeX)</a>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ========== DATA + RENDER ========== -->
+<script id="bench-data" type="application/json">
+{
+  "tasks": {
+    "feature": {
+      "cohort_mean": 139.89,
+      "ci": {
+        "ecc":        {"mean": 153.30, "lo": 151.27, "hi": 155.33, "z": 2.17},
+        "pure":       {"mean": 143.13, "lo": 141.43, "hi": 144.83, "z": 0.52},
+        "bmad":       {"mean": 141.33, "lo": 139.74, "hi": 142.92, "z": 0.23},
+        "superpower": {"mean": 140.16, "lo": 137.88, "hi": 142.44, "z": 0.04},
+        "omc":        {"mean": 139.49, "lo": 137.03, "hi": 141.95, "z": -0.06},
+        "claudekit":  {"mean": 135.04, "lo": 132.15, "hi": 137.93, "z": -0.78},
+        "compound":   {"mean": 134.67, "lo": 131.67, "hi": 137.67, "z": -0.84},
+        "gstack":     {"mean": 131.98, "lo": 127.83, "hi": 136.13, "z": -1.28}
+      }
+    },
+    "bugfix": {
+      "cohort_mean": 167.99,
+      "ci": {
+        "claudekit":  {"mean": 178.93, "lo": 176.35, "hi": 181.51, "z": 2.06},
+        "ecc":        {"mean": 172.31, "lo": 169.25, "hi": 175.37, "z": 0.81},
+        "pure":       {"mean": 169.53, "lo": 166.80, "hi": 172.26, "z": 0.29},
+        "superpower": {"mean": 166.41, "lo": 164.72, "hi": 168.10, "z": -0.30},
+        "compound":   {"mean": 166.25, "lo": 164.08, "hi": 168.42, "z": -0.33},
+        "bmad":       {"mean": 165.72, "lo": 162.83, "hi": 168.61, "z": -0.43},
+        "omc":        {"mean": 164.80, "lo": 161.26, "hi": 168.34, "z": -0.60},
+        "gstack":     {"mean": 159.97, "lo": 157.90, "hi": 162.04, "z": -1.51}
+      }
+    },
+    "refactor": {
+      "cohort_mean": 172.07,
+      "ci": {
+        "pure":       {"mean": 180.19, "lo": 179.19, "hi": 181.19, "z": 0.76},
+        "claudekit":  {"mean": 178.04, "lo": 176.84, "hi": 179.24, "z": 0.56},
+        "bmad":       {"mean": 177.74, "lo": 176.50, "hi": 178.98, "z": 0.53},
+        "superpower": {"mean": 177.56, "lo": 176.41, "hi": 178.71, "z": 0.51},
+        "compound":   {"mean": 174.42, "lo": 173.05, "hi": 175.79, "z": 0.22},
+        "ecc":        {"mean": 173.61, "lo": 171.64, "hi": 175.58, "z": 0.14},
+        "omc":        {"mean": 170.11, "lo": 168.43, "hi": 171.79, "z": -0.18},
+        "gstack":     {"mean": 144.92, "lo": 131.70, "hi": 158.14, "z": -2.54}
+      }
+    }
+  },
+  "combined": [
+    {"tool": "ecc",        "rank": 1, "z":  1.04, "zt": {"feature": 2.17, "bugfix": 0.81, "refactor": 0.14}, "note": "rank-1 feature"},
+    {"tool": "claudekit",  "rank": 2, "z":  0.61, "zt": {"feature": -0.78, "bugfix": 2.06, "refactor": 0.56}, "note": "rank-1 bugfix"},
+    {"tool": "pure",       "rank": 3, "z":  0.52, "zt": {"feature": 0.52, "bugfix": 0.29, "refactor": 0.76}, "note": "rank-1 refactor · baseline"},
+    {"tool": "bmad",       "rank": 4, "z":  0.11, "zt": {"feature": 0.23, "bugfix": -0.43, "refactor": 0.53}, "note": ""},
+    {"tool": "superpower", "rank": 5, "z":  0.08, "zt": {"feature": 0.04, "bugfix": -0.30, "refactor": 0.51}, "note": ""},
+    {"tool": "omc",        "rank": 6, "z": -0.28, "zt": {"feature": -0.06, "bugfix": -0.60, "refactor": -0.18}, "note": ""},
+    {"tool": "compound",   "rank": 7, "z": -0.32, "zt": {"feature": -0.84, "bugfix": -0.33, "refactor": 0.22}, "note": ""},
+    {"tool": "gstack",     "rank": 8, "z": -1.78, "zt": {"feature": -1.28, "bugfix": -1.51, "refactor": -2.54}, "note": ""}
+  ]
+}
+</script>
+
+<script>
+(function () {
+  const data = JSON.parse(document.getElementById('bench-data').textContent);
+
+  /* ---------- Leaderboard ---------- */
+  const lb = document.getElementById('lb');
+  const maxZ = Math.max(...data.combined.map(d => Math.abs(d.z)));
+  const barPct = z => {
+    // map z into [-100%..+100%] around center
+    const pct = (z / maxZ) * 50;
+    return pct;
+  };
+
+  data.combined.forEach(d => {
+    const best = Object.entries(d.zt).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+    const worst = Object.entries(d.zt).reduce((a, b) => a[1] < b[1] ? a : b)[0];
+    const p = barPct(d.z);
+    const fillCss = p >= 0
+      ? `left: 50%; width: ${p}%;`
+      : `left: ${50 + p}%; width: ${-p}%;`;
+
+    const chips = ['feature', 'bugfix', 'refactor'].map(t => {
+      const z = d.zt[t];
+      const cls = t === best ? 'best' : (t === worst ? 'worst' : '');
+      const glyph = t === best ? '★ ' : (t === worst ? '· ' : '');
+      const sign = z >= 0 ? '+' : '';
+      return `<span class="lb-chip ${cls}" title="${t} z-score">${glyph}${t.slice(0,3)} ${sign}${z.toFixed(2)}</span>`;
+    }).join('');
+
+    const sign = d.z >= 0 ? '+' : '';
+    const row = document.createElement('a');
+    row.className = 'lb-row lb-row-link';
+    row.href = `preview/tool-${d.tool}.html`;
+    row.innerHTML = `
+      <div class="lb-rank ${d.rank <= 4 ? 'top' : ''}">${String(d.rank).padStart(2, '0')}</div>
+      <div class="lb-tool">${d.tool}${d.note ? `<span class="sub">${d.note}</span>` : ''}</div>
+      <div class="lb-bar-wrap">
+        <div class="lb-bar"><div class="lb-bar-fill ${d.z < 0 ? 'neg' : ''}" style="${fillCss}"></div></div>
+        <div class="lb-z" style="margin-top:6px;">z̄ ${sign}${d.z.toFixed(3)}</div>
+      </div>
+      <div class="lb-tasks">${chips}<span class="lb-arrow" aria-hidden="true">→</span></div>
+    `;
+    lb.appendChild(row);
+  });
+
+  /* ---------- Forest plots (shared x-axis) ---------- */
+  const panels = document.getElementById('panels');
+  const taskMeta = {
+    feature:  { title: 'Feature', sub: '600 judgments · 5 trials × 5 judges · 75 per cell' },
+    bugfix:   { title: 'Bugfix',  sub: '600 judgments · 5 trials × 5 judges · 75 per cell' },
+    refactor: { title: 'Refactor', sub: '600 judgments · 5 trials × 5 judges · 75 per cell' }
+  };
+
+  // shared axis across all three tasks for honest visual comparison
+  const allTaskTools = ['feature','bugfix','refactor'].flatMap(t => Object.values(data.tasks[t].ci));
+  const sharedLo = Math.min(...allTaskTools.map(d => d.lo));
+  const sharedHi = Math.max(...allTaskTools.map(d => d.hi));
+  const sharedPad = (sharedHi - sharedLo) * 0.06;
+  const xMin = sharedLo - sharedPad, xMax = sharedHi + sharedPad;
+
+  ['feature', 'bugfix', 'refactor'].forEach(task => {
+    const meta = taskMeta[task];
+    const taskData = data.tasks[task];
+    const tools = Object.entries(taskData.ci).sort((a, b) => b[1].mean - a[1].mean);
+
+    const W = 420, rowH = 26, topPad = 24, botPad = 28, leftPad = 86;
+    const H = topPad + botPad + tools.length * rowH;
+    const xScale = v => leftPad + ((v - xMin) / (xMax - xMin)) * (W - leftPad - 18);
+
+    const best = tools[0][0], worst = tools[tools.length - 1][0];
+
+    let svg = `<svg class="forest-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${meta.title} score intervals (shared axis ${Math.round(xMin)}–${Math.round(xMax)})">`;
+
+    // cohort mean
+    const cm = xScale(taskData.cohort_mean);
+    svg += `<line class="cohort" x1="${cm}" x2="${cm}" y1="${topPad - 6}" y2="${H - botPad + 4}" />`;
+    svg += `<text class="cohort-label" x="${cm}" y="${H - 10}" text-anchor="middle">cohort μ ${taskData.cohort_mean.toFixed(1)}</text>`;
+
+    // x axis
+    svg += `<line class="axis" x1="${leftPad}" x2="${W - 18}" y1="${H - botPad + 4}" y2="${H - botPad + 4}" />`;
+
+    tools.forEach(([tool, d], i) => {
+      const y = topPad + i * rowH + rowH / 2;
+      const xLo = xScale(d.lo), xHi = xScale(d.hi), xMean = xScale(d.mean);
+      const cls = tool === best ? 'hi' : (tool === worst ? 'lo' : '');
+      const tip = `${tool}: ${d.mean.toFixed(2)} [${d.lo.toFixed(2)}–${d.hi.toFixed(2)}] · z ${d.z >= 0 ? '+' : ''}${d.z.toFixed(2)}`;
+      svg += `<g><title>${tip}</title>`;
+      svg += `<text class="label" x="${leftPad - 10}" y="${y + 4}" text-anchor="end">${tool}</text>`;
+      svg += `<line class="ci ${cls}" x1="${xLo}" x2="${xHi}" y1="${y}" y2="${y}" />`;
+      svg += `<circle class="pt ${cls}" cx="${xMean}" cy="${y}" r="${cls === 'hi' ? 4 : 3.2}" />`;
+      svg += `<text class="score" x="${xHi + 6}" y="${y + 3}">${d.mean.toFixed(1)}</text>`;
+      svg += `</g>`;
+    });
+
+    svg += `</svg>`;
+
+    const card = document.createElement('a');
+    card.className = 'task-card task-card-link';
+    card.href = `preview/final-report-${task}.html`;
+    card.innerHTML = `
+      <h3 class="task-title">${meta.title}</h3>
+      <p class="task-sub">${meta.sub}</p>
+      <div class="forest">${svg}</div>
+      <span class="task-link">Read the ${task} report →</span>
+    `;
+    panels.appendChild(card);
+  });
+
+  /* ---------- Mobile nav toggle ---------- */
+  const toggle = document.querySelector('.nav-toggle');
+  const links = document.getElementById('nav-links');
+  if (toggle && links) {
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    // close on link click (mobile)
+    links.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        links.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  /* ---------- Scroll-spy (active nav link) ---------- */
+  const navLinkEls = links ? Array.from(links.querySelectorAll('a[href^="#"]')) : [];
+  const sectionIds = navLinkEls.map(a => a.getAttribute('href').slice(1)).filter(Boolean);
+  const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+  if (sections.length && 'IntersectionObserver' in window) {
+    const setActive = (id) => {
+      navLinkEls.forEach(a => {
+        if (a.getAttribute('href') === `#${id}`) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    };
+    const io = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio);
+      if (visible[0]) setActive(visible[0].target.id);
+    }, { rootMargin: '-30% 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
+    sections.forEach(s => io.observe(s));
+  }
+})();
+</script>
+
+<!-- ===== Methodology diagram animations (Motion One, ESM, no build step) ===== -->
+<script type="module">
+  // JS-fail safe: only hide elements AFTER the CDN import resolves.
+  // If jsdelivr is blocked or motion semver-breaks, the static HTML stays visible.
+  try {
+    const { animate, inView, stagger } = await import("https://cdn.jsdelivr.net/npm/motion@10.18.0/+esm");
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- Reveal helper for any flow-row pipeline (trial + judge containers) ---
+    function revealFlowPipeline(root) {
+      if (!root) return;
+      const cards  = root.querySelectorAll(".flow-card");
+      const arrows = root.querySelectorAll(".flow-arrow");
+      if (!cards.length) return;
+      if (reduce) return; // static fall-through
+      cards .forEach(el => { el.style.opacity = "0"; el.style.transform = "translateY(16px)"; });
+      arrows.forEach(el => { el.style.opacity = "0"; });
+      inView(root, () => {
+        animate(cards,  { opacity: [0, 1], transform: ["translateY(16px)", "translateY(0)"] },
+          { duration: 0.45, delay: stagger(0.07), easing: [0.2, 0, 0.2, 1] });
+        if (arrows.length) animate(arrows, { opacity: [0, 1] },
+          { duration: 0.35, delay: stagger(0.07, { start: 0.05 }) });
+      }, { amount: 0.15 });
+    }
+    revealFlowPipeline(document.querySelector('[data-meth-pipeline="trial"]'));
+
+    // --- Panel micro-graphic (Mode A): sequential build of judges → chips → mean ---
+    const panel = document.querySelector('[data-panel-diagram]');
+    if (panel && !reduce) {
+      const artifact   = panel.querySelector('.panel-artifact');
+      const connectors = panel.querySelectorAll('.panel-connector');
+      const judges     = panel.querySelectorAll('.panel-judge');
+      const arrows     = panel.querySelectorAll('.panel-arrow');
+      const chips      = panel.querySelectorAll('.panel-chip');
+      const mean       = panel.querySelector('.panel-mean');
+
+      [artifact, ...connectors, ...judges, ...arrows, ...chips, mean]
+        .filter(Boolean).forEach(el => { el.style.opacity = "0"; });
+      if (mean) mean.style.transform = "translateY(8px)";
+
+      inView(panel, () => {
+        if (artifact) animate(artifact, { opacity: [0, 1] }, { duration: 0.35 });
+        animate(connectors, { opacity: [0, 1] },
+          { duration: 0.30, delay: stagger(0.09, { start: 0.10 }) });
+        animate(judges, { opacity: [0, 1], transform: ["translateX(-8px)", "translateX(0)"] },
+          { duration: 0.35, delay: stagger(0.10, { start: 0.20 }) });
+        animate(arrows, { opacity: [0, 1] },
+          { duration: 0.30, delay: stagger(0.10, { start: 0.35 }) });
+        animate(chips, { opacity: [0, 1], transform: ["translateX(-10px) scale(0.92)", "translateX(0) scale(1)"] },
+          { duration: 0.35, delay: stagger(0.10, { start: 0.50 }) });
+        if (mean) animate(mean, { opacity: [0, 1], transform: ["translateY(8px)", "translateY(0)"] },
+          { duration: 0.55, delay: 1.30, easing: [0.2, 0, 0.2, 1] });
+      }, { amount: 0.30 });
+    }
+
+    // --- Comparative micro-graphic (Mode B): shuffle/sort cycle every 7s ---
+    const compare = document.querySelector('[data-compare-diagram]');
+    if (compare && !reduce) {
+      const tiles = compare.querySelectorAll('.compare-input .ctile');
+      const ranks = compare.querySelectorAll('.compare-output .rank-tile');
+
+      [...tiles, ...ranks].forEach(el => { el.style.opacity = "0"; });
+
+      let cycleHandle = null;
+
+      function shuffleTiles() {
+        // Subtle position jitter on the 8 input tiles, then snap back via CSS transition
+        tiles.forEach(t => {
+          const dx = (Math.random() - 0.5) * 14;
+          const dy = (Math.random() - 0.5) * 10;
+          t.style.transform = `translate(${dx}px, ${dy}px)`;
+        });
+        setTimeout(() => { tiles.forEach(t => { t.style.transform = ''; }); }, 360);
+      }
+
+      function reorderRanks() {
+        // Stagger fade-out, shuffle labels, stagger fade-in
+        const labels = Array.from(ranks).map(r => r.textContent);
+        const shuffled = [...labels].sort(() => Math.random() - 0.5);
+        animate(ranks, { opacity: [1, 0.20] }, { duration: 0.22, delay: stagger(0.035) });
+        setTimeout(() => {
+          ranks.forEach((r, i) => { r.textContent = shuffled[i]; });
+          animate(ranks, { opacity: [0.20, 1] }, { duration: 0.30, delay: stagger(0.04) });
+        }, 380);
+      }
+
+      inView(compare, () => {
+        animate(tiles, { opacity: [0, 1], transform: ["translateY(8px)", "translateY(0)"] },
+          { duration: 0.35, delay: stagger(0.05) });
+        animate(ranks, { opacity: [0, 1], transform: ["translateY(8px)", "translateY(0)"] },
+          { duration: 0.35, delay: stagger(0.05, { start: 0.40 }) });
+
+        // Start the cycle once revealed
+        cycleHandle = setInterval(() => {
+          shuffleTiles();
+          setTimeout(reorderRanks, 600);
+        }, 7000);
+
+        // Stop cycling if the section leaves the viewport for a while (battery courtesy)
+        return () => {
+          if (cycleHandle) { clearInterval(cycleHandle); cycleHandle = null; }
+        };
+      }, { amount: 0.25 });
+    }
+  } catch (e) {
+    // Motion One unreachable — static HTML is already visible, nothing to do.
+    console.warn('[methodology] Motion One CDN unreachable; static fallback active.', e);
+  }
+</script>
+
+</body>
+</html>

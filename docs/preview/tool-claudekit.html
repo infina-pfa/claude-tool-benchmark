@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool Profile — claudekit</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/claudekit.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="claudekit" tabindex="-1"><a class="header-anchor" href="#claudekit"><span>claudekit</span></a></h1>
+<h2 id="overview" tabindex="-1"><a class="header-anchor" href="#overview"><span>Overview</span></a></h2>
+<p>Claudekit is a skill pack and hook toolkit for Claude Code. The benchmark pins the Infina fork (<code>a private Infina fork of claudekit</code> @ <code>cf636d9</code>), forked from <code>carlrannaberg/claudekit</code> (MIT). It ships as a <code>.claude/</code> directory — custom slash commands, subagent skills, and a set of Claude Code hooks (<code>file-guard</code>, <code>typecheck-changed</code>, <code>eslint</code>, <code>codebase-map</code>, <code>create-checkpoint</code>, <code>validate-todo-completion</code>, <code>no-any</code>) that enforce guardrails at <code>PreToolUse</code>, <code>PostToolUse</code>, and <code>Stop</code> boundaries.</p>
+<p>The benchmark exercises claudekit through the plan-then-cook chain recommended by claudekit’s own docs (https://docs.claudekit.cc/docs/engineer): <code>/ck:plan</code> scopes the work, then <code>/ck:cook --auto</code> executes it without stopping at interactive review gates. Cook is claudekit’s feature-implementation orchestrator, documented by the author as “your implementation conductor” — it classifies intent, chooses a workflow (fast, parallel, research-backed, or plan-execution), and chains planner, coder, tester, and reviewer skills across review gates. The <code>--auto</code> flag removes the human-in-the-loop approval gates and runs all phases continuously. In practice the session-log audit shows <code>/ck:plan</code> fires as a slash command and the operator then types <code>/ck:cook --auto</code> at the interactive prompt to enter the implementation phase — the chained form in a single prompt body is treated as prose and is not dispatched autonomously.</p>
+<h2 id="setup" tabindex="-1"><a class="header-anchor" href="#setup"><span>Setup</span></a></h2>
+<p><code>scripts/setup-tool-config.sh</code> clones the claudekit source repo into <code>/tmp/internal-claudekit</code>, replaces the clone’s <code>.claude/</code> directory with claudekit’s, copies claudekit’s <code>CLAUDE.md</code> over the project’s, and appends a short project-context block (stack, NX layout, testing command) while preserving the original as <code>CLAUDE.md.original</code>. A <code>plans/</code> directory is created for the <code>ck:plan</code> skill. Hook node paths are rewritten from bare <code>node</code> to the resolved <code>$(which node)</code> because the bench runs under <code>env -i</code> and NVM’s PATH is stripped. <code>settings.json</code> is minimal — only <code>skipDangerousModePermissionPrompt: true</code>. No MCP servers, no external agents.</p>
+<h2 id="benchmark-prompt" tabindex="-1"><a class="header-anchor" href="#benchmark-prompt"><span>Benchmark prompt</span></a></h2>
+<pre class="hljs"><code>/ck:plan $SHARED_TASK
+</code></pre>
+<p>Plan-only entry. Fork skills are installed at <code>CLAUDE_CONFIG_DIR</code> (user-level) so the slash command dispatches directly — <code>/ck:plan</code> expands in the CLI’s command handler rather than relying on prose trigger phrases. (Prior “prose form” — <em>“Use /ck:plan to scope…”</em> — produced zero <code>Skill</code> tool calls in an Apr-23 canary, which motivated the leading-slash form.)</p>
+<p>Once the plan file(s) land, the operator manually types <code>/ck:cook --auto</code> at the interactive prompt to start the implementation phase. An earlier rerun design included that second command in the prompt body, but session-log audits showed the chained instruction was treated as prose and never re-fired as a slash command — so the harness was simplified to fire only <code>/ck:plan</code> explicitly and leave the plan→cook transition to the operator.</p>
+<h2 id="what-the-transcripts-show-session-audit" tabindex="-1"><a class="header-anchor" href="#what-the-transcripts-show-session-audit"><span>What the transcripts show (session audit)</span></a></h2>
+<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/claudekit/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/claudekit/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">wall min</th>
+<th style="text-align:right">main turns</th>
+<th style="text-align:right">sidechain turns</th>
+<th style="text-align:right">sub-agent disp.</th>
+<th style="text-align:right">files read (config / target)</th>
+<th style="text-align:right">files edited</th>
+<th style="text-align:right">cache hit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">97.2</td>
+<td style="text-align:right">116.0</td>
+<td style="text-align:right"><strong>334.3</strong></td>
+<td style="text-align:right">2.3</td>
+<td style="text-align:right">67.3 (0 / 67.3)</td>
+<td style="text-align:right">47.3</td>
+<td style="text-align:right">0.98</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">21.2</td>
+<td style="text-align:right">92.7</td>
+<td style="text-align:right">38.7</td>
+<td style="text-align:right">0.7</td>
+<td style="text-align:right">20.7 (0 / 20.7)</td>
+<td style="text-align:right">2.3</td>
+<td style="text-align:right">0.97</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">38.2</td>
+<td style="text-align:right">147.7</td>
+<td style="text-align:right">19.7</td>
+<td style="text-align:right">0.3</td>
+<td style="text-align:right">25.3 (0 / 25.3)</td>
+<td style="text-align:right">24.7</td>
+<td style="text-align:right">0.98</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Two skills drive the runs:</strong> <code>cook</code> (1,707 turns across all trials) and <code>ck-plan</code> (540) — <code>ck-plan</code> fires once per trial to scope, then <code>cook</code> runs the implementation thread. <code>attributionSkill</code> confirms the plan→cook hand-off the docs claim.</li>
+<li><strong>Slash commands typed:</strong> <code>/ck-plan</code> (9), <code>/cook</code> (9), <code>/copy</code> (2). The plan→cook split is operator-typed in every trial.</li>
+<li><strong>Sub-agent types when dispatched:</strong> <code>fullstack-developer</code> (4), <code>Explore</code> (4), <code>tester</code> (1), <code>code-reviewer</code> (1) — across the 9 trials. The feature task carries most of the dispatch budget; bugfix/refactor stay near-zero.</li>
+<li><strong>Feature is the sidechain-heavy task</strong> (334 sidechain turns mean vs 39/20 for bugfix/refactor) — <code>cook</code> does fan out reviewer/tester subagents when the scope is large enough to amortise the dispatch cost.</li>
+<li><strong>Tool-config reads are zero on every task</strong> — the <code>.claudekit/</code> scaffolding is loaded once into the model’s prompt and not re-read during the run, contrasting with <code>omc</code> (~17 config reads per feature trial).</li>
+</ul>
+<h2 id="benchmark-performance" tabindex="-1"><a class="header-anchor" href="#benchmark-performance"><span>Benchmark performance</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">Weighted mean /200</th>
+<th style="text-align:right">within_σ</th>
+<th style="text-align:right">between_σ</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">135.04</td>
+<td style="text-align:right">12.75</td>
+<td style="text-align:right">16.83</td>
+<td>6 / 8</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right"><strong>178.93</strong></td>
+<td style="text-align:right">11.42</td>
+<td style="text-align:right">9.35</td>
+<td><strong>1 / 8</strong></td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">178.04</td>
+<td style="text-align:right">5.29</td>
+<td style="text-align:right">17.01</td>
+<td>2 / 8</td>
+</tr>
+</tbody>
+</table>
+<p>Bugfix is claudekit’s rank-1 task. It separates from rank-2 (<code>ecc</code> 172.31) by ≈ 7 weighted points and from rank-3 (<code>pure</code> 169.53) by ≈ 9 (feature’s ecc→bmad spread of ≈ 12 is the corpus’s largest rank-1-to-rank-3 gap). <code>within_σ</code> of 11.42 on bugfix combined with <code>between_σ</code> 9.35 makes this one of five cells in the corpus where <code>within_σ &gt; between_σ</code> (alongside <code>ecc</code>, <code>pure</code> and <code>omc</code> on bugfix, and <code>gstack</code> on refactor).</p>
+<p>Claudekit’s ESLint counts are consistently non-zero across all three tasks despite its own <code>eslint</code> hook being configured — suggesting hook output is advisory in <code>--auto</code> mode and not a hard completion gate for the cook workflow.</p>
+<h2 id="notable-observations" tabindex="-1"><a class="header-anchor" href="#notable-observations"><span>Notable observations</span></a></h2>
+<p>The <code>/ck:cook --auto</code> entry point is claudekit’s most opinionated surface: it collapses a multi-skill pipeline (<code>ck-plan</code> → <code>ck-cook</code> → embedded reviewers) into a single prompt and bypasses human approval. On bugfix — a scope-bounded defect with a named filter and a QA report — the plan-first chain produces the cohort’s best score. On feature (rank-6), the same structure does not separate from the cohort: the task surface is large enough that planning lift is diluted across many files. On refactor the plan-then-cook chain holds up well, landing rank-2 just behind <code>pure</code>.</p>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/tools/claudekit.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

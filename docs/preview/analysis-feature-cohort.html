@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Analysis — feature-cohort</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/analysis/feature-cohort.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="feature-cohort-cross-tool-analysis" tabindex="-1"><a class="header-anchor" href="#feature-cohort-cross-tool-analysis"><span>Feature Cohort — Cross-Tool Analysis</span></a></h1>
+<p><strong>Cohort</strong>: 8 tools × 5 trials × 5 judges × 3 rounds = 600 valid judgments
+<strong>Base model</strong>: claude-opus-4-7 (all tools)
+<strong>Task</strong>: greenfield feature implementation on a private TypeScript NX monorepo (financial-services domain)
+<strong>Generated</strong>: 2026-05-18 (re-aggregated after the t4/t5 trial expansion + 2 stability rounds)</p>
+<h2 id="ranking-equal-weight-5-judge-pooled-mean-200" tabindex="-1"><a class="header-anchor" href="#ranking-equal-weight-5-judge-pooled-mean-200"><span>Ranking (equal-weight 5-judge pooled mean / 200)</span></a></h2>
+<blockquote>
+<p><strong>Metric note.</strong> This page ranks by <strong>equal-weight pooled mean</strong> so the score column is directly comparable to the cost / effort columns below (every judgment carries weight 1). The <strong>canonical</strong> benchmark ranking — used in <a href="paper.html"><code>PAPER.md</code></a>, <a href="readme.html"><code>README.md</code></a>, and <a href="final-report-feature.html"><code>results/final-report.md</code></a> — is the <strong>weighted mean</strong> with pre-registered panel weights (opus×3, gpt54pro×2, others×1). The two rankings agree on rank-1 (<code>ecc</code>) but swap ranks 2–3; see the paragraph below for the mechanical reason.</p>
+</blockquote>
+<p>Values are the <code>Pooled Mean</code> column from <a href="final-report-feature.html"><code>results/final-report.md</code></a>. The weighted-mean ranking (the canonical one, with pre-registered 3 / 2 / 1 / 1 / 1 weights) and the equal-weight ranking shown below agree on rank-1 (<code>ecc</code>) and rank-4 (<code>superpower</code>) but swap ranks 2↔3 — under weighted mean the order is ecc / pure / bmad / superpower, while under equal weighting bmad edges ahead of pure (ecc / bmad / pure / superpower). Mechanically, equal pooling moves every judge to weight 0.20 (vs the weighted scheme’s opus = 0.375, gpt54pro = 0.25, others = 0.125), so it <strong>downweights the harsh judges (<code>opus</code>, <code>gpt54pro</code>)</strong> and <strong>upweights <code>grok420</code> / <code>glm51</code> / <code>mimo25pro</code></strong> — tools with weaker opus / gpt54pro marks but stronger grok420 / mimo25pro scores (<code>bmad</code>, <code>compound</code>) rise once the harsh judges’ share of the average shrinks.</p>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Tool</th>
+<th>Pooled Mean</th>
+<th>Pooled σ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>ecc</td>
+<td><strong>157.11</strong></td>
+<td>16.46</td>
+</tr>
+<tr>
+<td>2</td>
+<td>bmad</td>
+<td><strong>147.65</strong></td>
+<td>19.99</td>
+</tr>
+<tr>
+<td>3</td>
+<td>pure</td>
+<td><strong>147.44</strong></td>
+<td>16.05</td>
+</tr>
+<tr>
+<td>4</td>
+<td>superpower</td>
+<td><strong>143.68</strong></td>
+<td>16.95</td>
+</tr>
+<tr>
+<td>5</td>
+<td>omc</td>
+<td><strong>143.59</strong></td>
+<td>19.00</td>
+</tr>
+<tr>
+<td>6</td>
+<td>compound</td>
+<td><strong>140.11</strong></td>
+<td>19.65</td>
+</tr>
+<tr>
+<td>7</td>
+<td>claudekit</td>
+<td><strong>139.07</strong></td>
+<td>19.67</td>
+</tr>
+<tr>
+<td>8</td>
+<td>gstack</td>
+<td><strong>137.80</strong></td>
+<td>25.02</td>
+</tr>
+</tbody>
+</table>
+<p>Spread: 19.3 pts. ecc leads rank-2 <code>bmad</code> by 9.5 pts; ranks 2–5 sit within 4.1 pts. Lowest pooled σ: pure (16.05), then ecc (16.46). (Pooled σ mixes within-judge and between-judge variance — for trial-to-trial-plus-round-to-round consistency see the <code>within_σ</code> column in <a href="final-report-feature.html"><code>results/final-report.md</code></a>, where the leader on feature is now bmad at 7.02.)</p>
+<h2 id="effort-cost-per-trial-mean" tabindex="-1"><a class="header-anchor" href="#effort-cost-per-trial-mean"><span>Effort &amp; Cost (per-trial mean)</span></a></h2>
+<p>Score is the <strong>equal-weight pooled mean</strong> (5 trials × 5 judges × 3 rounds = 75 judgments per row), matching the ranking table above; the canonical weighted-mean score for each tool lives in <a href="final-report-feature.html"><code>results/final-report.md</code></a>. Files / +Lines / Cost / Wall / Turns / Subagents are per-trial run-time stats from the n=3 session-audit subsystem and are unchanged by the trial/round expansion.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Score</th>
+<th>Files</th>
+<th>+Lines</th>
+<th>Cost</th>
+<th>Wall (s)</th>
+<th>Turns</th>
+<th>Subagents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ecc</td>
+<td>157.1</td>
+<td>27.0</td>
+<td>1924</td>
+<td>$156.6</td>
+<td>13313</td>
+<td>216</td>
+<td>1.7</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td>147.7</td>
+<td>8.3</td>
+<td>521</td>
+<td>$43.6</td>
+<td>1148</td>
+<td>156</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>pure</td>
+<td>147.4</td>
+<td>16.3</td>
+<td>821</td>
+<td>$73.8</td>
+<td>1822</td>
+<td>138</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td>143.7</td>
+<td>36.0</td>
+<td>2706</td>
+<td>$172.0</td>
+<td>5079</td>
+<td>183</td>
+<td>18.3</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>143.6</td>
+<td>34.3</td>
+<td>1837</td>
+<td>$554.7</td>
+<td>5046</td>
+<td>171</td>
+<td>10.7</td>
+</tr>
+<tr>
+<td>compound</td>
+<td>140.1</td>
+<td>13.7</td>
+<td>960</td>
+<td>$68.8</td>
+<td>1317</td>
+<td>165</td>
+<td>1.7</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td>139.1</td>
+<td>33.0</td>
+<td>1940</td>
+<td>$93.8</td>
+<td>2330</td>
+<td>116</td>
+<td>2.3</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td>137.8</td>
+<td>12.7</td>
+<td>1000</td>
+<td>$63.6</td>
+<td>1992</td>
+<td>156</td>
+<td>2.7</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cost-efficiency-pts-per" tabindex="-1"><a class="header-anchor" href="#cost-efficiency-pts-per"><span>Cost-efficiency (pts per $)</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Score / $</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>bmad</strong></td>
+<td><strong>3.39</strong></td>
+</tr>
+<tr>
+<td>gstack</td>
+<td>2.17</td>
+</tr>
+<tr>
+<td>compound</td>
+<td>2.04</td>
+</tr>
+<tr>
+<td>pure</td>
+<td>2.00</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td>1.48</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td>1.00</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td>0.84</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>0.26</td>
+</tr>
+</tbody>
+</table>
+<p>bmad delivers 94% of ecc’s score at 28% of the cost. omc burns 13× more than bmad for ~4 fewer points.</p>
+<h2 id="key-observations" tabindex="-1"><a class="header-anchor" href="#key-observations"><span>Key observations</span></a></h2>
+<h3 id="quality-vs-verbosity-is-non-monotonic" tabindex="-1"><a class="header-anchor" href="#quality-vs-verbosity-is-non-monotonic"><span>Quality vs verbosity is non-monotonic</span></a></h3>
+<p>Top scorer (ecc, 1924 lines, $156) and bottom scorer (gstack, 1000 lines, $63) ship comparable code volume yet rank 19.3 pts apart. bmad lands within ~9.5 pts of ecc on under half the lines and ~28% of the cost — judges weight design choices over diff size.</p>
+<h3 id="hard-gate-pass-judge-score" tabindex="-1"><a class="header-anchor" href="#hard-gate-pass-judge-score"><span>Hard-gate pass ≠ judge score</span></a></h3>
+<ul>
+<li>superpower: highest gate pass rate (5.0/6) but rank-4 in judge score</li>
+<li>gstack, bmad: 2.0/6 gates avg yet bmad ranks 2nd
+Hard gates measure mechanical compliance (G1-G7); judges weight reasoning, structure, test design — orthogonal axes.</li>
+</ul>
+<h3 id="multi-agent-fan-out-doesnt-predict-quality" tabindex="-1"><a class="header-anchor" href="#multi-agent-fan-out-doesnt-predict-quality"><span>Multi-agent fan-out doesn’t predict quality</span></a></h3>
+<ul>
+<li>superpower: 18.3 subagents/trial → rank 4</li>
+<li>omc: 10.7 subagents/trial → rank 5</li>
+<li>bmad, pure: 1.0 subagent → ranks 2 and 3
+Subagent expansion is a cost multiplier, not a quality multiplier on this task.</li>
+</ul>
+<h3 id="omc-is-the-cost-outlier" tabindex="-1"><a class="header-anchor" href="#omc-is-the-cost-outlier"><span>omc is the cost outlier</span></a></h3>
+<p>$554.7/trial — 6.6× the cohort median ($84). 10.7 subagents × deep cache reuse drives it (see <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>session-audit.md</code></a>). Not justified by score (rank 5).</p>
+<h3 id="judge-harshness-gradient" tabindex="-1"><a class="header-anchor" href="#judge-harshness-gradient"><span>Judge harshness gradient</span></a></h3>
+<table>
+<thead>
+<tr>
+<th>Judge</th>
+<th>Cohort mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gpt54pro</td>
+<td>117.8</td>
+</tr>
+<tr>
+<td>opus</td>
+<td>139.3</td>
+</tr>
+<tr>
+<td>glm51</td>
+<td>149.8</td>
+</tr>
+<tr>
+<td>mimo25pro</td>
+<td>156.2</td>
+</tr>
+<tr>
+<td>grok420</td>
+<td>159.8</td>
+</tr>
+</tbody>
+</table>
+<p>gpt54pro is the floor (42.0 pt range below grok420). The weighted (3/2/1/1/1) and equal-weight aggregations both cancel this asymmetry on rank-1; top-3 swaps ranks 2–3 on feature only (see ranking section above).</p>
+<h3 id="trial-to-trial-volatility-pooled" tabindex="-1"><a class="header-anchor" href="#trial-to-trial-volatility-pooled"><span>Trial-to-trial volatility (pooled σ)</span></a></h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Pooled σ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pure</td>
+<td>16.05 (most stable)</td>
+</tr>
+<tr>
+<td>ecc</td>
+<td>16.46</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td>16.95</td>
+</tr>
+<tr>
+<td>omc</td>
+<td>19.00</td>
+</tr>
+<tr>
+<td>compound</td>
+<td>19.65</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td>19.67</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td>19.99</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td>25.02 (most volatile)</td>
+</tr>
+</tbody>
+</table>
+<p>bmad, claudekit, compound, omc sit near the 20-pt mark and gstack at 25 — most of that is judge disagreement rather than tool instability. The <code>within_σ</code> column in <a href="final-report-feature.html"><code>results/final-report.md</code></a> shows within-judge noise across the 15 samples per (tool, judge) is much smaller (7.0–18.4 on feature) — the dominant component is <code>between_σ</code> (judge base-rate spread).</p>
+<h2 id="headline-takeaways" tabindex="-1"><a class="header-anchor" href="#headline-takeaways"><span>Headline takeaways</span></a></h2>
+<ol>
+<li><strong>ecc wins on quality</strong> (equal-weight rank-1, 157.1) but at high cost.</li>
+<li><strong>bmad is the value pick</strong> — 94% of ecc’s score at 28% of the price, and equal-weight rank-2.</li>
+<li><strong>bmad and pure split ranks 2–3</strong> depending on the weighting scheme; both are strong-value picks while compound/claudekit fall to the mid/lower pack.</li>
+<li><strong>omc and superpower invest heavily in fan-out</strong> without commensurate judge reward on this task (ranks 5 and 4).</li>
+<li><strong>gstack is rank-8 on every aggregation</strong> — the equal-weight gap to #7 (<code>claudekit</code>) is only ~1.3 pts and ~2.7 pts under weighted-mean, narrower than the v1 snapshot. At the recomputed n=5 MDE the <strong>only</strong> statistically-significant separation in the whole corpus is <code>ecc</code> − <code>gstack</code> on <strong>feature</strong> (≈21.3 &gt; the 19.33-pt feature MDE); gstack’s dramatic-looking refactor mean (144.92) is driven by a single low-scored trial (t4 ≈ 36/200 vs ~178 on its other four) and is <em>not</em> distinguishable at n=5 once that trial’s variance enters the refactor σ_pool.</li>
+</ol>
+<h2 id="caveats" tabindex="-1"><a class="header-anchor" href="#caveats"><span>Caveats</span></a></h2>
+<ul>
+<li>n=5 trials per tool × 5 judges × 3 rounds = 75 judgments per cell. Pairs within ~5 weighted pts should be read as ties on this n. The two added stability rounds (judging only — not new trials) tighten the per-judge mean estimate, and the cohort now runs the full 5-trial denominator.</li>
+<li>One feature task. Per-tool generalization across the three tasks (feature, bugfix, refactor) is reported in the three per-task <code>final-report.md</code> files; cross-task synthesis as a single leaderboard is intentionally not reported (see <a href="readme.html#caveats">README caveat 7</a>).</li>
+<li>Judges sample at provider defaults (no temperature pin exposed for opus or gpt54pro).</li>
+<li>gpt54pro is the harshest judge by 40+ pts; rank-1 is stable under both weighted (3/2/1/1/1) and equal-weight aggregation on every task.</li>
+</ul>
+<h2 id="related" tabindex="-1"><a class="header-anchor" href="#related"><span>Related</span></a></h2>
+<ul>
+<li><a href="analysis-skill-cost-efficiency.html"><code>skill-cost-efficiency.md</code></a> — per-skill output_tokens / score and output_tokens / line on the same feature cohort. ecc is the only tool that ships its +1,924 lines on under 50k skill output tokens; superpower runs 6,353 tok/pt as the cohort outlier.</li>
+<li><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>../../results/_audits/session-audit.md</code></a> — full behavioural fingerprints (subagent dispatch, tool-config reads, cache hit ratio) across all 3 tasks.</li>
+</ul>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/analysis/feature-cohort.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "name": "judge_v2",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "label": {"type": "string"},
+      "judge": {"type": "string"},
+      "schema_version": {"type": "integer"},
+      "reasoning": {"type": "string"},
+      "scores": {
+        "type": "array",
+        "minItems": 20,
+        "maxItems": 20,
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {"type": "integer", "minimum": 1, "maximum": 20},
+            "score": {"type": "integer", "minimum": 0, "maximum": 10},
+            "why": {"type": "string"}
+          },
+          "required": ["id", "score", "why"],
+          "additionalProperties": false
+        }
+      },
+      "max": {"type": "integer"},
+      "notes": {"type": "string"}
+    },
+    "required": ["label", "judge", "schema_version", "reasoning", "scores", "max", "notes"],
+    "additionalProperties": false
+  }
+}

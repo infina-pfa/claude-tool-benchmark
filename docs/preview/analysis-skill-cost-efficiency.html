@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Analysis — skill-cost-efficiency</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/analysis/skill-cost-efficiency.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="skill-cost-efficiency-output-tokens-per-score-point-per-line" tabindex="-1"><a class="header-anchor" href="#skill-cost-efficiency-output-tokens-per-score-point-per-line"><span>Skill cost efficiency — output tokens per score point, per line</span></a></h1>
+<p><strong>Generated</strong>: 2026-05-18 (Score column re-derived from the canonical n=5 weighted mean; cost columns unchanged)
+<strong>Score source</strong>: <code>results/final-report.md</code> (canonical n=5 weighted-mean feature score)
+<strong>Cost source</strong>: <code>scripts/audit-sessions.py</code> → <code>results/_audits/session-audit.json</code> (n=3 session-audit subset: t1–t3; the t4–t5 audit re-run is pending)
+<strong>Scope</strong>: <code>feature</code> task. <code>+Lines</code> and <code>Skill out tok</code> are means over the n=3 session-audited trials (t1–t3) per tool; per-task drill-downs live in <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>session-audit.md</code></a>.</p>
+<p>This page joins two audit fields:</p>
+<ul>
+<li><strong><code>message.usage.output_tokens</code></strong> — tokens the model generated on the assistant turn (i.e. the <em>cost-bearing</em> tokens billed to output).</li>
+<li><strong><code>attributionSkill</code></strong> — the skill/slash-command that owned that turn (captured from Claude Code’s session JSONL).</li>
+</ul>
+<p>Summed per skill, we get “output tokens spent inside skill X”, which we then divide by the trial’s weighted feature score and <code>+Lines</code> to get two efficiency ratios. The pure (no-addons) setup invokes no skills, so its row is empty by construction — it functions as the zero-skill-burn baseline.</p>
+<h2 id="caveats" tabindex="-1"><a class="header-anchor" href="#caveats"><span>Caveats</span></a></h2>
+<ul>
+<li><strong>Output tokens ≠ full billed cost.</strong> Cache reads and cache creation dominate Claude Opus’s $ figure (see <code>Cost</code> column in <a href="analysis-feature-cohort.html"><code>feature-cohort.md</code></a>); this page reports the verbosity-inside-skill axis only. For $/score see feature-cohort.md.</li>
+<li><strong><code>attributionSkill</code> is best-effort.</strong> Turns outside any skill (the main agent loop) are excluded from these totals. A skill that delegates to a sub-agent loses attribution on the sub-agent’s turns — sub-agent output appears in cohort totals (see <code>session-audit.md</code> § Subagent dispatches) but not in the parent skill’s column.</li>
+<li><strong>n=3 per tool.</strong> A single outlier trial can swing a tool’s per-skill mean by ±30 %. Pairs within ~20 % on these ratios should be read as ties.</li>
+</ul>
+<h2 id="cohort-wide-top-skills-by-output-tokens" tabindex="-1"><a class="header-anchor" href="#cohort-wide-top-skills-by-output-tokens"><span>Cohort-wide: top skills by output tokens</span></a></h2>
+<p>Aggregated across all 8 tools × 3 tasks × 3 trials = 72 sessions. “Cells” = number of (tool, task) cells the skill appears in (max 3 since each addon is exclusive to one tool).</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Tool</th>
+<th style="text-align:right">Cells</th>
+<th style="text-align:right">Turns</th>
+<th style="text-align:right">Output tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bmad-quick-dev</code></td>
+<td>bmad</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1,380</td>
+<td style="text-align:right">693,733</td>
+</tr>
+<tr>
+<td><code>superpowers:subagent-driven-development</code></td>
+<td>superpower</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">2,668</td>
+<td style="text-align:right">669,379</td>
+</tr>
+<tr>
+<td><code>oh-my-claudecode:team</code></td>
+<td>omc</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">2,153</td>
+<td style="text-align:right">574,078</td>
+</tr>
+<tr>
+<td><code>oh-my-claudecode:ralplan</code></td>
+<td>omc</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1,100</td>
+<td style="text-align:right">559,150</td>
+</tr>
+<tr>
+<td><code>cook</code></td>
+<td>claudekit</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">1,707</td>
+<td style="text-align:right">525,514</td>
+</tr>
+<tr>
+<td><code>autoplan</code></td>
+<td>gstack</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">456</td>
+<td style="text-align:right">349,544</td>
+</tr>
+<tr>
+<td><code>compound-engineering:ce-work</code></td>
+<td>compound</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">727</td>
+<td style="text-align:right">327,751</td>
+</tr>
+<tr>
+<td><code>compound-engineering:ce-plan</code></td>
+<td>compound</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">387</td>
+<td style="text-align:right">255,051</td>
+</tr>
+<tr>
+<td><code>ck-plan</code></td>
+<td>claudekit</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">540</td>
+<td style="text-align:right">200,432</td>
+</tr>
+<tr>
+<td><code>ship</code></td>
+<td>gstack</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">336</td>
+<td style="text-align:right">172,074</td>
+</tr>
+<tr>
+<td><code>superpowers:writing-plans</code></td>
+<td>superpower</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">47</td>
+<td style="text-align:right">162,288</td>
+</tr>
+<tr>
+<td><code>superpowers:brainstorming</code></td>
+<td>superpower</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">340</td>
+<td style="text-align:right">140,225</td>
+</tr>
+<tr>
+<td><code>everything-claude-code:plan</code></td>
+<td>ecc</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">427</td>
+<td style="text-align:right">137,366</td>
+</tr>
+<tr>
+<td><code>compound-engineering:ce-code-review</code></td>
+<td>compound</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">261</td>
+<td style="text-align:right">132,251</td>
+</tr>
+<tr>
+<td><code>oh-my-claudecode:hud</code></td>
+<td>omc</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">230</td>
+<td style="text-align:right">95,825</td>
+</tr>
+</tbody>
+</table>
+<p>Each tool’s primary skill dominates its skill-output total. <code>superpowers:subagent-driven-development</code> is concentrated in a <em>single</em> session-task cell (superpower on feature, 2,668 turns) — it generates more output in one feature trial than <code>bmad-quick-dev</code> does across all three tasks combined.</p>
+<h2 id="feature-task-tokens-per-score-point-tokens-per-line" tabindex="-1"><a class="header-anchor" href="#feature-task-tokens-per-score-point-tokens-per-line"><span>Feature task: tokens per score point, tokens per line</span></a></h2>
+<p>Rows are ordered by the <strong>canonical n=5 weighted-mean feature score</strong> from <a href="final-report-feature.html"><code>results/final-report.md</code></a> — so the <code>Score</code> column is provenanced and matches the headline benchmark ranking. <code>+Lines</code> and <code>Skill out tok</code> remain n=3 session-audit means (t1–t3; the t4–t5 audit re-run is pending), so the per-skill token ratios below are <strong>n=3 cost estimates joined to the n=5 score</strong> — read <code>Tok / pt</code> as an order-of-magnitude efficiency signal, not a precise n=5 figure. <code>Skill out tok</code> is the per-trial-summed output across <strong>all</strong> skills attributed to that tool’s feature trials.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th style="text-align:right">Score</th>
+<th style="text-align:right">+Lines</th>
+<th style="text-align:right">Skill out tok</th>
+<th style="text-align:right">Tok / pt</th>
+<th style="text-align:right">Tok / line</th>
+<th>Top skill (output)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ecc</td>
+<td style="text-align:right">153.30</td>
+<td style="text-align:right">1,924</td>
+<td style="text-align:right">48,956</td>
+<td style="text-align:right"><strong>319</strong></td>
+<td style="text-align:right"><strong>25.4</strong></td>
+<td><code>everything-claude-code:plan</code> (48,956)</td>
+</tr>
+<tr>
+<td>pure</td>
+<td style="text-align:right">143.13</td>
+<td style="text-align:right">821</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td>(no skills invoked)</td>
+</tr>
+<tr>
+<td>bmad</td>
+<td style="text-align:right">141.33</td>
+<td style="text-align:right">521</td>
+<td style="text-align:right">242,106</td>
+<td style="text-align:right">1,713</td>
+<td style="text-align:right">464.7</td>
+<td><code>bmad-quick-dev</code> (242,106)</td>
+</tr>
+<tr>
+<td>superpower</td>
+<td style="text-align:right">140.16</td>
+<td style="text-align:right">2,706</td>
+<td style="text-align:right">890,464</td>
+<td style="text-align:right"><strong>6,353</strong></td>
+<td style="text-align:right">329.1</td>
+<td><code>superpowers:subagent-driven-development</code> (669,379)</td>
+</tr>
+<tr>
+<td>omc</td>
+<td style="text-align:right">139.49</td>
+<td style="text-align:right">1,837</td>
+<td style="text-align:right">511,141</td>
+<td style="text-align:right">3,664</td>
+<td style="text-align:right">278.2</td>
+<td><code>oh-my-claudecode:team</code> (290,393)</td>
+</tr>
+<tr>
+<td>claudekit</td>
+<td style="text-align:right">135.04</td>
+<td style="text-align:right">1,940</td>
+<td style="text-align:right">348,218</td>
+<td style="text-align:right">2,579</td>
+<td style="text-align:right">179.5</td>
+<td><code>cook</code> (274,451)</td>
+</tr>
+<tr>
+<td>compound</td>
+<td style="text-align:right">134.67</td>
+<td style="text-align:right">960</td>
+<td style="text-align:right">322,815</td>
+<td style="text-align:right">2,397</td>
+<td style="text-align:right">336.3</td>
+<td><code>compound-engineering:ce-work</code> (132,134)</td>
+</tr>
+<tr>
+<td>gstack</td>
+<td style="text-align:right">131.98</td>
+<td style="text-align:right">1,000</td>
+<td style="text-align:right">194,449</td>
+<td style="text-align:right">1,473</td>
+<td style="text-align:right">194.4</td>
+<td><code>autoplan</code> (163,706)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="observations" tabindex="-1"><a class="header-anchor" href="#observations"><span>Observations</span></a></h2>
+<p><strong>ecc is an order of magnitude more skill-efficient than any other setup.</strong> 25 output tokens per line shipped vs. 180–465 for the rest, and 319 tokens per score point vs. ~1,500–6,400. <code>everything-claude-code:plan</code> runs once at the start (427 turns cohort-wide across 3 trials = ~142 turns/trial) and then yields to the main agent loop; ecc’s skill ceremony front-loads into one planning pass rather than running a parallel skill context throughout execution. This shows up as the smallest <code>Skill out tok</code> column despite the largest <code>+Lines</code>.</p>
+<p><strong>superpower’s 6,353 tok/pt is the cohort outlier.</strong> <code>superpowers:subagent-driven-development</code> runs 2,668 turns in a single feature trial and emits 669k output tokens, but the score does not follow: superpower (140.16) lands <strong>below</strong> <code>pure</code> (143.13) on feature. The skill is doing work, but that work is not converting into judged score on feature. Compare to compound (<code>compound-engineering:ce-work</code> at 132k tokens for a similar mid-pack score, 134.67).</p>
+<p><strong><code>pure</code> at 0 skill-burn is a usable null.</strong> Pure’s 143.13 score is <strong>rank-2 on the canonical feature ranking</strong> with zero attributed skill output. Every tool above 0 in this column is choosing to spend output tokens on skill-internal text (plans, subagent prompts, hooks, status lines) on top of the same base model. The skill-cost-efficient setups are the ones where that spend either (a) stays small (ecc) or (b) translates into measurable lift over the pure baseline. On feature, only ecc clears both bars; superpower and omc spend the most output and score below pure.</p>
+<h2 id="related" tabindex="-1"><a class="header-anchor" href="#related"><span>Related</span></a></h2>
+<ul>
+<li><a href="analysis-feature-cohort.html"><code>feature-cohort.md</code></a> — full feature-task table with billed <code>$</code> cost (cache-aware) and per-trial run-time stats.</li>
+<li><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>../../results/_audits/session-audit.md</code></a> — cohort behavioural fingerprints, top-5 skills per tool, full per-(tool, task) metrics.</li>
+<li><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>../../scripts/audit-sessions.py</code></a> — miner; the <code>skill_token_cost</code> field is at TrialMetrics.skill_token_cost.</li>
+</ul>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/analysis/skill-cost-efficiency.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

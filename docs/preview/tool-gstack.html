@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool Profile — gstack</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/gstack.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="gstack" tabindex="-1"><a class="header-anchor" href="#gstack"><span>gstack</span></a></h1>
+<p><strong>Upstream:</strong> <a href="https://github.com/garrytan/gstack">github.com/garrytan/gstack</a> — MIT, by Garry Tan (YC). Pinned at SHA <code>443bde05</code>, <code>VERSION</code> 1.28.0.0. Runtime stack: Claude Code + Bun v1.0+ (plus Node on Windows). Marketed as “Garry’s Stack — Claude Code skills + fast headless browser. One repo, one install, entire AI engineering workflow.”</p>
+<h2 id="what-it-is" tabindex="-1"><a class="header-anchor" href="#what-it-is"><span>What it is</span></a></h2>
+<p>gstack is a skill pack — 37 directories under <code>config/gstack-t1/skills/</code> — that frames Claude Code as a simulated product team: CEO (<code>/plan-ceo-review</code>), eng manager (<code>/plan-eng-review</code>), designer (<code>/plan-design-review</code>, <code>/design-review</code>), reviewer (<code>/review</code>), QA (<code>/qa</code>, <code>/qa-only</code>), security officer (<code>/cso</code>), release engineer (<code>/ship</code>, <code>/land-and-deploy</code>, <code>/canary</code>), plus debugging (<code>/investigate</code>), planning (<code>/autoplan</code>, <code>/office-hours</code>), retros, scope locks (<code>/freeze</code>, <code>/guard</code>), and a headless-browser binary. The installer (<code>./setup --no-prefix</code>) drops each skill into <code>$CLAUDE_CONFIG_DIR/skills/</code>, where Claude Code reads them as top-level slash commands.</p>
+<p>Every skill begins with a long <code># Preamble (run first)</code> Bash block that probes <code>~/.gstack/</code> for telemetry, proactive-suggest, routing, and vendoring markers, optionally appends a “Skill routing” block to the project CLAUDE.md, and (when proactive is on) auto-invokes peer skills from conversational triggers — <code>&quot;why is this broken&quot;</code> routes to <code>/investigate</code>, <code>&quot;ship it&quot;</code> to <code>/ship</code>, <code>&quot;architecture review&quot;</code> to <code>/plan-eng-review</code>, and so on. Each skill’s <code>description:</code> frontmatter explicitly names its trigger phrases; that prose is what Claude Code matches against the user turn.</p>
+<h2 id="benchmark-configuration" tabindex="-1"><a class="header-anchor" href="#benchmark-configuration"><span>Benchmark configuration</span></a></h2>
+<ul>
+<li>Config dir: <code>config/gstack-t1/</code>. <code>settings.json</code> contains only <code>{&quot;skipDangerousModePermissionPrompt&quot;: true}</code>; no MCP, no hooks, no allow-list. All behaviour comes from the skill tree. Install shim in <code>scripts/setup-tool-config.sh</code> (gstack case, ~L176) clones upstream into <code>$TOOL_CONFIG/skills/gstack</code> and runs <code>HOME=$TOOL_CONFIG ./setup --no-prefix</code> so <code>~/.gstack/</code> writes stay inside the trial.</li>
+<li>Launch prompt (<code>scripts/manual-bench.sh</code>, ~L208): feature and refactor fire bare <code>/autoplan</code> (no task argument — the skill auto-discovers the PRD from the repo) with the suffix <em>“When implementation is complete and committed, run /ship to review the diff and finalize.”</em>; bugfix prepends <code>/investigate $SHARED_TASK</code> with the suffix <em>“When the fix is committed, run /ship to review the diff and finalize.”</em> Every task now fires an explicit entry skill per the 2026-04-22 “explicit skill activation” harness change — previously feature and refactor ran with raw <code>$SHARED_TASK</code> and relied on prose triggers; that form produced zero or near-zero <code>Skill</code> tool calls on some runs, so the rerun pins <code>/autoplan</code> (feature/refactor) and <code>/investigate</code> (bugfix) as the primary entry points. The 2026-04-23 follow-up dropped <code>$SHARED_TASK</code> from the <code>/autoplan</code> line after confirming the skill locates the PRD on its own — passing the task text inline was redundant and risked steering the skill away from its own discovery path.</li>
+</ul>
+<h2 id="how-the-entry-points-behave" tabindex="-1"><a class="header-anchor" href="#how-the-entry-points-behave"><span>How the entry points behave</span></a></h2>
+<p><code>/investigate</code> is a four-phase debugger enforcing what the skill calls the <strong>Iron Law: no fixes without root cause</strong>. Phase 1 is root-cause investigation with a regression-diff check; Phase 2 is pattern analysis with an optional sanitized web search; Phase 3 is explicit hypothesis confirmation via temporary logs/assertions before any edit; Phase 4 is the minimal fix; Phase 5 writes a regression test and a capture-learnings entry to <code>~/.gstack/projects/&lt;slug&gt;/learnings.jsonl</code>. <code>PreToolUse</code> hooks on <code>Edit</code>/<code>Write</code> call <code>freeze/bin/check-freeze.sh</code> to enforce a scope lock.</p>
+<p><code>/ship</code> is where gstack’s “eng-review gate” lives — the reason gstack is excluded from plan mode. It runs: Step 0 platform detection → Step 1 pre-flight + Review Readiness Dashboard (tallies prior <code>/plan-ceo-review</code>, <code>/codex review</code>, <code>/plan-eng-review</code>, <code>/plan-design-review</code>, <code>/plan-devex-review</code> runs from <code>~/.gstack/</code> logs; verdict is <code>NO REVIEWS YET</code> until they’ve run) → Step 2 merge base branch → Step 2.5 test-framework bootstrap → Step 3 tests, with a Test Failure Ownership Triage that classifies failures as in-branch vs pre-existing and, on collaborative repos, can open and assign a GitHub issue via <code>gh</code>. Only after review+tests+eval-suites clear does it bump VERSION, update CHANGELOG, commit, push, and open the PR.</p>
+<h2 id="what-the-transcripts-show-session-audit" tabindex="-1"><a class="header-anchor" href="#what-the-transcripts-show-session-audit"><span>What the transcripts show (session audit)</span></a></h2>
+<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/gstack/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/gstack/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">wall min</th>
+<th style="text-align:right">main turns</th>
+<th style="text-align:right">sidechain turns</th>
+<th style="text-align:right">sub-agent disp.</th>
+<th style="text-align:right">files read (config / target)</th>
+<th style="text-align:right">files edited</th>
+<th style="text-align:right">cache hit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">41.0</td>
+<td style="text-align:right">155.7</td>
+<td style="text-align:right">31.0</td>
+<td style="text-align:right">2.7</td>
+<td style="text-align:right">21.0 (0 / 21.0)</td>
+<td style="text-align:right">13.3</td>
+<td style="text-align:right">0.97</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">5.9</td>
+<td style="text-align:right">72.0</td>
+<td style="text-align:right">0.0</td>
+<td style="text-align:right">0.0</td>
+<td style="text-align:right">12.7 (0 / 12.7)</td>
+<td style="text-align:right">1.3</td>
+<td style="text-align:right">0.97</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">46.3</td>
+<td style="text-align:right"><strong>258.7</strong></td>
+<td style="text-align:right">42.7</td>
+<td style="text-align:right">2.7</td>
+<td style="text-align:right">40.3 (0 / 40.3)</td>
+<td style="text-align:right">32.7</td>
+<td style="text-align:right">0.98</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Three skills drive the runs:</strong> <code>autoplan</code> (456 turns), <code>ship</code> (336), <code>investigate</code> (216). The plan→ship pair fires every feature/refactor trial; <code>investigate</code> fires only on bugfix as intended.</li>
+<li><strong>Slash commands typed:</strong> <code>/autoplan</code> (7), <code>/ship</code> (7), <code>/investigate</code> (3) — <code>/autoplan</code>+<code>/ship</code> fire on every feature/refactor trial (6 trials, with one double-fire on each), <code>/investigate</code> fires on every bugfix trial.</li>
+<li><strong>Sub-agent types dispatched:</strong> <code>general-purpose</code> (14), <code>Explore</code> (2). Notably ≈ 0 dispatch on bugfix — <code>/investigate</code>’s “no fixes without root cause” phases run as sequential turns in the main thread.</li>
+<li><strong>Refactor main-turn count is the cohort’s highest (258.7)</strong> — gstack’s preamble + skill-routing chatter adds noticeable per-skill turn overhead, especially when <code>/autoplan</code> and <code>/ship</code> both fire.</li>
+</ul>
+<h2 id="results" tabindex="-1"><a class="header-anchor" href="#results"><span>Results</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">Weighted mean /200</th>
+<th style="text-align:right">within_σ</th>
+<th style="text-align:right">between_σ</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">131.98</td>
+<td style="text-align:right">18.35</td>
+<td style="text-align:right">19.41</td>
+<td>8 / 8</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">159.97</td>
+<td style="text-align:right">9.13</td>
+<td style="text-align:right">16.12</td>
+<td>8 / 8</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">144.92</td>
+<td style="text-align:right">58.43</td>
+<td style="text-align:right">12.52</td>
+<td>8 / 8</td>
+</tr>
+</tbody>
+</table>
+<p>gstack is the cohort’s weakest performer overall — rank-8 on all three tasks. On <code>feature</code> it sits ≈ 7.5 weighted pts below rank-5 <code>omc</code> (139.49) — the <strong>only setup cleanly below the main cluster</strong> on any task. <code>within_σ</code> of 18.35 on feature is the highest in the cohort, indicating noticeable run-to-run instability in addition to between-judge spread. The refactor <code>within_σ</code> of <strong>58.43</strong> is a severe outlier — an order of magnitude above the 4–13 range every other tool sits in on refactor — signalling extreme run-to-run variance on that task, which drags gstack’s refactor weighted mean (144.92) far below the rest of the cohort and into rank-8.</p>
+<h2 id="where-it-fits" tabindex="-1"><a class="header-anchor" href="#where-it-fits"><span>Where it fits</span></a></h2>
+<p>gstack trades blank-prompt flexibility for a fixed organisational metaphor. The ceiling is high when the task lines up with a role gstack already has, and lower when the bottleneck is exploratory reasoning the preamble didn’t anticipate. The eng-review gate enforces process cleanliness but does not catch all code-quality issues that judges weight heavily; on this corpus that translates to rank-8 on every task.</p>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/tools/gstack.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

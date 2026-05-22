@@ -1,0 +1,723 @@
+{
+  "method": "Per-round outlier audit per rerun protocol (CLAUDE.md). A round flags if |score \u2212 median(other rounds)| > 15.0 pts AND > 1.41 \u00d7 spread(other rounds).",
+  "rerun_decision": "no_action_recommended",
+  "rationale": "Selective rerunning of flagged rounds biases the cohort toward the mean (extreme values re-roll closer to median while in-distribution values stay). Outlier rate matching chance expectation (~5%) is evidence of stable judging.",
+  "tasks": {
+    "feature": {
+      "n_round_judgments": 600,
+      "n_skill_failures": 0,
+      "n_skill_cells_audited": 21,
+      "skill_failures": [],
+      "n_outliers": 25,
+      "outlier_rate": 0.0417,
+      "expected_chance_rate": 0.05,
+      "outliers_below_chance": true,
+      "outliers_by_judge": {
+        "grok420": 5,
+        "mimo25pro": 11,
+        "opus": 3,
+        "glm51": 4,
+        "gpt54pro": 2
+      },
+      "flagged_outliers": [
+        {
+          "tool": "claudekit",
+          "trial": 2,
+          "judge": "grok420",
+          "round": "root",
+          "score": 163.0,
+          "others": [
+            141.0,
+            141.0
+          ],
+          "delta_from_median": 22.0
+        },
+        {
+          "tool": "claudekit",
+          "trial": 2,
+          "judge": "mimo25pro",
+          "round": "round2",
+          "score": 120.0,
+          "others": [
+            139.0,
+            136.0
+          ],
+          "delta_from_median": 17.5
+        },
+        {
+          "tool": "claudekit",
+          "trial": 3,
+          "judge": "opus",
+          "round": "round1",
+          "score": 140.0,
+          "others": [
+            158.0,
+            162.0
+          ],
+          "delta_from_median": 20.0
+        },
+        {
+          "tool": "claudekit",
+          "trial": 3,
+          "judge": "glm51",
+          "round": "round2",
+          "score": 134.0,
+          "others": [
+            147.0,
+            156.0
+          ],
+          "delta_from_median": 17.5
+        },
+        {
+          "tool": "claudekit",
+          "trial": 3,
+          "judge": "mimo25pro",
+          "round": "round2",
+          "score": 145.0,
+          "others": [
+            163.0,
+            162.0
+          ],
+          "delta_from_median": 17.5
+        },
+        {
+          "tool": "compound",
+          "trial": 2,
+          "judge": "glm51",
+          "round": "root",
+          "score": 170.0,
+          "others": [
+            146.0,
+            153.0
+          ],
+          "delta_from_median": 20.5
+        },
+        {
+          "tool": "compound",
+          "trial": 3,
+          "judge": "mimo25pro",
+          "round": "round2",
+          "score": 134.0,
+          "others": [
+            160.0,
+            157.0
+          ],
+          "delta_from_median": 24.5
+        },
+        {
+          "tool": "bmad",
+          "trial": 2,
+          "judge": "glm51",
+          "round": "round2",
+          "score": 169.0,
+          "others": [
+            154.0,
+            149.0
+          ],
+          "delta_from_median": 17.5
+        },
+        {
+          "tool": "bmad",
+          "trial": 2,
+          "judge": "mimo25pro",
+          "round": "round1",
+          "score": 151.0,
+          "others": [
+            171.0,
+            177.0
+          ],
+          "delta_from_median": 23.0
+        },
+        {
+          "tool": "gstack",
+          "trial": 1,
+          "judge": "grok420",
+          "round": "root",
+          "score": 141.0,
+          "others": [
+            117.0,
+            123.0
+          ],
+          "delta_from_median": 21.0
+        },
+        {
+          "tool": "gstack",
+          "trial": 1,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 112.0,
+          "others": [
+            89.0,
+            84.0
+          ],
+          "delta_from_median": 25.5
+        },
+        {
+          "tool": "gstack",
+          "trial": 1,
+          "judge": "mimo25pro",
+          "round": "round1",
+          "score": 140.0,
+          "others": [
+            107.0,
+            122.0
+          ],
+          "delta_from_median": 25.5
+        },
+        {
+          "tool": "omc",
+          "trial": 2,
+          "judge": "grok420",
+          "round": "root",
+          "score": 134.0,
+          "others": [
+            153.0,
+            149.0
+          ],
+          "delta_from_median": 17.0
+        },
+        {
+          "tool": "bmad",
+          "trial": 3,
+          "judge": "opus",
+          "round": "root",
+          "score": 121.0,
+          "others": [
+            146.0,
+            138.0
+          ],
+          "delta_from_median": 21.0
+        },
+        {
+          "tool": "gstack",
+          "trial": 5,
+          "judge": "glm51",
+          "round": "round2",
+          "score": 147.0,
+          "others": [
+            166.0,
+            159.0
+          ],
+          "delta_from_median": 15.5
+        },
+        {
+          "tool": "compound",
+          "trial": 4,
+          "judge": "grok420",
+          "round": "round1",
+          "score": 126.0,
+          "others": [
+            168.0,
+            152.0
+          ],
+          "delta_from_median": 34.0
+        },
+        {
+          "tool": "claudekit",
+          "trial": 5,
+          "judge": "mimo25pro",
+          "round": "root",
+          "score": 172.0,
+          "others": [
+            151.0,
+            145.0
+          ],
+          "delta_from_median": 24.0
+        },
+        {
+          "tool": "gstack",
+          "trial": 4,
+          "judge": "mimo25pro",
+          "round": "round2",
+          "score": 149.0,
+          "others": [
+            179.0,
+            175.0
+          ],
+          "delta_from_median": 28.0
+        },
+        {
+          "tool": "omc",
+          "trial": 5,
+          "judge": "opus",
+          "round": "round1",
+          "score": 153.0,
+          "others": [
+            132.0,
+            140.0
+          ],
+          "delta_from_median": 17.0
+        },
+        {
+          "tool": "omc",
+          "trial": 5,
+          "judge": "mimo25pro",
+          "round": "round1",
+          "score": 132.0,
+          "others": [
+            160.0,
+            159.0
+          ],
+          "delta_from_median": 27.5
+        },
+        {
+          "tool": "superpower",
+          "trial": 4,
+          "judge": "mimo25pro",
+          "round": "root",
+          "score": 159.0,
+          "others": [
+            123.0,
+            123.0
+          ],
+          "delta_from_median": 36.0
+        },
+        {
+          "tool": "pure",
+          "trial": 4,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 130.0,
+          "others": [
+            111.0,
+            118.0
+          ],
+          "delta_from_median": 15.5
+        },
+        {
+          "tool": "pure",
+          "trial": 4,
+          "judge": "mimo25pro",
+          "round": "root",
+          "score": 128.0,
+          "others": [
+            163.0,
+            168.0
+          ],
+          "delta_from_median": 37.5
+        },
+        {
+          "tool": "superpower",
+          "trial": 5,
+          "judge": "grok420",
+          "round": "round1",
+          "score": 145.0,
+          "others": [
+            161.0,
+            171.0
+          ],
+          "delta_from_median": 21.0
+        },
+        {
+          "tool": "superpower",
+          "trial": 5,
+          "judge": "mimo25pro",
+          "round": "round2",
+          "score": 174.0,
+          "others": [
+            154.0,
+            157.0
+          ],
+          "delta_from_median": 18.5
+        }
+      ]
+    },
+    "bugfix": {
+      "n_round_judgments": 600,
+      "n_skill_failures": 0,
+      "n_skill_cells_audited": 21,
+      "skill_failures": [],
+      "n_outliers": 22,
+      "outlier_rate": 0.0367,
+      "expected_chance_rate": 0.05,
+      "outliers_below_chance": true,
+      "outliers_by_judge": {
+        "grok420": 5,
+        "opus": 1,
+        "glm51": 4,
+        "gpt54pro": 8,
+        "mimo25pro": 4
+      },
+      "flagged_outliers": [
+        {
+          "tool": "ecc",
+          "trial": 3,
+          "judge": "grok420",
+          "round": "round2",
+          "score": 174.0,
+          "others": [
+            191.0,
+            189.0
+          ],
+          "delta_from_median": 16.0
+        },
+        {
+          "tool": "omc",
+          "trial": 3,
+          "judge": "grok420",
+          "round": "round2",
+          "score": 174.0,
+          "others": [
+            193.0,
+            189.0
+          ],
+          "delta_from_median": 17.0
+        },
+        {
+          "tool": "omc",
+          "trial": 1,
+          "judge": "opus",
+          "round": "round1",
+          "score": 155.0,
+          "others": [
+            167.0,
+            176.0
+          ],
+          "delta_from_median": 16.5
+        },
+        {
+          "tool": "omc",
+          "trial": 1,
+          "judge": "glm51",
+          "round": "round2",
+          "score": 187.0,
+          "others": [
+            165.0,
+            149.0
+          ],
+          "delta_from_median": 30.0
+        },
+        {
+          "tool": "ecc",
+          "trial": 2,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 139.0,
+          "others": [
+            154.0,
+            155.0
+          ],
+          "delta_from_median": 15.5
+        },
+        {
+          "tool": "superpower",
+          "trial": 1,
+          "judge": "glm51",
+          "round": "root",
+          "score": 183.0,
+          "others": [
+            170.0,
+            165.0
+          ],
+          "delta_from_median": 15.5
+        },
+        {
+          "tool": "superpower",
+          "trial": 1,
+          "judge": "mimo25pro",
+          "round": "root",
+          "score": 166.0,
+          "others": [
+            184.0,
+            182.0
+          ],
+          "delta_from_median": 17.0
+        },
+        {
+          "tool": "gstack",
+          "trial": 2,
+          "judge": "grok420",
+          "round": "round2",
+          "score": 165.0,
+          "others": [
+            186.0,
+            185.0
+          ],
+          "delta_from_median": 20.5
+        },
+        {
+          "tool": "pure",
+          "trial": 2,
+          "judge": "glm51",
+          "round": "round2",
+          "score": 169.0,
+          "others": [
+            188.0,
+            188.0
+          ],
+          "delta_from_median": 19.0
+        },
+        {
+          "tool": "pure",
+          "trial": 3,
+          "judge": "mimo25pro",
+          "round": "root",
+          "score": 198.0,
+          "others": [
+            177.0,
+            187.0
+          ],
+          "delta_from_median": 16.0
+        },
+        {
+          "tool": "bmad",
+          "trial": 2,
+          "judge": "grok420",
+          "round": "root",
+          "score": 173.0,
+          "others": [
+            191.0,
+            191.0
+          ],
+          "delta_from_median": 18.0
+        },
+        {
+          "tool": "ecc",
+          "trial": 5,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 149.0,
+          "others": [
+            162.0,
+            172.0
+          ],
+          "delta_from_median": 18.0
+        },
+        {
+          "tool": "omc",
+          "trial": 4,
+          "judge": "glm51",
+          "round": "root",
+          "score": 136.0,
+          "others": [
+            157.0,
+            154.0
+          ],
+          "delta_from_median": 19.5
+        },
+        {
+          "tool": "ecc",
+          "trial": 4,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 116.0,
+          "others": [
+            142.0,
+            139.0
+          ],
+          "delta_from_median": 24.5
+        },
+        {
+          "tool": "ecc",
+          "trial": 4,
+          "judge": "mimo25pro",
+          "round": "round1",
+          "score": 155.0,
+          "others": [
+            182.0,
+            181.0
+          ],
+          "delta_from_median": 26.5
+        },
+        {
+          "tool": "gstack",
+          "trial": 5,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 135.0,
+          "others": [
+            156.0,
+            150.0
+          ],
+          "delta_from_median": 18.0
+        },
+        {
+          "tool": "compound",
+          "trial": 4,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 144.0,
+          "others": [
+            169.0,
+            164.0
+          ],
+          "delta_from_median": 22.5
+        },
+        {
+          "tool": "omc",
+          "trial": 5,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 157.0,
+          "others": [
+            179.0,
+            171.0
+          ],
+          "delta_from_median": 18.0
+        },
+        {
+          "tool": "pure",
+          "trial": 5,
+          "judge": "grok420",
+          "round": "round2",
+          "score": 151.0,
+          "others": [
+            168.0,
+            176.0
+          ],
+          "delta_from_median": 21.0
+        },
+        {
+          "tool": "pure",
+          "trial": 5,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 140.0,
+          "others": [
+            157.0,
+            163.0
+          ],
+          "delta_from_median": 20.0
+        },
+        {
+          "tool": "pure",
+          "trial": 5,
+          "judge": "mimo25pro",
+          "round": "round2",
+          "score": 164.0,
+          "others": [
+            181.0,
+            184.0
+          ],
+          "delta_from_median": 18.5
+        },
+        {
+          "tool": "superpower",
+          "trial": 4,
+          "judge": "gpt54pro",
+          "round": "round2",
+          "score": 137.0,
+          "others": [
+            166.0,
+            156.0
+          ],
+          "delta_from_median": 24.0
+        }
+      ]
+    },
+    "refactor": {
+      "n_round_judgments": 600,
+      "n_skill_failures": 0,
+      "n_skill_cells_audited": 21,
+      "skill_failures": [],
+      "n_outliers": 8,
+      "outlier_rate": 0.0133,
+      "expected_chance_rate": 0.05,
+      "outliers_below_chance": true,
+      "outliers_by_judge": {
+        "mimo25pro": 5,
+        "opus": 1,
+        "grok420": 1,
+        "glm51": 1
+      },
+      "flagged_outliers": [
+        {
+          "tool": "compound",
+          "trial": 3,
+          "judge": "mimo25pro",
+          "round": "root",
+          "score": 200.0,
+          "others": [
+            180.0,
+            179.0
+          ],
+          "delta_from_median": 20.5
+        },
+        {
+          "tool": "bmad",
+          "trial": 3,
+          "judge": "mimo25pro",
+          "round": "round2",
+          "score": 176.0,
+          "others": [
+            200.0,
+            198.0
+          ],
+          "delta_from_median": 23.0
+        },
+        {
+          "tool": "compound",
+          "trial": 2,
+          "judge": "opus",
+          "round": "root",
+          "score": 170.0,
+          "others": [
+            189.0,
+            186.0
+          ],
+          "delta_from_median": 17.5
+        },
+        {
+          "tool": "bmad",
+          "trial": 4,
+          "judge": "mimo25pro",
+          "round": "root",
+          "score": 179.0,
+          "others": [
+            192.0,
+            200.0
+          ],
+          "delta_from_median": 17.0
+        },
+        {
+          "tool": "omc",
+          "trial": 5,
+          "judge": "mimo25pro",
+          "round": "round1",
+          "score": 176.0,
+          "others": [
+            193.0,
+            198.0
+          ],
+          "delta_from_median": 19.5
+        },
+        {
+          "tool": "omc",
+          "trial": 4,
+          "judge": "mimo25pro",
+          "round": "round2",
+          "score": 180.0,
+          "others": [
+            195.0,
+            200.0
+          ],
+          "delta_from_median": 17.5
+        },
+        {
+          "tool": "gstack",
+          "trial": 4,
+          "judge": "grok420",
+          "round": "round2",
+          "score": 20.0,
+          "others": [
+            60.0,
+            50.0
+          ],
+          "delta_from_median": 35.0
+        },
+        {
+          "tool": "gstack",
+          "trial": 4,
+          "judge": "glm51",
+          "round": "round2",
+          "score": 20.0,
+          "others": [
+            60.0,
+            60.0
+          ],
+          "delta_from_median": 40.0
+        }
+      ]
+    }
+  }
+}

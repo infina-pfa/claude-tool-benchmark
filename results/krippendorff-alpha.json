@@ -1,0 +1,33 @@
+{
+  "method": "Krippendorff alpha, interval level, judges-as-coders, labels-as-units",
+  "judges": [
+    "opus",
+    "grok420",
+    "glm51",
+    "gpt54pro",
+    "mimo25pro"
+  ],
+  "tasks": {
+    "feature": {
+      "alpha": 0.12368334237357526,
+      "n_units": 40,
+      "n_observations": 200,
+      "d_o": 655.5088888888889,
+      "d_e": 748.027420435426
+    },
+    "bugfix": {
+      "alpha": 0.2839816786343343,
+      "n_units": 40,
+      "n_observations": 200,
+      "d_o": 375.3911111111111,
+      "d_e": 524.2758458961296
+    },
+    "refactor": {
+      "alpha": 0.6257273001815674,
+      "n_units": 40,
+      "n_observations": 200,
+      "d_o": 549.3094444444444,
+      "d_e": 1467.6716862088144
+    }
+  }
+}

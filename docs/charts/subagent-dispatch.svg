@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 516 402" role="img" aria-label="Sub-agent dispatch per tool × task" style="font-family:Inter,system-ui,sans-serif;">
+<text x="110" y="24" font-size="15" font-weight="600" fill="#0f172a">Sub-agent dispatch per tool × task</text>
+<text x="110" y="44" font-size="11" fill="#64748b">Mean `Agent` tool calls per trial (3 trials per cell).</text>
+<text x="175.0" y="60" text-anchor="middle" font-size="11" font-weight="500" fill="#334155">feature</text>
+<text x="305.0" y="60" text-anchor="middle" font-size="11" font-weight="500" fill="#334155">bugfix</text>
+<text x="435.0" y="60" text-anchor="middle" font-size="11" font-weight="500" fill="#334155">refactor</text>
+<text x="102" y="91.0" text-anchor="end" font-size="12" fill="#0f172a">bmad</text>
+<rect x="110" y="68" width="130" height="38" fill="#dbe7fc" stroke="#e2e8f0" />
+<text x="175.0" y="91.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">1</text>
+<rect x="240" y="68" width="130" height="38" fill="#e6f0ff" stroke="#e2e8f0" />
+<text x="305.0" y="91.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">0</text>
+<rect x="370" y="68" width="130" height="38" fill="#d7e4fc" stroke="#e2e8f0" />
+<text x="435.0" y="91.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">1.3</text>
+<text x="102" y="129.0" text-anchor="end" font-size="12" fill="#0f172a">claudekit</text>
+<rect x="110" y="106" width="130" height="38" fill="#ccdbfa" stroke="#e2e8f0" />
+<text x="175.0" y="129.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">2.3</text>
+<rect x="240" y="106" width="130" height="38" fill="#deeafd" stroke="#e2e8f0" />
+<text x="305.0" y="129.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">0.7</text>
+<rect x="370" y="106" width="130" height="38" fill="#e2edfe" stroke="#e2e8f0" />
+<text x="435.0" y="129.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">0.3</text>
+<text x="102" y="167.0" text-anchor="end" font-size="12" fill="#0f172a">compound</text>
+<rect x="110" y="144" width="130" height="38" fill="#d3e1fb" stroke="#e2e8f0" />
+<text x="175.0" y="167.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">1.7</text>
+<rect x="240" y="144" width="130" height="38" fill="#e6f0ff" stroke="#e2e8f0" />
+<text x="305.0" y="167.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">0</text>
+<rect x="370" y="144" width="130" height="38" fill="#e6f0ff" stroke="#e2e8f0" />
+<text x="435.0" y="167.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">0</text>
+<text x="102" y="205.0" text-anchor="end" font-size="12" fill="#0f172a">ecc</text>
+<rect x="110" y="182" width="130" height="38" fill="#d3e1fb" stroke="#e2e8f0" />
+<text x="175.0" y="205.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">1.7</text>
+<rect x="240" y="182" width="130" height="38" fill="#dbe7fc" stroke="#e2e8f0" />
+<text x="305.0" y="205.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">1</text>
+<rect x="370" y="182" width="130" height="38" fill="#dbe7fc" stroke="#e2e8f0" />
+<text x="435.0" y="205.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">1</text>
+<text x="102" y="243.0" text-anchor="end" font-size="12" fill="#0f172a">gstack</text>
+<rect x="110" y="220" width="130" height="38" fill="#c9d8f9" stroke="#e2e8f0" />
+<text x="175.0" y="243.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">2.7</text>
+<rect x="240" y="220" width="130" height="38" fill="#e6f0ff" stroke="#e2e8f0" />
+<text x="305.0" y="243.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">0</text>
+<rect x="370" y="220" width="130" height="38" fill="#c9d8f9" stroke="#e2e8f0" />
+<text x="435.0" y="243.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">2.7</text>
+<text x="102" y="281.0" text-anchor="end" font-size="12" fill="#0f172a">omc</text>
+<rect x="110" y="258" width="130" height="38" fill="#7291e8" stroke="#e2e8f0" />
+<text x="175.0" y="281.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">10.7</text>
+<rect x="240" y="258" width="130" height="38" fill="#becff7" stroke="#e2e8f0" />
+<text x="305.0" y="281.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">3.7</text>
+<rect x="370" y="258" width="130" height="38" fill="#6083e4" stroke="#e2e8f0" />
+<text x="435.0" y="281.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">12.3</text>
+<text x="102" y="319.0" text-anchor="end" font-size="12" fill="#0f172a">pure</text>
+<rect x="110" y="296" width="130" height="38" fill="#dbe7fc" stroke="#e2e8f0" />
+<text x="175.0" y="319.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">1</text>
+<rect x="240" y="296" width="130" height="38" fill="#e2edfe" stroke="#e2e8f0" />
+<text x="305.0" y="319.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">0.3</text>
+<rect x="370" y="296" width="130" height="38" fill="#d7e4fc" stroke="#e2e8f0" />
+<text x="435.0" y="319.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">1.3</text>
+<text x="102" y="357.0" text-anchor="end" font-size="12" fill="#0f172a">superpower</text>
+<rect x="110" y="334" width="130" height="38" fill="#1f4ed8" stroke="#e2e8f0" />
+<text x="175.0" y="357.0" text-anchor="middle" font-size="13" font-weight="500" fill="#ffffff">18.3</text>
+<rect x="240" y="334" width="130" height="38" fill="#e6f0ff" stroke="#e2e8f0" />
+<text x="305.0" y="357.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">0</text>
+<rect x="370" y="334" width="130" height="38" fill="#deeafd" stroke="#e2e8f0" />
+<text x="435.0" y="357.0" text-anchor="middle" font-size="13" font-weight="500" fill="#0f172a">0.7</text>
+</svg>

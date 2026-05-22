@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool Profile — compound</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/compound.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="compound" tabindex="-1"><a class="header-anchor" href="#compound"><span>compound</span></a></h1>
+<h2 id="overview" tabindex="-1"><a class="header-anchor" href="#overview"><span>Overview</span></a></h2>
+<p><code>compound</code> is the Claude Code plugin <a href="https://github.com/EveryInc/compound-engineering-plugin"><code>EveryInc/compound-engineering-plugin</code></a>, maintained by Every Inc. (the media and software company behind the Cora email product). The plugin was developed in public alongside Kieran Klaassen’s “compound engineering” writing, and it packages that methodology as a large bundle of slash commands, skills, and specialist agents. The benchmark installs it via the Claude Code plugin marketplace and pins release <strong>3.7.0</strong> (tag SHA <code>0bb53dfa</code>, MIT license). The user-facing primitives cluster into four phases: <code>/ce:plan</code>, <code>/ce:work</code>, <code>/ce:review</code>, and <code>/ce:compound</code>, plus a handful of research, design, and git utilities.</p>
+<p>The methodology behind the name is the thesis that each engineering task should leave the system <em>easier</em> to work on next time, by codifying plans, reviews, and learnings back into the repository. In practice that shows up as markdown artifacts in <code>docs/plans/</code>, reviewer persona subagents, and a <code>/ce:compound</code> step that writes learnings to a wiki-style store.</p>
+<h2 id="entry-point-lfg" tabindex="-1"><a class="header-anchor" href="#entry-point-lfg"><span>Entry point: <code>/lfg</code></span></a></h2>
+<p>The benchmark drives the plugin through its beta autonomous entry point, <code>/compound-engineering:lfg</code> (“let’s f***ing go”). The skill file is explicit about ordering: it is a fixed six-step pipeline with stop-gates between phases.</p>
+<ol>
+<li>Optionally delegate to a <code>ralph-loop</code> skill if present (not installed in the benchmark).</li>
+<li><code>/ce:plan $ARGUMENTS</code> — gated on producing a plan file under <code>docs/plans/</code>.</li>
+<li><code>/ce:work</code> — gated on observing code changes beyond the plan.</li>
+<li><code>/ce:review mode:autofix plan:&lt;plan-path&gt;</code> — passes the plan path so review can check requirement coverage.</li>
+<li><code>/compound-engineering:todo-resolve</code>.</li>
+<li><code>/compound-engineering:test-browser</code>, then emit <code>&lt;promise&gt;DONE&lt;/promise&gt;</code>.</li>
+</ol>
+<p>So <code>lfg</code> is a plan-execute-review loop with a knowledge-compaction tail, not a freeform agent. Phases are sequenced with “GATE: STOP” language rather than parallel fan-out.</p>
+<h2 id="what-the-transcripts-show-session-audit" tabindex="-1"><a class="header-anchor" href="#what-the-transcripts-show-session-audit"><span>What the transcripts show (session audit)</span></a></h2>
+<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/compound/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/compound/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">wall min</th>
+<th style="text-align:right">main turns</th>
+<th style="text-align:right">sidechain turns</th>
+<th style="text-align:right">sub-agent disp.</th>
+<th style="text-align:right">files read (config / target)</th>
+<th style="text-align:right">files edited</th>
+<th style="text-align:right">cache hit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">22.0</td>
+<td style="text-align:right">165.0</td>
+<td style="text-align:right">53.3</td>
+<td style="text-align:right"><strong>1.7</strong></td>
+<td style="text-align:right">25.0 (0 / 25.0)</td>
+<td style="text-align:right">11.7</td>
+<td style="text-align:right">0.98</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">7.2</td>
+<td style="text-align:right">83.0</td>
+<td style="text-align:right">0.0</td>
+<td style="text-align:right"><strong>0.0</strong></td>
+<td style="text-align:right">14.0 (0 / 14.0)</td>
+<td style="text-align:right">1.0</td>
+<td style="text-align:right">0.97</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">15.0</td>
+<td style="text-align:right">165.3</td>
+<td style="text-align:right">0.0</td>
+<td style="text-align:right"><strong>0.0</strong></td>
+<td style="text-align:right">22.3 (0 / 22.0)</td>
+<td style="text-align:right">27.0</td>
+<td style="text-align:right">0.98</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Reviewer fan-out fires in 1 of 9 trials.</strong> The <code>lfg</code> pipeline (plan → work → review → todo-resolve) phases through compound’s own skills as sequential <code>attributionSkill</code> changes within the main thread — <code>ce-work</code> (727), <code>ce-plan</code> (387), <code>ce-code-review</code> (261), <code>ce-commit-push-pr</code> (7), <code>lfg</code> (18). But the <em>reviewer-persona sub-agents</em> (<code>ce-correctness-reviewer</code>, <code>ce-adversarial-reviewer</code>, <code>ce-api-contract-reviewer</code>, <code>ce-testing-reviewer</code>, <code>ce-maintainability-reviewer</code>) only dispatched once each across the entire corpus — concentrated in <strong>compound/t2 feature</strong> (5 dispatches). All other 8 trials show 0 sub-agent dispatches.</li>
+<li><strong>Bugfix and refactor stay single-thread.</strong> 0 sidechain turns and 0 <code>Agent</code> calls on every trial of both tasks. The pipeline’s review phase still fires (<code>ce-code-review</code> shows up in attribution) but does it as a role-played turn inside the main thread, not as a sub-agent dispatch.</li>
+<li><strong>Slash commands typed:</strong> <code>/compound-engineering:lfg</code> (9), <code>/login</code> (1).</li>
+<li><strong>Refactor is the most edit-heavy task</strong> (27.0 edits) but completes fast (15 min) — the lfg pipeline collapses to plan-then-edit without review fan-out, looking similar in shape to <code>pure</code>.</li>
+</ul>
+<h2 id="benchmark-outcome" tabindex="-1"><a class="header-anchor" href="#benchmark-outcome"><span>Benchmark outcome</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th style="text-align:right">Weighted mean /200</th>
+<th style="text-align:right">within_σ</th>
+<th style="text-align:right">between_σ</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feature</td>
+<td style="text-align:right">134.67</td>
+<td style="text-align:right">13.26</td>
+<td style="text-align:right">15.99</td>
+<td>7 / 8</td>
+</tr>
+<tr>
+<td>bugfix</td>
+<td style="text-align:right">166.25</td>
+<td style="text-align:right">9.57</td>
+<td style="text-align:right">11.27</td>
+<td>5 / 8</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td style="text-align:right">174.42</td>
+<td style="text-align:right">6.04</td>
+<td style="text-align:right">16.40</td>
+<td>5 / 8</td>
+</tr>
+</tbody>
+</table>
+<p>Compound is <strong>rank-7 on feature</strong> — ≈ 18.6 weighted pts behind <code>ecc</code> (153.30) and ≈ 8.5 pts below <code>pure</code> (143.13). On the smaller tasks the reviewer-persona pipeline lands mid-pack: rank-5 on both bugfix and refactor.</p>
+<h2 id="reading-of-the-result" tabindex="-1"><a class="header-anchor" href="#reading-of-the-result"><span>Reading of the result</span></a></h2>
+<p><code>compound</code> is not a lightweight prompt — it ships a full plan-then-work-then-review pipeline with reviewer personas, gates, and a learning-capture step. In the benchmark’s single-shot <code>/lfg</code> invocation the pipeline does run, but its orchestration overhead is not repaid on any of the three single-shot tasks: it lands rank-7 on feature and mid-pack (rank-5) on bugfix and refactor. The reviewer fan-out and plan artifacts do not separate from the cohort when each task is a one-attempt run with no memory carryover.</p>
+<p>The plugin is more interesting as a methodology carrier — plans in <code>docs/plans/</code>, learnings in a wiki — than as a single-shot speed runner, and the benchmark, which rewards diff quality on one attempt with no memory carryover, is a harsh venue for that design.</p>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/tools/compound.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

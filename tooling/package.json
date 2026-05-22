@@ -1,0 +1,16 @@
+{
+  "name": "ai-tool-benchmark-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Build tooling for the benchmark docs site (markdown preview renderer).",
+  "type": "module",
+  "scripts": {
+    "preview": "node render-md-previews.mjs",
+    "preview:check": "node render-md-previews.mjs --check"
+  },
+  "devDependencies": {
+    "highlight.js": "^11.10.0",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0"
+  }
+}

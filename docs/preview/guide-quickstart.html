@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quickstart — One Trial in 10 Minutes</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/guides/quickstart.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="quickstart-run-one-trial-end-to-end-in-10-minutes" tabindex="-1"><a class="header-anchor" href="#quickstart-run-one-trial-end-to-end-in-10-minutes"><span>Quickstart — Run one trial end-to-end in ~10 minutes</span></a></h1>
+<p>This guide gets you from <code>git clone</code> to a scored trial in the shortest path. For the full methodology and reference, see <a href="paper.html"><code>../../PAPER.md</code></a> §1 (methodology) and §6 (reproducibility).</p>
+<hr>
+<h2 id="prerequisites" tabindex="-1"><a class="header-anchor" href="#prerequisites"><span>Prerequisites</span></a></h2>
+<ul>
+<li><strong>macOS or Linux.</strong> Windows via WSL untested.</li>
+<li><strong>git</strong>, <strong>bash</strong> (4.0+), <strong>python3</strong> (3.10+ with <code>numpy</code> if you want to re-compute stats).</li>
+<li><strong>OpenCode CLI</strong> — only if you want to run the non-Claude judges (<code>grok420</code>, <code>glm51</code>, <code>mimo25pro</code>). <code>opencode --version</code> must succeed.</li>
+<li><strong>Anthropic API key</strong> for Claude Code (<code>opus</code> judge + the executor base model).</li>
+<li><strong>OpenAI API key</strong> for the <code>gpt54pro</code> judge (calls <code>/v1/responses</code> directly).</li>
+<li><strong>Disk:</strong> ~2 GB for the benchmark’s base repo clones and judge artifacts.</li>
+</ul>
+<p>The benchmark runs against a real TypeScript NX monorepo that must be cloneable locally. Set <code>BENCH_REPO</code> to the clone URL of that monorepo (your fork or the original) — <code>scripts/env.sh</code> reads it and derives <code>BASE_REPO</code> as the local prepared-clone path (<code>runs/base-feature</code>, <code>runs/base-bugfix</code>, <code>runs/base-refactor</code> depending on <code>TASK</code>). <code>create-clones.sh</code> provisions those base clones on first use; after that it copies them into per-trial working copies.</p>
+<hr>
+<h2 id="1-clone-and-orient-1-min" tabindex="-1"><a class="header-anchor" href="#1-clone-and-orient-1-min"><span>1. Clone and orient (~1 min)</span></a></h2>
+<pre class="hljs"><code class="language-bash">git <span class="hljs-built_in">clone</span> git@github.com:infina-pfa/claude-tool-benchmark.git
+<span class="hljs-built_in">cd</span> claude-tool-benchmark
+<span class="hljs-built_in">export</span> BENCH_REPO=<span class="hljs-string">&quot;git@github.com:your-org/your-target-repo.git&quot;</span>   <span class="hljs-comment"># or your fork</span>
+grep -E <span class="hljs-string">&#x27;TOOLS|BASE_REPO|BENCH_REPO|TASK&#x27;</span> scripts/env.sh              <span class="hljs-comment"># tool list, base repo paths, task env</span>
+</code></pre>
+<p>The benchmark evaluates 8 tools × 3 tasks:</p>
+<ul>
+<li><strong>Tasks:</strong> <code>feature</code> <code>bugfix</code> <code>refactor</code></li>
+<li><strong>Tools:</strong> <code>pure</code>, <code>claudekit</code>, <code>gstack</code>, <code>bmad</code>, <code>omc</code>, <code>compound</code>, <code>ecc</code>, <code>superpower</code></li>
+</ul>
+<hr>
+<h2 id="2-pick-one-task-tool-trial-1-min" tabindex="-1"><a class="header-anchor" href="#2-pick-one-task-tool-trial-1-min"><span>2. Pick one (task, tool, trial) (~1 min)</span></a></h2>
+<p>The smallest meaningful unit is one <code>(task, tool, trial)</code>. Pick something cheap first:</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-built_in">export</span> TASK=refactor          <span class="hljs-comment"># smallest PRD, shortest trials</span>
+TOOL=bmad                     <span class="hljs-comment"># top-of-cluster tool — easy signal</span>
+TRIAL=1
+</code></pre>
+<hr>
+<h2 id="3-clone-the-base-repo-into-a-trial-working-copy-2-min" tabindex="-1"><a class="header-anchor" href="#3-clone-the-base-repo-into-a-trial-working-copy-2-min"><span>3. Clone the base repo into a trial working copy (~2 min)</span></a></h2>
+<pre class="hljs"><code class="language-bash">TASK=<span class="hljs-variable">$TASK</span> ./scripts/create-clones.sh <span class="hljs-variable">$TRIAL</span>
+</code></pre>
+<p>First run: clones <code>$BENCH_REPO</code> to the task’s base path at the pinned SHA (declared in <code>versions.lock.json</code> <code>base_repos.&lt;task&gt;.sha</code>). Subsequent runs: fast-copies that base (APFS clonefile on macOS, <code>cp -r</code> elsewhere) into <code>runs/&lt;task&gt;/&lt;tool&gt;-t&lt;trial&gt;/</code> — one isolated working copy per (tool, trial). These directories are <code>.gitignored</code> so your tool’s commits don’t pollute the benchmark repo.</p>
+<hr>
+<h2 id="4-prepare-the-per-tool-config-30-sec" tabindex="-1"><a class="header-anchor" href="#4-prepare-the-per-tool-config-30-sec"><span>4. Prepare the per-tool config (~30 sec)</span></a></h2>
+<pre class="hljs"><code class="language-bash">TASK=<span class="hljs-variable">$TASK</span> ./scripts/setup-tool-config.sh <span class="hljs-variable">$TOOL</span> <span class="hljs-variable">$TRIAL</span>
+</code></pre>
+<p>This provisions <code>config/&lt;tool&gt;-t&lt;trial&gt;/</code> — an isolated Claude Code home directory. It installs the tool (plugin, git clone, marketplace, depending on the tool — see <code>scripts/setup-tool-config.sh</code> for the per-tool recipe), seeds <code>settings.json</code>, and writes <code>.claude.json</code>.</p>
+<p>Isolation matters: the benchmark does not want to inherit your personal Claude settings, plugins, or MCP servers. See the per-tool <code>config/&lt;tool&gt;-t&lt;trial&gt;/</code> for what was actually loaded.</p>
+<hr>
+<h2 id="5-run-the-tool-5-15-min-depending-on-tool" tabindex="-1"><a class="header-anchor" href="#5-run-the-tool-5-15-min-depending-on-tool"><span>5. Run the tool (~5-15 min depending on tool)</span></a></h2>
+<pre class="hljs"><code class="language-bash">TASK=<span class="hljs-variable">$TASK</span> ./scripts/manual-bench.sh <span class="hljs-variable">$TOOL</span> <span class="hljs-variable">$TRIAL</span>
+</code></pre>
+<p>Follow the on-screen instructions: paste the prompt, let the tool run to its natural stop, then <code>/exit</code>. The script prints the SHA-capture + collect-metrics one-liner — <strong>run it before anything else</strong> so the SHAs and <code>auto-metrics.json</code> are captured cleanly.</p>
+<p>You now have one trial worth of artifacts at <code>results/&lt;task&gt;/&lt;tool&gt;/t&lt;trial&gt;/</code>:</p>
+<ul>
+<li><code>commits.txt</code> (line 1: BASE SHA, line 2: IMPL SHA)</li>
+<li><code>session-logs/*.jsonl</code> (the full Claude Code transcript)</li>
+<li><code>auto-metrics.json</code>, <code>diff-stats.txt</code>, <code>tsc-output.txt</code>, <code>eslint-output.txt</code>, <code>test-output.txt</code></li>
+<li><code>sessions/*.meta.json</code> (trial metadata, base commit, tool version)</li>
+</ul>
+<hr>
+<h2 id="6-judge-it-2-5-min-per-judge" tabindex="-1"><a class="header-anchor" href="#6-judge-it-2-5-min-per-judge"><span>6. Judge it (~2-5 min per judge)</span></a></h2>
+<p>For a minimum-viable-judgement, run one judge on your trial:</p>
+<pre class="hljs"><code class="language-bash">TASK=<span class="hljs-variable">$TASK</span> ./scripts/blind-eval-setup.sh
+TASK=<span class="hljs-variable">$TASK</span> ROUND=1 ./scripts/judge-opus.sh Alpha    <span class="hljs-comment"># replace Alpha with the blind label printed above</span>
+</code></pre>
+<p><code>blind-eval-setup.sh</code> generates a blind label (Alpha/Bravo/Charlie/…) per (tool, trial) and builds <code>judge-prompt.md</code> with: the PRD, reference implementation, the diff patch, the 20-item rubric, and the output JSON schema. Nothing in the prompt names the tool. <code>.mapping-DO-NOT-OPEN.json</code> keeps the label→tool mapping.</p>
+<p>For the <strong>full 5-judge protocol</strong> (as used in the published report), run all five:</p>
+<pre class="hljs"><code class="language-bash">TASK=<span class="hljs-variable">$TASK</span> ROUND=1 ./scripts/judge-opus.sh      &lt;label&gt;
+TASK=<span class="hljs-variable">$TASK</span> ROUND=1 ./scripts/judge-grok420.sh   &lt;label&gt;
+TASK=<span class="hljs-variable">$TASK</span> ROUND=1 ./scripts/judge-glm51.sh     &lt;label&gt;
+TASK=<span class="hljs-variable">$TASK</span> ROUND=1 ./scripts/judge-gpt54pro.sh  &lt;label&gt;
+TASK=<span class="hljs-variable">$TASK</span> ROUND=1 ./scripts/judge-mimo25pro.sh &lt;label&gt;
+</code></pre>
+<p>Or use the panel wrapper:</p>
+<pre class="hljs"><code class="language-bash">TASK=<span class="hljs-variable">$TASK</span> ./scripts/judge-all.sh &lt;label&gt;       <span class="hljs-comment"># 5-judge panel, single round</span>
+</code></pre>
+<p>5 trials × 5 judges × 3 rounds = 75 judgments per <code>(tool, task)</code> cell. Each judgment uses fresh sampling (temperature 0 where provider exposes it). The canonical round’s judge files live flat under each label dir; the two added stability rounds live under <code>round1/</code> and <code>round2/</code> subdirs (see <code>PAPER.md §1.6</code> and the aggregator’s <code>^round[0-9]+$</code> filter).</p>
+<hr>
+<h2 id="7-aggregate-get-the-score-30-sec" tabindex="-1"><a class="header-anchor" href="#7-aggregate-get-the-score-30-sec"><span>7. Aggregate &amp; get the score (~30 sec)</span></a></h2>
+<pre class="hljs"><code class="language-bash">TASK=<span class="hljs-variable">$TASK</span> ./scripts/aggregate-results.sh
+</code></pre>
+<p>Writes <code>results/&lt;task&gt;/final-report.md</code> (weighted-mean ranking + caveats + σ decomposition) and <code>results/&lt;task&gt;/final-report.equal-weight.md</code> (equal-weight comparator). The script runs an idempotent R1 mechanical-fact sweep before aggregating, so any single-judge retry that bypassed the wrapper is auto-corrected.</p>
+<p>For the cohort-symmetry audit:</p>
+<pre class="hljs"><code class="language-bash">python3 scripts/audit-cohort-symmetry.py
+</code></pre>
+<p>Exits non-zero on missing trials, base-commit divergence within a trial, or any other hard violation; soft-warns on &gt;24h cohort spans.</p>
+<hr>
+<h2 id="8-check-your-numbers-against-the-published-benchmark" tabindex="-1"><a class="header-anchor" href="#8-check-your-numbers-against-the-published-benchmark"><span>8. Check your numbers against the published benchmark</span></a></h2>
+<pre class="hljs"><code class="language-bash">diff &lt;(grep -A20 <span class="hljs-string">&#x27;^| Tool &#x27;</span> results/refactor/final-report.md) \
+     &lt;(curl -s https://raw.githubusercontent.com/infina-pfa/claude-tool-benchmark/main/results/refactor/final-report.md | grep -A20 <span class="hljs-string">&#x27;^| Tool &#x27;</span>)
+</code></pre>
+<p>If your numbers diverge, check: base-repo SHA, tool version, judge model versions, round count.</p>
+<hr>
+<h2 id="minimum-viable-re-run" tabindex="-1"><a class="header-anchor" href="#minimum-viable-re-run"><span>Minimum viable re-run</span></a></h2>
+<p>If all you want is one score on one task with one judge (skip multi-judge averaging):</p>
+<pre class="hljs"><code class="language-bash">TASK=refactor ./scripts/create-clones.sh 1
+TASK=refactor ./scripts/setup-tool-config.sh pure 1
+TASK=refactor ./scripts/manual-bench.sh pure 1
+<span class="hljs-comment"># paste + run + exit + printed one-liner</span>
+TASK=refactor ./scripts/blind-eval-setup.sh
+TASK=refactor ROUND=1 ./scripts/judge-opus.sh Alpha
+TASK=refactor ./scripts/aggregate-results.sh
+</code></pre>
+<hr>
+<h2 id="what-this-quickstart-deliberately-skips" tabindex="-1"><a class="header-anchor" href="#what-this-quickstart-deliberately-skips"><span>What this quickstart deliberately skips</span></a></h2>
+<ul>
+<li><strong>Multi-trial per tool.</strong> Production numbers use 5 trials per (tool, task).</li>
+<li><strong>Cohort symmetry.</strong> Production re-runs all 8 tools whenever one is re-run.</li>
+<li><strong>Full 5-judge panel.</strong> Production uses opus / grok420 / glm51 / gpt54pro / mimo25pro with pre-registered 3 / 2 / 1 / 1 / 1 weights (see <code>versions.lock.json</code>).</li>
+</ul>
+<p>See the <a href="guide-verification.html">verification guide</a> for how to reproduce a specific published claim.</p>
+<p>See <a href="guide-extending.html">extending.md</a> if you want to add a new tool or judge.</p>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/guides/quickstart.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

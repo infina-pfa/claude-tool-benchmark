@@ -1,0 +1,28 @@
+{
+  "name": "comparative_ranking",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "ranking": {
+        "type": "array",
+        "minItems": 8,
+        "maxItems": 8,
+        "items": {
+          "type": "object",
+          "properties": {
+            "rank": {"type": "integer", "minimum": 1, "maximum": 8},
+            "label": {"type": "string"},
+            "rationale": {"type": "string"}
+          },
+          "required": ["rank", "label", "rationale"],
+          "additionalProperties": false
+        }
+      },
+      "calibration_notes": {"type": "string"},
+      "blinding_concerns": {"type": "string"}
+    },
+    "required": ["ranking", "calibration_notes", "blinding_concerns"],
+    "additionalProperties": false
+  }
+}

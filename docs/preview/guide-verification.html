@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Verification Guide</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/guides/verification.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="verification-guide-reproducing-the-benchmark-claims" tabindex="-1"><a class="header-anchor" href="#verification-guide-reproducing-the-benchmark-claims"><span>Verification Guide — Reproducing the Benchmark Claims</span></a></h1>
+<p>Guide for a reader who wants to independently verify any claim made in <a href="paper.html"><code>../../PAPER.md</code></a>, <a href="readme.html"><code>../../README.md</code></a>, or the per-task <code>results/&lt;task&gt;/final-report.md</code> files. Everything needed is checked into <a href="https://github.com/infina-pfa/claude-tool-benchmark/tree/main/results"><code>results/</code></a> — no private state, no network access.</p>
+<hr>
+<h2 id="0-setup" tabindex="-1"><a class="header-anchor" href="#0-setup"><span>0. Setup</span></a></h2>
+<pre class="hljs"><code class="language-bash">git <span class="hljs-built_in">clone</span> &lt;this-repo&gt;
+<span class="hljs-built_in">cd</span> ai-tool-benchmark
+python3 -m pip install --user --break-system-packages numpy
+</code></pre>
+<p>Only <code>numpy</code> is needed for re-aggregation. The aggregation scripts use only stdlib + numpy, no framework.</p>
+<hr>
+<h2 id="1-where-does-a-tools-score-come-from" tabindex="-1"><a class="header-anchor" href="#1-where-does-a-tools-score-come-from"><span>1. “Where does a tool’s score come from?”</span></a></h2>
+<p><strong>Claim example:</strong> “<code>ecc</code> is rank-1 on feature with a weighted mean of 153.30/200.”</p>
+<p><strong>Chain of evidence:</strong></p>
+<ol>
+<li><strong>Raw judge files</strong> — for the canonical (first) round: <code>results/_blind-eval/&lt;label&gt;/{opus,grok420,glm51,gpt54pro,mimo25pro}-judge.json</code>, where <code>&lt;label&gt;</code> is whichever NATO letter maps to <code>ecc t&lt;trial&gt;</code> in <code>results/_blind-eval/.mapping-DO-NOT-OPEN.json</code>. The two added stability rounds live under <code>results/_blind-eval/&lt;label&gt;/round1/</code> and <code>results/_blind-eval/&lt;label&gt;/round2/</code> with the same five judge files in each. The aggregator unions the label root + every <code>^round[0-9]+$</code> subdir, so all three rounds are counted automatically; pilot/sample dirs (<code>roundcotsample*</code>, etc.) are excluded.</li>
+<li><strong>Canonical score per file</strong> — <code>sum(scores.values())</code> (authoritative; do not use the stored <code>total</code> field, which has historically drifted off-by-one).</li>
+<li><strong>Canonical round filter</strong> — <code>aggregate-results.sh</code> unions the label root (the canonical first round) with every <code>^round[0-9]+$</code> subdir (in this cohort: <code>round1/</code> and <code>round2/</code>). Pilot/sample dirs (<code>roundcotsample*</code>, etc.) are excluded so the corpus size is deterministic.</li>
+<li><strong>R1 mechanical-fact override</strong> — <code>scripts/apply-r1-override.py</code> rewrites deterministic rubric items from <code>auto-metrics.json</code> before aggregation. Pre-override scores are preserved per-file under <code>scores_pre_r1</code>.</li>
+<li><strong>Aggregation</strong> — <code>scripts/aggregate-results.sh</code> computes per-judge means, then the <strong>weighted mean of per-judge means</strong> with weights from <code>versions.lock.json</code> <code>judges.*.weight</code> (opus×3, gpt54pro×2, grok420 / glm51 / mimo25pro ×1). Equal-weight comparator is emitted alongside as <code>final-report.equal-weight.md</code>.</li>
+<li><strong>Output</strong> — <code>results/&lt;task&gt;/final-report.md</code>.</li>
+</ol>
+<p><strong>To verify:</strong></p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># Snapshot the current committed report, then regenerate and compare.</span>
+<span class="hljs-built_in">cp</span> results/final-report.md /tmp/final-report.feature.before.md
+TASK=feature ./scripts/aggregate-results.sh
+diff /tmp/final-report.feature.before.md results/final-report.md
+</code></pre>
+<p>The R1 sweep is idempotent, so the diff should be empty (modulo the regenerated timestamp). If not, either your dependency versions differ or the committed artifacts have drifted from their generating source.</p>
+<hr>
+<h2 id="2-why-is-pure-rank-1-on-refactor" tabindex="-1"><a class="header-anchor" href="#2-why-is-pure-rank-1-on-refactor"><span>2. “Why is <code>pure</code> rank-1 on refactor?”</span></a></h2>
+<p><strong>Claim example:</strong> “On the aggregate-ownership refactor, <code>pure</code> (no addons) takes rank-1 at 180.19/200 over <code>claudekit</code> (178.04) and <code>bmad</code> (177.74). Top-5 span is 5.8 weighted pts.”</p>
+<p><strong>Walk the chain:</strong></p>
+<ol>
+<li><code>results/refactor/_blind-eval/.mapping-DO-NOT-OPEN.json</code> <span class="muted">(omitted from public release)</span> — find which labels map to <code>pure t1/t2/t3</code>.</li>
+<li><code>results/refactor/_blind-eval/&lt;label&gt;/implementation-diff.patch</code> — inspect the actual code diff the judges saw.</li>
+<li><code>results/refactor/_blind-eval/&lt;label&gt;/&lt;judge&gt;-judge.json</code> — read <code>notes</code> field and per-item rubric scores; compare to the next-ranked tool’s labels.</li>
+<li><code>results/refactor/pure/t1/session-logs/&lt;uuid&gt;.jsonl</code> — the full session transcript.</li>
+<li><code>results/refactor/pure/t1/auto-metrics.json</code> — tsc / eslint / test counts, line changes.</li>
+</ol>
+<p><strong>Cross-reference:</strong> <a href="paper.html#21-per-task-rankings">PAPER §2.1 refactor</a> and <a href="paper.html#3-discussion">§3 Discussion</a> narrate this result.</p>
+<hr>
+<h2 id="3-no-hidden-sampling-of-trials-no-cherry-picking-reruns" tabindex="-1"><a class="header-anchor" href="#3-no-hidden-sampling-of-trials-no-cherry-picking-reruns"><span>3. “No hidden sampling of trials / no cherry-picking reruns”</span></a></h2>
+<p><strong>Claim example:</strong> The cohort-symmetry rule in <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/CLAUDE.md#rerun-protocol-pre-registered"><code>../../CLAUDE.md</code></a> requires that if trial <code>t&lt;N&gt;</code> is rerun for one tool, it’s rerun for all 8 before the trial is used in comparison.</p>
+<p><strong>Verify:</strong></p>
+<pre class="hljs"><code class="language-bash">python3 scripts/audit-cohort-symmetry.py
+</code></pre>
+<p>Reads <code>results/&lt;task&gt;/&lt;tool&gt;/t&lt;N&gt;/sessions/*.meta.json</code> across all 8 tools, groups by trial index, and reports:</p>
+<ul>
+<li>Missing trials per tool (hard violation → non-zero exit)</li>
+<li>Base-commit divergence within a trial (hard violation → non-zero exit)</li>
+<li>
+<blockquote>
+<p>24h cohort timestamp span (soft warning — flagged in each task’s <code>final-report.md</code> “Caveats” block)</p>
+</blockquote>
+</li>
+<li>Any archived reruns under <code>results/&lt;task&gt;/&lt;tool&gt;/archive-t&lt;N&gt;-&lt;date&gt;/</code></li>
+</ul>
+<hr>
+<h2 id="4-the-judge-didnt-see-the-tool-identity" tabindex="-1"><a class="header-anchor" href="#4-the-judge-didnt-see-the-tool-identity"><span>4. “The judge didn’t see the tool identity”</span></a></h2>
+<p><strong>Verify:</strong></p>
+<ol>
+<li>Open any <code>results/&lt;task&gt;/_blind-eval/&lt;label&gt;/judge-prompt.md</code>. Confirm nothing in the prompt names the tool.</li>
+<li>Open <code>implementation-diff.patch</code> in the same dir. Confirm the diff uses paths from the actual repo (no tool-specific markers like <code>.omc/</code>, <code>_bmad/</code>, <code>.claudekit/</code>, <code>.superpowers/</code>, etc.).</li>
+<li>Open <code>auto-metrics.json</code> in the same dir. Confirm <code>plugin_versions</code> and <code>collected_at</code> have been stripped (anonymisation).</li>
+<li>Open <code>.mapping-DO-NOT-OPEN.json</code> only after you’ve formed your own expectation.</li>
+</ol>
+<p>The judge receives: PRD + reference codebase markdown + the diff patch + the 20-item rubric + JSON schema. Nothing else.</p>
+<hr>
+<h2 id="5-the-judges-use-the-canonical-model-settings" tabindex="-1"><a class="header-anchor" href="#5-the-judges-use-the-canonical-model-settings"><span>5. “The judges use the canonical model settings”</span></a></h2>
+<p><strong>Claim example:</strong> “Temperature is fixed to 0 where the provider exposes it (OpenRouter, OpenCode Go); Claude CLI and OpenAI <code>/v1/responses</code> do not expose temperature/seed.”</p>
+<p><strong>Verify:</strong></p>
+<pre class="hljs"><code class="language-bash">claude --<span class="hljs-built_in">help</span> | grep -iE <span class="hljs-string">&#x27;temp|seed|sampl&#x27;</span>        <span class="hljs-comment"># Claude CLI — no results</span>
+opencode run --<span class="hljs-built_in">help</span> | grep -iE <span class="hljs-string">&#x27;temp|seed|sampl&#x27;</span>  <span class="hljs-comment"># OpenCode CLI — exposes temperature</span>
+</code></pre>
+<p>Comment headers in <code>scripts/judge-{opus,grok420,glm51,gpt54pro,mimo25pro}.sh</code> document this per-judge. Round-to-round variance shows up as <code>within_σ</code> in each <code>final-report.md</code>; the 5-judge weighted panel is the intended mitigation, not a fix.</p>
+<hr>
+<h2 id="6-the-ranking-doesnt-flip-under-different-weighting" tabindex="-1"><a class="header-anchor" href="#6-the-ranking-doesnt-flip-under-different-weighting"><span>6. “The ranking doesn’t flip under different weighting”</span></a></h2>
+<p><strong>Canonical ranking</strong> is the <strong>weighted mean</strong> (<code>final-report.md</code>, panel weights opus×3 / gpt54pro×2 / others×1, pre-registered in <code>versions.lock.json</code>). The equal-weight pass (<code>final-report.equal-weight.md</code>) is a sensitivity check, not a second canonical ranking.</p>
+<p><strong>Claim example:</strong> “Rank-1 is stable under both weighted-mean (3/2/1/1/1) and equal-weight aggregation on every task; top-3 is identical on bugfix only — feature top-3 reorders under equal weighting (ecc / pure / bmad → ecc / bmad / pure) and refactor swaps at rank-3 (bmad → superpower).”</p>
+<p><strong>Verify:</strong></p>
+<p>For each task, compare <code>final-report.md</code> (canonical, weighted) against <code>final-report.equal-weight.md</code> (equal-weight sensitivity). They are written by the same <code>aggregate-results.sh</code> pass.</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-keyword">for</span> task <span class="hljs-keyword">in</span> feature bugfix refactor; <span class="hljs-keyword">do</span>
+  <span class="hljs-keyword">case</span> <span class="hljs-variable">$task</span> <span class="hljs-keyword">in</span> feature) <span class="hljs-built_in">dir</span>=results;; *) <span class="hljs-built_in">dir</span>=results/<span class="hljs-variable">$task</span>;; <span class="hljs-keyword">esac</span>
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;=== <span class="hljs-variable">$task</span> ===&quot;</span>
+  grep -E <span class="hljs-string">&#x27;^[0-9]+\. \*\*&#x27;</span> <span class="hljs-variable">$dir</span>/final-report.md | <span class="hljs-built_in">head</span> -3
+  <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;--- equal-weight ---&quot;</span>
+  grep -E <span class="hljs-string">&#x27;^[0-9]+\. \*\*&#x27;</span> <span class="hljs-variable">$dir</span>/final-report.equal-weight.md | <span class="hljs-built_in">head</span> -3
+<span class="hljs-keyword">done</span>
+</code></pre>
+<p>Expected: rank-1 identical across both columns on every task; top-3 identical on bugfix only; feature top-3 reorders (weighted: ecc / pure / bmad; equal-weight: ecc / bmad / pure) and refactor swaps at rank-3 (weighted bmad; equal-weight superpower — see PAPER §5).</p>
+<hr>
+<h2 id="7-r1-mechanical-fact-override" tabindex="-1"><a class="header-anchor" href="#7-r1-mechanical-fact-override"><span>7. R1 mechanical-fact override</span></a></h2>
+<p><strong>Claim example:</strong> “Deterministic rubric items (tsc / eslint / core-test failures / lines removed) are rewritten from <code>auto-metrics.json</code> after judging. Pre-override scores are preserved per-file.”</p>
+<p><strong>Verify:</strong></p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># Count: every judged file (across all 3 rounds) should carry a scores_pre_r1 snapshot.</span>
+python3 -c <span class="hljs-string">&quot;
+import json, pathlib
+files = [f for f in pathlib.Path(&#x27;results&#x27;).rglob(&#x27;*-judge.json&#x27;)
+         if &#x27;_blind-eval&#x27; in f.parts and &#x27;_archive&#x27; not in f.parts
+         and &#x27;request&#x27; not in f.name and &#x27;raw&#x27; not in f.name]
+total = len(files); with_snap = sum(1 for f in files if &#x27;scores_pre_r1&#x27; in json.loads(f.read_text()))
+print(f&#x27;{with_snap}/{total} files carry scores_pre_r1&#x27;)
+&quot;</span>
+</code></pre>
+<p>Expected: <code>1800/1800 files carry scores_pre_r1</code> (3 tasks × 8 tools × 5 trials × 5 judges × 3 rounds). The locked items per task are documented in <a href="paper.html#15-r1-mechanical-fact-override"><code>../../PAPER.md</code> §1.5</a>.</p>
+<hr>
+<h2 id="8-reproducing-the-pipeline-end-to-end" tabindex="-1"><a class="header-anchor" href="#8-reproducing-the-pipeline-end-to-end"><span>8. Reproducing the pipeline end-to-end</span></a></h2>
+<p>If you want to re-run the benchmark (not just re-aggregate):</p>
+<p>See <strong><a href="guide-quickstart.html"><code>quickstart.md</code></a></strong> for the full clone → execute → judge → aggregate flow and <strong><a href="paper.html#6-reproducibility"><code>../../PAPER.md</code> §6</a></strong> for the canonical pipeline reference.</p>
+<p><strong>Minimum re-run for one (task, tool, trial):</strong></p>
+<pre class="hljs"><code class="language-bash">TASK=refactor ./scripts/create-clones.sh 1
+TASK=refactor ./scripts/setup-tool-config.sh bmad 1
+TASK=refactor ./scripts/manual-bench.sh bmad 1
+<span class="hljs-comment"># → paste prompt, run tool, exit</span>
+<span class="hljs-comment"># → run the printed one-liner (SHA capture + collect-metrics)</span>
+
+TASK=refactor ./scripts/blind-eval-setup.sh
+TASK=refactor ./scripts/judge-all.sh &lt;label&gt;   <span class="hljs-comment"># 5-judge panel, single round</span>
+
+TASK=refactor ./scripts/aggregate-results.sh
+python3 scripts/audit-cohort-symmetry.py
+</code></pre>
+<hr>
+<h2 id="9-what-this-benchmark-does-not-let-you-verify" tabindex="-1"><a class="header-anchor" href="#9-what-this-benchmark-does-not-let-you-verify"><span>9. What this benchmark does <strong>not</strong> let you verify</span></a></h2>
+<p>Being explicit about what’s outside the scope of the artifact:</p>
+<ul>
+<li><strong>Judge self-preference at the family level</strong> — all 8 executors use a Claude base model, so Anthropic-family favoritism is not identified by this design. A true audit would need a non-Anthropic-base executor as control.</li>
+<li><strong>Generalization to other languages / codebases</strong> — single TypeScript NX monorepo (<a href="#"><code>a private TypeScript NX monorepo</code></a>).</li>
+<li><strong>Tool-version drift</strong> — results are a 2026-05 snapshot pinned in <code>versions.lock.json</code>.</li>
+<li><strong>Cross-task synthesis</strong> — intentionally not reported as a single leaderboard; read the three per-task <code>final-report.md</code> files together. See <a href="readme.html#caveats">README caveat 7</a>.</li>
+</ul>
+<p>Each limitation is disclosed in <a href="paper.html#4-limitations-and-threats-to-validity"><code>../../PAPER.md</code> §4</a> and <a href="readme.html#caveats"><code>../../README.md</code> Caveats</a>.</p>
+<hr>
+<h2 id="quick-reference" tabindex="-1"><a class="header-anchor" href="#quick-reference"><span>Quick Reference</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>File to open</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What was the exact prompt sent to this tool?</td>
+<td><code>results/&lt;task&gt;/&lt;tool&gt;/t&lt;N&gt;/phase1-prompt.txt</code></td>
+</tr>
+<tr>
+<td>What did the tool actually do?</td>
+<td><code>results/&lt;task&gt;/&lt;tool&gt;/t&lt;N&gt;/session-logs/&lt;uuid&gt;.jsonl</code></td>
+</tr>
+<tr>
+<td>What did the judge see?</td>
+<td><code>results/&lt;task&gt;/_blind-eval/&lt;label&gt;/judge-prompt.md</code> + <code>implementation-diff.patch</code></td>
+</tr>
+<tr>
+<td>What did each judge score?</td>
+<td><code>results/&lt;task&gt;/_blind-eval/&lt;label&gt;/&lt;judge&gt;-judge.json</code></td>
+</tr>
+<tr>
+<td>What was the pre-R1 score?</td>
+<td><code>scores_pre_r1</code> field inside the same judge file</td>
+</tr>
+<tr>
+<td>How is the aggregate computed?</td>
+<td><code>scripts/aggregate-results.sh</code></td>
+</tr>
+<tr>
+<td>Which label is which tool?</td>
+<td><code>results/&lt;task&gt;/_blind-eval/.mapping-DO-NOT-OPEN.json</code> (after judging is done)</td>
+</tr>
+<tr>
+<td>What are the integrity guarantees?</td>
+<td>This file + <code>../../CLAUDE.md</code> (rerun protocol, aggregation rules)</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/guides/verification.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

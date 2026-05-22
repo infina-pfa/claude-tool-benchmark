@@ -1,0 +1,293 @@
+{
+  "method": "Two-sample two-sided t-test, \u03b1=0.05, power=0.80, n=trials per arm (cohort n); \u03b1/2 critical = exact Student-t t(0.975, df=2(n-1)); z_\u03b2 normal approx (conservative); \u03c3 pooled across tools per task",
+  "t_alpha_2": 2.306004,
+  "df": 8,
+  "z_beta": 0.84,
+  "tasks": {
+    "feature": {
+      "n_per_arm": 5,
+      "sigma_pool": 9.716422997587927,
+      "mde_pts": 19.332841009587998,
+      "rank1_lead_pts": 10.166666666666657,
+      "rank1_lead_significant": false,
+      "consec_gaps": [
+        {
+          "a": "ecc",
+          "b": "pure",
+          "gap": 10.166666666666657,
+          "significant": false
+        },
+        {
+          "a": "pure",
+          "b": "bmad",
+          "gap": 1.799999999999983,
+          "significant": false
+        },
+        {
+          "a": "bmad",
+          "b": "superpower",
+          "gap": 1.1750000000000114,
+          "significant": false
+        },
+        {
+          "a": "superpower",
+          "b": "omc",
+          "gap": 0.6666666666666572,
+          "significant": false
+        },
+        {
+          "a": "omc",
+          "b": "claudekit",
+          "gap": 4.450000000000017,
+          "significant": false
+        },
+        {
+          "a": "claudekit",
+          "b": "compound",
+          "gap": 0.375,
+          "significant": false
+        },
+        {
+          "a": "compound",
+          "b": "gstack",
+          "gap": 2.6833333333333087,
+          "significant": false
+        }
+      ],
+      "gaps_from_rank1": [
+        {
+          "top": "ecc",
+          "vs": "pure",
+          "gap": 10.166666666666657,
+          "significant": false
+        },
+        {
+          "top": "ecc",
+          "vs": "bmad",
+          "gap": 11.96666666666664,
+          "significant": false
+        },
+        {
+          "top": "ecc",
+          "vs": "superpower",
+          "gap": 13.141666666666652,
+          "significant": false
+        },
+        {
+          "top": "ecc",
+          "vs": "omc",
+          "gap": 13.808333333333309,
+          "significant": false
+        },
+        {
+          "top": "ecc",
+          "vs": "claudekit",
+          "gap": 18.258333333333326,
+          "significant": false
+        },
+        {
+          "top": "ecc",
+          "vs": "compound",
+          "gap": 18.633333333333326,
+          "significant": false
+        },
+        {
+          "top": "ecc",
+          "vs": "gstack",
+          "gap": 21.316666666666634,
+          "significant": true
+        }
+      ]
+    },
+    "bugfix": {
+      "n_per_arm": 5,
+      "sigma_pool": 11.14087311746456,
+      "mde_pts": 22.16708028678907,
+      "rank1_lead_pts": 6.625,
+      "rank1_lead_significant": false,
+      "consec_gaps": [
+        {
+          "a": "claudekit",
+          "b": "ecc",
+          "gap": 6.625,
+          "significant": false
+        },
+        {
+          "a": "ecc",
+          "b": "pure",
+          "gap": 2.7750000000000057,
+          "significant": false
+        },
+        {
+          "a": "pure",
+          "b": "superpower",
+          "gap": 3.125,
+          "significant": false
+        },
+        {
+          "a": "superpower",
+          "b": "compound",
+          "gap": 0.15833333333333144,
+          "significant": false
+        },
+        {
+          "a": "compound",
+          "b": "bmad",
+          "gap": 0.5333333333333314,
+          "significant": false
+        },
+        {
+          "a": "bmad",
+          "b": "omc",
+          "gap": 0.9166666666666572,
+          "significant": false
+        },
+        {
+          "a": "omc",
+          "b": "gstack",
+          "gap": 4.833333333333343,
+          "significant": false
+        }
+      ],
+      "gaps_from_rank1": [
+        {
+          "top": "claudekit",
+          "vs": "ecc",
+          "gap": 6.625,
+          "significant": false
+        },
+        {
+          "top": "claudekit",
+          "vs": "pure",
+          "gap": 9.400000000000006,
+          "significant": false
+        },
+        {
+          "top": "claudekit",
+          "vs": "superpower",
+          "gap": 12.525000000000006,
+          "significant": false
+        },
+        {
+          "top": "claudekit",
+          "vs": "compound",
+          "gap": 12.683333333333337,
+          "significant": false
+        },
+        {
+          "top": "claudekit",
+          "vs": "bmad",
+          "gap": 13.216666666666669,
+          "significant": false
+        },
+        {
+          "top": "claudekit",
+          "vs": "omc",
+          "gap": 14.133333333333326,
+          "significant": false
+        },
+        {
+          "top": "claudekit",
+          "vs": "gstack",
+          "gap": 18.96666666666667,
+          "significant": false
+        }
+      ]
+    },
+    "refactor": {
+      "n_per_arm": 5,
+      "sigma_pool": 22.12599750576231,
+      "mde_pts": 44.024266138231425,
+      "rank1_lead_pts": 2.1500000000000057,
+      "rank1_lead_significant": false,
+      "consec_gaps": [
+        {
+          "a": "pure",
+          "b": "claudekit",
+          "gap": 2.1500000000000057,
+          "significant": false
+        },
+        {
+          "a": "claudekit",
+          "b": "bmad",
+          "gap": 0.29999999999998295,
+          "significant": false
+        },
+        {
+          "a": "bmad",
+          "b": "superpower",
+          "gap": 0.18333333333333712,
+          "significant": false
+        },
+        {
+          "a": "superpower",
+          "b": "compound",
+          "gap": 3.14166666666668,
+          "significant": false
+        },
+        {
+          "a": "compound",
+          "b": "ecc",
+          "gap": 0.8083333333333371,
+          "significant": false
+        },
+        {
+          "a": "ecc",
+          "b": "omc",
+          "gap": 3.4999999999999716,
+          "significant": false
+        },
+        {
+          "a": "omc",
+          "b": "gstack",
+          "gap": 25.191666666666663,
+          "significant": false
+        }
+      ],
+      "gaps_from_rank1": [
+        {
+          "top": "pure",
+          "vs": "claudekit",
+          "gap": 2.1500000000000057,
+          "significant": false
+        },
+        {
+          "top": "pure",
+          "vs": "bmad",
+          "gap": 2.4499999999999886,
+          "significant": false
+        },
+        {
+          "top": "pure",
+          "vs": "superpower",
+          "gap": 2.6333333333333258,
+          "significant": false
+        },
+        {
+          "top": "pure",
+          "vs": "compound",
+          "gap": 5.775000000000006,
+          "significant": false
+        },
+        {
+          "top": "pure",
+          "vs": "ecc",
+          "gap": 6.583333333333343,
+          "significant": false
+        },
+        {
+          "top": "pure",
+          "vs": "omc",
+          "gap": 10.083333333333314,
+          "significant": false
+        },
+        {
+          "top": "pure",
+          "vs": "gstack",
+          "gap": 35.27499999999998,
+          "significant": false
+        }
+      ]
+    }
+  }
+}

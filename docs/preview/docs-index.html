@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>docs/ — Folder Index</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/README.md" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="docs-benchmark-documentation" tabindex="-1"><a class="header-anchor" href="#docs-benchmark-documentation"><span>docs/ — Benchmark Documentation</span></a></h1>
+<p>Everything a reader needs to understand, reproduce, extend, or critique the benchmark.</p>
+<p>This folder is organized by <em>reader intent</em>. The top-level <a href="readme.html"><code>README.md</code></a> and <a href="paper.html"><code>PAPER.md</code></a> are the author-facing entry points; this folder is the reader-facing reference set.</p>
+<hr>
+<h2 id="map" tabindex="-1"><a class="header-anchor" href="#map"><span>Map</span></a></h2>
+<h3 id="guides-how-do-i" tabindex="-1"><a class="header-anchor" href="#guides-how-do-i"><span>guides/ — “How do I …?”</span></a></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="guide-quickstart.html"><code>guides/quickstart.md</code></a></td>
+<td>How do I clone this repo and run one task end-to-end in ~10 minutes?</td>
+</tr>
+<tr>
+<td><a href="guide-verification.html"><code>guides/verification.md</code></a></td>
+<td>How do I independently verify a specific claim (e.g. “why is <code>pure</code> rank-1 on refactor”)?</td>
+</tr>
+<tr>
+<td><a href="guide-extending.html"><code>guides/extending.md</code></a></td>
+<td>How do I add a new tool or a new judge to the panel?</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tools-what-is-each-setup-actually" tabindex="-1"><a class="header-anchor" href="#tools-what-is-each-setup-actually"><span>tools/ — “What is each setup, actually?”</span></a></h3>
+<p>Per-tool profile: version, upstream repo, mechanism (skills/hooks/prompts), what each trial loaded, observed strengths and failure modes.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Tool</th>
+<th>Mechanism</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="tool-README.html"><code>tools/README.md</code></a></td>
+<td>—</td>
+<td>Comparison matrix across all 8 tools (mechanism taxonomy, per-task winners, failure modes)</td>
+</tr>
+<tr>
+<td><a href="tool-bmad.html"><code>tools/bmad.md</code></a></td>
+<td><code>bmad</code></td>
+<td>Role-based multi-agent (<code>/bmad-quick-dev</code>)</td>
+</tr>
+<tr>
+<td><a href="tool-claudekit.html"><code>tools/claudekit.md</code></a></td>
+<td><code>claudekit</code></td>
+<td>Skill pack + hook gates (<code>/ck:cook --auto</code>)</td>
+</tr>
+<tr>
+<td><a href="tool-compound.html"><code>tools/compound.md</code></a></td>
+<td><code>compound</code></td>
+<td>Multi-agent pipeline (<code>/lfg</code>)</td>
+</tr>
+<tr>
+<td><a href="tool-ecc.html"><code>tools/ecc.md</code></a></td>
+<td><code>ecc</code></td>
+<td>Plugin pack (<code>/everything-claude-code:plan</code>, <code>/build-fix</code>)</td>
+</tr>
+<tr>
+<td><a href="tool-gstack.html"><code>tools/gstack.md</code></a></td>
+<td><code>gstack</code></td>
+<td>Product-team simulator (<code>/autoplan</code>, <code>/investigate</code>, <code>/ship</code>)</td>
+</tr>
+<tr>
+<td><a href="tool-omc.html"><code>tools/omc.md</code></a></td>
+<td><code>omc</code></td>
+<td>Meta-orchestrator (<code>/oh-my-claudecode:autopilot</code>)</td>
+</tr>
+<tr>
+<td><a href="tool-pure.html"><code>tools/pure.md</code></a></td>
+<td><code>pure</code></td>
+<td>Vanilla Claude Code, no addons</td>
+</tr>
+<tr>
+<td><a href="tool-superpower.html"><code>tools/superpower.md</code></a></td>
+<td><code>superpower</code></td>
+<td>Skill registry (<code>/superpowers:*</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="analysis-what-did-we-learn" tabindex="-1"><a class="header-anchor" href="#analysis-what-did-we-learn"><span>analysis/ — “What did we learn?”</span></a></h3>
+<p>Rank-order alone is low-signal once the top-cluster intervals overlap. This folder holds the <em>why</em>.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="analysis-feature-cohort.html"><code>analysis/feature-cohort.md</code></a></td>
+<td>Feature-cohort cross-tool analysis: where the top cluster separates, where it ties, and what the session transcripts show about the planning/orchestration patterns that drove it.</td>
+</tr>
+<tr>
+<td><a href="analysis-skill-cost-efficiency.html"><code>analysis/skill-cost-efficiency.md</code></a></td>
+<td>Per-skill <code>output_tokens / score</code> and <code>output_tokens / line</code> on the feature cohort, derived from <code>attributionSkill</code> × <code>message.usage</code> in the session JSONLs. ecc clears both efficiency bars; superpower is the 6,353 tok/pt outlier; pure is the zero-skill-burn null.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pre-publish-runbook" tabindex="-1"><a class="header-anchor" href="#pre-publish-runbook"><span>Pre-publish runbook</span></a></h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="rerun-pre-publish.html"><code>RERUN-PRE-PUBLISH.md</code></a></td>
+<td>Operator runbook for the harness patches applied before the published cohort: R1 sweep behaviour, blind-eval scrubs, σ decomposition, and the verification commands to confirm no fingerprint leaks.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="preview-rendered-markdown-for-the-site" tabindex="-1"><a class="header-anchor" href="#preview-rendered-markdown-for-the-site"><span>preview/ — rendered markdown for the site</span></a></h3>
+<p>HTML renders of every docs markdown file so readers can view them in-browser without leaving the landing page. Rebuilt via <code>node tooling/render-md-previews.mjs</code> whenever the source markdown changes.</p>
+<h3 id="landing-page-served-from-this-folder" tabindex="-1"><a class="header-anchor" href="#landing-page-served-from-this-folder"><span>Landing page (served from this folder)</span></a></h3>
+<p><code>index.html</code>, <code>styles.css</code>, <code>favicon.svg</code>, <code>_headers</code> are served by Cloudflare Pages from the <code>docs/</code> root. The canonical public URL is <a href="https://claude-tool-benchmark.pages.dev/"><code>https://claude-tool-benchmark.pages.dev/</code></a>.</p>
+<hr>
+<h2 id="reader-routes" tabindex="-1"><a class="header-anchor" href="#reader-routes"><span>Reader routes</span></a></h2>
+<ul>
+<li><strong>“I just want the numbers.”</strong> → <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/final-report.md"><code>../results/final-report.md</code></a> (feature, tabular) plus <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/bugfix/final-report.md"><code>../results/bugfix/final-report.md</code></a> and <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/refactor/final-report.md"><code>../results/refactor/final-report.md</code></a>, or <a href="paper.html"><code>../PAPER.md</code></a> (narrative).</li>
+<li><strong>“I want to verify a specific claim.”</strong> → <a href="guide-verification.html"><code>guides/verification.md</code></a>.</li>
+<li><strong>“I want to re-run one trial.”</strong> → <a href="guide-quickstart.html"><code>guides/quickstart.md</code></a>, or <a href="paper.html"><code>../PAPER.md</code></a> §6 for the full command sequence.</li>
+<li><strong>“I want to understand what each tool actually does.”</strong> → <a href="tool-README.html"><code>tools/README.md</code></a> (comparison), then the per-tool profile that catches your eye.</li>
+<li><strong>“I want the <em>learnings</em>, not the ranks.”</strong> → <a href="analysis-feature-cohort.html"><code>analysis/feature-cohort.md</code></a>.</li>
+<li><strong>“I want to add my own tool or judge.”</strong> → <a href="guide-extending.html"><code>guides/extending.md</code></a>.</li>
+</ul>
+<hr>
+<h2 id="upstream-references" tabindex="-1"><a class="header-anchor" href="#upstream-references"><span>Upstream references</span></a></h2>
+<p>The two foundational docs live at the repo root, not here, because they’re the public interface of the project:</p>
+<ul>
+<li><a href="readme.html"><code>../README.md</code></a> — TL;DR + TOC + caveats headline.</li>
+<li><a href="paper.html"><code>../PAPER.md</code></a> — research-paper-style full report.</li>
+</ul>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/README.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

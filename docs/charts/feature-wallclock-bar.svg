@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570 298" role="img" aria-label="Feature task — wall-clock minutes per setup (sorted)" style="font-family:Inter,system-ui,sans-serif;">
+<text x="110" y="24" font-size="15" font-weight="600" fill="#0f172a">Feature task — wall-clock minutes per setup (sorted)</text>
+<text x="110" y="44" font-size="11" fill="#64748b">Mean across 3 trials. Wall-clock = first→last assistant timestamp in the session.</text>
+<text x="102" y="81.0" text-anchor="end" font-size="12" fill="#0f172a">ecc</text>
+<rect x="110" y="68" width="380.0" height="16" fill="#1f4ed8" rx="2" />
+<text x="496.0" y="81.0" font-size="12" fill="#0f172a">634.1 min</text>
+<text x="102" y="107.0" text-anchor="end" font-size="12" fill="#0f172a">superpower</text>
+<rect x="110" y="94" width="137.5667833601413" height="16" fill="#1f4ed8" rx="2" />
+<text x="253.5667833601413" y="107.0" font-size="12" fill="#0f172a">229.6 min</text>
+<text x="102" y="133.0" text-anchor="end" font-size="12" fill="#0f172a">omc</text>
+<rect x="110" y="120" width="133.95338568770305" height="16" fill="#1f4ed8" rx="2" />
+<text x="249.95338568770305" y="133.0" font-size="12" fill="#0f172a">223.5 min</text>
+<text x="102" y="159.0" text-anchor="end" font-size="12" fill="#0f172a">claudekit</text>
+<rect x="110" y="146" width="58.22184375689911" height="16" fill="#1f4ed8" rx="2" />
+<text x="174.22184375689912" y="159.0" font-size="12" fill="#0f172a">97.2 min</text>
+<text x="102" y="185.0" text-anchor="end" font-size="12" fill="#0f172a">gstack</text>
+<rect x="110" y="172" width="24.556722490301823" height="16" fill="#1f4ed8" rx="2" />
+<text x="140.5567224903018" y="185.0" font-size="12" fill="#0f172a">41.0 min</text>
+<text x="102" y="211.0" text-anchor="end" font-size="12" fill="#0f172a">pure</text>
+<rect x="110" y="198" width="20.61374459898445" height="16" fill="#1f4ed8" rx="2" />
+<text x="136.61374459898445" y="211.0" font-size="12" fill="#0f172a">34.4 min</text>
+<text x="102" y="237.0" text-anchor="end" font-size="12" fill="#0f172a">compound</text>
+<rect x="110" y="224" width="13.183208755164475" height="16" fill="#1f4ed8" rx="2" />
+<text x="129.18320875516446" y="237.0" font-size="12" fill="#0f172a">22 min</text>
+<text x="102" y="263.0" text-anchor="end" font-size="12" fill="#0f172a">bmad</text>
+<rect x="110" y="250" width="12.829659065821428" height="16" fill="#1f4ed8" rx="2" />
+<text x="128.82965906582143" y="263.0" font-size="12" fill="#0f172a">21.4 min</text>
+</svg>
