@@ -90,4 +90,18 @@ See **[PAPER.md §4](https://github.com/infina-pfa/claude-tool-benchmark/blob/ma
 
 ## License
 
-Results and methodology published openly for reference and independent re-analysis. See individual files for upstream tool licenses. Source repository: [infina-pfa/claude-tool-benchmark](https://github.com/infina-pfa/claude-tool-benchmark).
+Released under the MIT License — see [`LICENSE`](LICENSE). Copyright © 2026 Infina. Refer to each upstream tool for its own license. Source repository: [infina-pfa/claude-tool-benchmark](https://github.com/infina-pfa/claude-tool-benchmark).
+
+## Citation
+
+If you reference this benchmark, please cite:
+
+```bibtex
+@misc{infina2026claudetoolbenchmark,
+  title        = {AI Coding Tool Benchmark: Blind, Multi-Judge Evaluation of Claude Code Setups},
+  author       = {{Infina}},
+  year         = {2026},
+  howpublished = {\url{https://claude-tool-benchmark.pages.dev/}},
+  note         = {Tool-version snapshot 2026-05; base model \texttt{claude-opus-4-7}}
+}
+```
