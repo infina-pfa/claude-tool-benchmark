@@ -37,6 +37,14 @@ JUDGE_PAIRS = list(itertools.combinations(JUDGES, 2))
 ROUND_RE = re.compile(r'^round[0-9]+$')
 
 
+def _read_base_model():
+    try:
+        with open(os.path.join(REPO, 'versions.lock.json')) as f:
+            return json.load(f).get('base_model', 'unknown')
+    except Exception:
+        return 'unknown'
+
+
 def load_task(task):
     """Return dict of records: label, tool, trial, round, judge, score.
 
@@ -385,8 +393,10 @@ def main():
             top4_overlap_tasks += 1
     L.append(f"- **Top-4 spread:** {spread_top4:.3f} z. Top-4 pairwise 95% CIs overlap on "
              f"{top4_overlap_tasks}/{len(TASKS)} tasks — treat top-4 as a tier, not a strict ranking.")
-    L.append(f"- **Outlier:** superpower at z̄={combined['superpower']['z_mean']:+.3f}, "
-             f"driven by bugfix (z={per_task_z['bugfix']['superpower']:+.3f}).")
+    outlier_tool = max(combined, key=lambda t: abs(combined[t]['z_mean']))
+    outlier_task = max(TASKS, key=lambda t: abs(per_task_z[t][outlier_tool]))
+    L.append(f"- **Largest |z̄| tool:** {outlier_tool} at z̄={combined[outlier_tool]['z_mean']:+.3f}, "
+             f"largest single-task deviation on {outlier_task} (z={per_task_z[outlier_task][outlier_tool]:+.3f}).")
     L.append('')
 
     L.append('## 1. Combined Ranking — z̄ and Rank-Sum')
@@ -561,8 +571,8 @@ def main():
     L.append(f'*Δ per (task, tool) = opus judge mean − mean({others_label}) on that (task, tool) cell. '
              'This statistic measures whether the opus judge scores artifacts systematically '
              'above or below the non-Anthropic judges, and whether that drift varies across tools. '
-             '**Identification note:** all nine executors use the same Anthropic base model '
-             '(`claude-opus-4-6`), so this design has no non-Anthropic executor control. '
+             '**Identification note:** every executor uses the same Anthropic base model '
+             f'(`{_read_base_model()}`), so this design has no non-Anthropic executor control. '
              'A uniform Δ is therefore indistinguishable from simple judge-calibration drift; '
              'a tool-specific Δ would be needed to flag family favoritism. Treat a small, '
              'tool-invariant Δ as inconclusive on self-preference, not as evidence of its absence.*')
@@ -603,23 +613,30 @@ def main():
              'are still high-variance at small n.*')
     L.append('')
 
-    L.append('## 8. Key Findings')
+    L.append('## 8. Reading the Results')
     L.append('')
-    L.append('1. **Top-4 is a statistical tie.** bmad, ecc, pure, gstack sit within '
+    L.append('How to read this report on your cohort. The numbers below come from your data; the prose is generic guidance.')
+    L.append('')
+    _topk = min(4, len(ranked))
+    _top_names = ', '.join(ranked[:_topk])
+    L.append(f"1. **Tier reading.** The top-{_topk} (`{_top_names}`) sit within "
              f"{spread_top4:.2f} z across tasks; their pairwise 95% CIs overlap on "
-             f"{top4_overlap_tasks}/{len(TASKS)} tasks.")
-    L.append('2. **superpower is the only outlier**, at z̄ = '
-             f"{combined['superpower']['z_mean']:+.3f}. Driven entirely by bugfix "
-             f"(z={per_task_z['bugfix']['superpower']:+.3f}); mid-pack on feature and refactor.")
-    L.append('3. **pure (baseline) is top-4.** The null hypothesis "enhancement frameworks add no measurable quality over Claude Code baseline" is not rejected at this precision. Tools may still add value on cost, speed, or DX — not captured here.')
-    L.append('4. **Judge calibration differs by ±25 points** but rank orders agree on feature and bugfix. On refactor inter-judge ρ is ≈ 0 — the cohort is too compressed for judges to discriminate. Rankings on refactor are noise-dominated and should not be cited in isolation.')
-    L.append('5. **Judge calibration asymmetry is small and tool-invariant.** opus drifts against the non-Anthropic pair by single-digit points per task with little tool-specific variation, consistent with calibration drift rather than tool-specific self-preference. Family-level self-preference is **not identified** by this design (all executors share `claude-opus-4-6` as base) — any claim of "no self-preference bias" would overstate what this corpus can show.')
+             f"{top4_overlap_tasks}/{len(TASKS)} tasks. When CI-overlap is high, treat them as a tier rather than a strict ranking.")
+    _outlier_t = max(combined, key=lambda t: abs(combined[t]['z_mean']))
+    _outlier_task = max(TASKS, key=lambda t: abs(per_task_z[t][_outlier_t]))
+    L.append(f"2. **Largest |z̄| tool.** `{_outlier_t}` at z̄={combined[_outlier_t]['z_mean']:+.3f}, "
+             f"largest single-task deviation on **{_outlier_task}** (z={per_task_z[_outlier_task][_outlier_t]:+.3f}). "
+             f"Inspect that (tool, task) cell directly before drawing conclusions.")
+    L.append('3. **Baseline framing.** If your `TOOLS` array includes a no-addon baseline (e.g. `pure`), its rank tells you whether enhancement frameworks add measurable quality over the base executor on this cohort. Tools may still add value on cost, speed, or DX — those axes are not captured here.')
+    L.append('4. **Judge calibration vs. rank agreement.** Per-judge mean offsets can differ by tens of points without changing rank order; the question is whether rank orders agree across judges (Spearman ρ, §6). Low inter-judge ρ on a task means the cohort is too compressed for judges to discriminate — rankings on that task are noise-dominated.')
+    L.append('5. **Self-preference is not identified.** This design uses a single Anthropic executor base for all tools, so a uniform opus offset is indistinguishable from calibration drift. Family-level self-preference cannot be ruled out from this data — see §6 for the calibration-asymmetry check.')
     L.append('')
 
+    _base_model = _read_base_model()
     L.append('## 9. Caveats')
     L.append('')
-    L.append('- **Language/codebase:** single TypeScript codebase; results may not generalize to Python/Go/Rust.')
-    L.append('- **Base-model scope:** single executor base (`claude-opus-4-6`); rankings may differ on other bases.')
+    L.append('- **Language/codebase:** results may not generalize beyond the target repo language and codebase pinned in `versions.lock.json`.')
+    L.append(f'- **Base-model scope:** single executor base (`{_base_model}`); rankings may differ on other bases.')
     L.append('- **Small-n cells:** bugfix and refactor have 18 judgments per (tool, task) cell = 2 trials × 3 rounds × 3 judges; 6 observations per judge stratum. Percentile-bootstrap CI coverage at n=6 per stratum is approximate; treat close calls as inconclusive.')
     L.append('- **Pseudoreplication risk:** the stratified bootstrap treats each (trial, round, judge) score as an independent draw, but rounds re-judge the same artifact. That inflates apparent precision relative to a trial-clustered resampling. The qualitative separations reported here (superpower/bugfix, tier boundaries) are robust to this; close pairwise calls should not be cited as "significant."')
     L.append('- **Judge sampling not pinned:** judge CLIs are not configured with temperature=0 or sampler seed. Round-to-round σ partially reflects sampler variance rather than reasoning variance; three-judge averaging is the intended mitigation.')

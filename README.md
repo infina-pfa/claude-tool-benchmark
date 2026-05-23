@@ -99,7 +99,7 @@ If you reference this benchmark, please cite:
 ```bibtex
 @misc{infina2026claudetoolbenchmark,
   title        = {AI Coding Tool Benchmark: Blind, Multi-Judge Evaluation of Claude Code Setups},
-  author       = {{Infina}},
+  author       = {Quang Tran (Infina)},
   year         = {2026},
   howpublished = {\url{https://claude-tool-benchmark.pages.dev/}},
   note         = {Tool-version snapshot 2026-05; base model \texttt{claude-opus-4-7}}
