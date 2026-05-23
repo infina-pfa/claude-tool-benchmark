@@ -1,0 +1,117 @@
+{
+  "tool": "gstack",
+  "task": "feature",
+  "trial": "t3",
+  "paths": [
+    "results/gstack/t3/session-logs/53a3e475-d692-4054-89d5-edd2a12f8a87.jsonl",
+    "results/gstack/t3/session-logs/subagents/agent-a1698f9e7c4b6d7da.jsonl",
+    "results/gstack/t3/session-logs/subagents/agent-a4e658b58a09ee8c4.jsonl",
+    "results/gstack/t3/session-logs/subagents/agent-a757f4de7c2e52546.jsonl",
+    "results/gstack/t3/session-logs/subagents/agent-af954c267d64c22e1.jsonl"
+  ],
+  "main_turns": 199,
+  "sidechain_turns": 67,
+  "wall_clock_min": 41.98,
+  "first_ts": "2026-05-09T08:54:11.211Z",
+  "last_ts": "2026-05-09T09:36:10.201Z",
+  "input_tokens": 7967,
+  "output_tokens": 140482,
+  "cache_read_tokens": 34776100,
+  "cache_creation_tokens": 906939,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "autoplan": 106,
+    "ship": 29
+  },
+  "slash_commands": [
+    "/autoplan",
+    "/ship"
+  ],
+  "tools": {
+    "Bash": 68,
+    "TaskUpdate": 30,
+    "Read": 26,
+    "TaskCreate": 15,
+    "Edit": 15,
+    "Write": 10,
+    "Agent": 4,
+    "AskUserQuestion": 3,
+    "TaskList": 2,
+    "ToolSearch": 1
+  },
+  "bash_commands_top": [
+    [
+      "find",
+      19
+    ],
+    [
+      "npx",
+      14
+    ],
+    [
+      "grep",
+      11
+    ],
+    [
+      "git",
+      9
+    ],
+    [
+      "ls",
+      5
+    ],
+    [
+      "gstack-update-check",
+      1
+    ],
+    [
+      "eval",
+      1
+    ],
+    [
+      "PLAN_FILE=$(cat",
+      1
+    ],
+    [
+      "command",
+      1
+    ],
+    [
+      "_REPO_ROOT=$(git",
+      1
+    ]
+  ],
+  "subagent_dispatches": 4,
+  "subagent_types": {
+    "general-purpose": 3,
+    "Explore": 1
+  },
+  "files_read": 26,
+  "files_edited": 15,
+  "files_written": 10,
+  "distinct_files_read": 17,
+  "distinct_files_edited": 13,
+  "tool_config_reads": 0,
+  "target_repo_reads": 26,
+  "tool_config_edits": 0,
+  "target_repo_edits": 25,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "autoplan": {
+      "turns": 106,
+      "input": 252,
+      "output": 51718,
+      "cache_read": 7184330,
+      "cache_creation": 503159
+    },
+    "ship": {
+      "turns": 29,
+      "input": 37,
+      "output": 11679,
+      "cache_read": 7379425,
+      "cache_creation": 139840
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "tool": "gstack",
+  "task": "bugfix",
+  "trial": "t3",
+  "paths": [
+    "results/bugfix/gstack/t3/session-logs/95d6dd91-11de-4efd-8b45-145d2bd32063.jsonl"
+  ],
+  "main_turns": 67,
+  "sidechain_turns": 0,
+  "wall_clock_min": 5.93,
+  "first_ts": "2026-05-10T09:46:15.522Z",
+  "last_ts": "2026-05-10T09:52:11.358Z",
+  "input_tokens": 77,
+  "output_tokens": 28389,
+  "cache_read_tokens": 7679759,
+  "cache_creation_tokens": 243742,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "investigate": 67
+  },
+  "slash_commands": [
+    "/investigate"
+  ],
+  "tools": {
+    "Bash": 33,
+    "Read": 8,
+    "Edit": 1,
+    "Write": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      14
+    ],
+    [
+      "yarn",
+      6
+    ],
+    [
+      "find",
+      4
+    ],
+    [
+      "npx",
+      3
+    ],
+    [
+      "cat",
+      2
+    ],
+    [
+      "sed",
+      2
+    ],
+    [
+      "git",
+      2
+    ]
+  ],
+  "subagent_dispatches": 0,
+  "subagent_types": {},
+  "files_read": 8,
+  "files_edited": 1,
+  "files_written": 1,
+  "distinct_files_read": 7,
+  "distinct_files_edited": 2,
+  "tool_config_reads": 0,
+  "target_repo_reads": 8,
+  "tool_config_edits": 0,
+  "target_repo_edits": 2,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "investigate": {
+      "turns": 67,
+      "input": 77,
+      "output": 28389,
+      "cache_read": 7679759,
+      "cache_creation": 243742
+    }
+  }
+}

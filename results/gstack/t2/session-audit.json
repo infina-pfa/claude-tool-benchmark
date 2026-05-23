@@ -1,0 +1,110 @@
+{
+  "tool": "gstack",
+  "task": "feature",
+  "trial": "t2",
+  "paths": [
+    "results/gstack/t2/session-logs/b4da0d1d-32bd-4e6b-bcbf-31b36f4fc436.jsonl",
+    "results/gstack/t2/session-logs/subagents/agent-aa26f6daa30a41be1.jsonl",
+    "results/gstack/t2/session-logs/subagents/agent-ac926a6591c95d6cd.jsonl"
+  ],
+  "main_turns": 161,
+  "sidechain_turns": 15,
+  "wall_clock_min": 41.71,
+  "first_ts": "2026-05-09T08:53:49.487Z",
+  "last_ts": "2026-05-09T09:35:32.341Z",
+  "input_tokens": 247,
+  "output_tokens": 151589,
+  "cache_read_tokens": 28506561,
+  "cache_creation_tokens": 741302,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "autoplan": 63,
+    "ship": 13
+  },
+  "slash_commands": [
+    "/autoplan",
+    "/ship"
+  ],
+  "tools": {
+    "Bash": 51,
+    "Read": 30,
+    "Edit": 20,
+    "Write": 6,
+    "AskUserQuestion": 2,
+    "Agent": 2
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      15
+    ],
+    [
+      "npx",
+      13
+    ],
+    [
+      "git",
+      7
+    ],
+    [
+      "ls",
+      4
+    ],
+    [
+      "find",
+      4
+    ],
+    [
+      "wc",
+      2
+    ],
+    [
+      "cd",
+      2
+    ],
+    [
+      "gstack-update-check",
+      1
+    ],
+    [
+      "eval",
+      1
+    ],
+    [
+      "timeout",
+      1
+    ]
+  ],
+  "subagent_dispatches": 2,
+  "subagent_types": {
+    "general-purpose": 2
+  },
+  "files_read": 30,
+  "files_edited": 20,
+  "files_written": 6,
+  "distinct_files_read": 22,
+  "distinct_files_edited": 10,
+  "tool_config_reads": 0,
+  "target_repo_reads": 30,
+  "tool_config_edits": 0,
+  "target_repo_edits": 26,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "autoplan": {
+      "turns": 63,
+      "input": 96,
+      "output": 67696,
+      "cache_read": 5796511,
+      "cache_creation": 488350
+    },
+    "ship": {
+      "turns": 13,
+      "input": 21,
+      "output": 8902,
+      "cache_read": 3649325,
+      "cache_creation": 137954
+    }
+  }
+}

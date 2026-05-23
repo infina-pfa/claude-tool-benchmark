@@ -1,0 +1,163 @@
+{
+  "tool": "omc",
+  "task": "feature",
+  "trial": "t1",
+  "paths": [
+    "results/omc/t1/session-logs/ad0830b3-5521-466a-b181-b13fd075716b.jsonl",
+    "results/omc/t1/session-logs/e453cd3a-d9cf-4384-af2f-f94b6153df8d.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a070f6610b1294b71.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a14c5aca1c3ff2513.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a186fabb3baae1abb.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a2aef6164c26e11fa.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a37fe730bd403db36.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a396361cf3c21993a.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a4c9727375a8f93bc.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a51179975b5b612b7.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a59f8e5d2d05feaf3.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a5aecab8bceeeb2ad.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a752df19a5720d00d.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a7c796911bf7ef0c2.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a7e54e513942ced39.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a8bb775aee9b92bdd.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-a8e6f3c2df8c99b04.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-aa0add2f2940d073c.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-aa18597b733234081.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-ae162ef25653957ec.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-ae6cb98a42b04a802.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-af97f1186cd0b2efd.jsonl",
+    "results/omc/t1/session-logs/subagents/agent-afdd1858a0152109c.jsonl"
+  ],
+  "main_turns": 156,
+  "sidechain_turns": 3360,
+  "wall_clock_min": 490.43,
+  "first_ts": "2026-05-09T08:40:16.409Z",
+  "last_ts": "2026-05-09T16:50:42.062Z",
+  "input_tokens": 14329,
+  "output_tokens": 1064343,
+  "cache_read_tokens": 408983971,
+  "cache_creation_tokens": 25696217,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "oh-my-claudecode:ralplan": 119,
+    "oh-my-claudecode:team": 31,
+    "oh-my-claudecode:hud": 22,
+    "oh-my-claudecode:omc-setup": 12,
+    "Skill:oh-my-claudecode:hud": 1
+  },
+  "slash_commands": [
+    "/oh-my-claudecode:omc-setup",
+    "/clear",
+    "/oh-my-claudecode:ralplan",
+    "/oh-my-claudecode:team",
+    "/login"
+  ],
+  "tools": {
+    "Bash": 1115,
+    "Read": 435,
+    "Edit": 275,
+    "Write": 84,
+    "TaskUpdate": 49,
+    "SendMessage": 33,
+    "ToolSearch": 28,
+    "TaskList": 28,
+    "TaskGet": 20,
+    "Agent": 11,
+    "TaskCreate": 6,
+    "AskUserQuestion": 3,
+    "Skill": 1,
+    "TeamCreate": 1,
+    "TeamDelete": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      528
+    ],
+    [
+      "find",
+      214
+    ],
+    [
+      "yarn",
+      102
+    ],
+    [
+      "npx",
+      62
+    ],
+    [
+      "ls",
+      61
+    ],
+    [
+      "cat",
+      56
+    ],
+    [
+      "git",
+      21
+    ],
+    [
+      "sed",
+      11
+    ],
+    [
+      "for",
+      10
+    ],
+    [
+      "node",
+      8
+    ]
+  ],
+  "subagent_dispatches": 11,
+  "subagent_types": {
+    "oh-my-claudecode:executor": 4,
+    "oh-my-claudecode:architect": 3,
+    "oh-my-claudecode:critic": 2,
+    "Explore": 1,
+    "oh-my-claudecode:planner": 1
+  },
+  "files_read": 435,
+  "files_edited": 275,
+  "files_written": 84,
+  "distinct_files_read": 88,
+  "distinct_files_edited": 56,
+  "tool_config_reads": 28,
+  "target_repo_reads": 407,
+  "tool_config_edits": 34,
+  "target_repo_edits": 325,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "oh-my-claudecode:omc-setup": {
+      "turns": 12,
+      "input": 65,
+      "output": 2742,
+      "cache_read": 516586,
+      "cache_creation": 77558
+    },
+    "oh-my-claudecode:hud": {
+      "turns": 22,
+      "input": 122,
+      "output": 8426,
+      "cache_read": 1419091,
+      "cache_creation": 28868
+    },
+    "oh-my-claudecode:ralplan": {
+      "turns": 119,
+      "input": 515,
+      "output": 29940,
+      "cache_read": 6240741,
+      "cache_creation": 1342139
+    },
+    "oh-my-claudecode:team": {
+      "turns": 31,
+      "input": 173,
+      "output": 41877,
+      "cache_read": 4091020,
+      "cache_creation": 719356
+    }
+  }
+}

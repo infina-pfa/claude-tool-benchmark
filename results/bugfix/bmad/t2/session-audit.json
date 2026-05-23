@@ -1,0 +1,83 @@
+{
+  "tool": "bmad",
+  "task": "bugfix",
+  "trial": "t2",
+  "paths": [
+    "results/bugfix/bmad/t2/session-logs/7d23a413-c1e4-4321-880c-c1659538baea.jsonl"
+  ],
+  "main_turns": 71,
+  "sidechain_turns": 0,
+  "wall_clock_min": 4.68,
+  "first_ts": "2026-05-10T11:20:04.474Z",
+  "last_ts": "2026-05-10T11:24:45.475Z",
+  "input_tokens": 81,
+  "output_tokens": 34917,
+  "cache_read_tokens": 5957839,
+  "cache_creation_tokens": 255839,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "bmad-quick-dev": 71
+  },
+  "slash_commands": [
+    "/bmad-quick-dev"
+  ],
+  "tools": {
+    "Bash": 32,
+    "Read": 13,
+    "Edit": 1,
+    "Write": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      14
+    ],
+    [
+      "yarn",
+      5
+    ],
+    [
+      "cat",
+      3
+    ],
+    [
+      "ls",
+      3
+    ],
+    [
+      "git",
+      3
+    ],
+    [
+      "find",
+      3
+    ],
+    [
+      "npx",
+      1
+    ]
+  ],
+  "subagent_dispatches": 0,
+  "subagent_types": {},
+  "files_read": 13,
+  "files_edited": 1,
+  "files_written": 1,
+  "distinct_files_read": 13,
+  "distinct_files_edited": 2,
+  "tool_config_reads": 1,
+  "target_repo_reads": 12,
+  "tool_config_edits": 0,
+  "target_repo_edits": 2,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "bmad-quick-dev": {
+      "turns": 71,
+      "input": 81,
+      "output": 34917,
+      "cache_read": 5957839,
+      "cache_creation": 255839
+    }
+  }
+}

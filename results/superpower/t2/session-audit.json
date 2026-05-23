@@ -1,0 +1,148 @@
+{
+  "tool": "superpower",
+  "task": "feature",
+  "trial": "t2",
+  "paths": [
+    "results/superpower/t2/session-logs/d34158ef-a216-4b16-b05a-2be180d928ee.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a0a30608aa3ca6b5c.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a12d7d345a6fd1e8c.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a212af15c9148c895.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a2aaa8a7b44b324db.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a3300a37bf36d3d5a.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a34f0bb5508b13d9d.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a3c72ad912d503720.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a428ed5f7941bfca5.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a487ab0056007bbbf.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a53ecf212ca02974a.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a5c2234d88fb1ec43.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a5d596a9b8d1b7d7c.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a6d975d5adfc76124.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a6e44a6cf2aaccc4e.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a7148bd1b1fe9e0ec.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a7c869c923f428bce.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a7cb6c7305ed9cf01.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-a87c65f8018ecc797.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-aaffc7532b819b0e8.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-ab5d1a6cc9d47402d.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-ab6a03b077d5f3899.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-ab9ccb998a491a9e1.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-abd73765b84370b90.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-ac8732cbb5f704dde.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-adbcaf337d0c07d67.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-ade8fb97a051ac1af.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-ae9304f2bff02808e.jsonl",
+    "results/superpower/t2/session-logs/subagents/agent-aea72f7710058de91.jsonl"
+  ],
+  "main_turns": 231,
+  "sidechain_turns": 1280,
+  "wall_clock_min": 398.72,
+  "first_ts": "2026-05-10T03:27:44.806Z",
+  "last_ts": "2026-05-10T10:06:28.287Z",
+  "input_tokens": 14257,
+  "output_tokens": 394743,
+  "cache_read_tokens": 89292297,
+  "cache_creation_tokens": 3357123,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "superpowers:subagent-driven-development": 1438,
+    "superpowers:brainstorming": 37,
+    "superpowers:writing-plans": 20,
+    "Skill:superpowers:brainstorming": 1,
+    "Skill:superpowers:writing-plans": 1,
+    "Skill:superpowers:subagent-driven-development": 1
+  },
+  "slash_commands": [],
+  "tools": {
+    "Bash": 660,
+    "Read": 149,
+    "Edit": 77,
+    "TaskUpdate": 34,
+    "Agent": 28,
+    "Write": 17,
+    "TaskCreate": 16,
+    "Skill": 3,
+    "AskUserQuestion": 2,
+    "ToolSearch": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      258
+    ],
+    [
+      "npx",
+      114
+    ],
+    [
+      "find",
+      75
+    ],
+    [
+      "git",
+      70
+    ],
+    [
+      "nx",
+      43
+    ],
+    [
+      "ls",
+      34
+    ],
+    [
+      "cat",
+      25
+    ],
+    [
+      "#",
+      14
+    ],
+    [
+      "sed",
+      4
+    ],
+    [
+      "head",
+      4
+    ]
+  ],
+  "subagent_dispatches": 28,
+  "subagent_types": {
+    "general-purpose": 28
+  },
+  "files_read": 149,
+  "files_edited": 77,
+  "files_written": 17,
+  "distinct_files_read": 65,
+  "distinct_files_edited": 37,
+  "tool_config_reads": 1,
+  "target_repo_reads": 148,
+  "tool_config_edits": 2,
+  "target_repo_edits": 92,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "superpowers:brainstorming": {
+      "turns": 37,
+      "input": 52,
+      "output": 19620,
+      "cache_read": 2219311,
+      "cache_creation": 78403
+    },
+    "superpowers:writing-plans": {
+      "turns": 20,
+      "input": 28,
+      "output": 56884,
+      "cache_read": 1896709,
+      "cache_creation": 72513
+    },
+    "superpowers:subagent-driven-development": {
+      "turns": 1438,
+      "input": 14101,
+      "output": 306762,
+      "cache_read": 84208693,
+      "cache_creation": 2865675
+    }
+  }
+}

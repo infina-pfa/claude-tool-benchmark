@@ -1,0 +1,117 @@
+{
+  "tool": "gstack",
+  "task": "refactor",
+  "trial": "t1",
+  "paths": [
+    "results/refactor/gstack/t1/session-logs/d6c96c6b-74fc-468e-a473-0cf1408c3f72.jsonl",
+    "results/refactor/gstack/t1/session-logs/subagents/agent-a2b8a0bf27f68d54b.jsonl",
+    "results/refactor/gstack/t1/session-logs/subagents/agent-a9760cd66f5dc3261.jsonl",
+    "results/refactor/gstack/t1/session-logs/subagents/agent-abfd92f3a5728c27c.jsonl",
+    "results/refactor/gstack/t1/session-logs/subagents/agent-ac80b25ee1ab05914.jsonl"
+  ],
+  "main_turns": 320,
+  "sidechain_turns": 86,
+  "wall_clock_min": 72.66,
+  "first_ts": "2026-05-11T07:33:15.814Z",
+  "last_ts": "2026-05-11T08:45:55.432Z",
+  "input_tokens": 611,
+  "output_tokens": 219134,
+  "cache_read_tokens": 78233960,
+  "cache_creation_tokens": 1467681,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "ship": 258,
+    "autoplan": 148
+  },
+  "slash_commands": [
+    "/autoplan",
+    "/ship",
+    "/ship"
+  ],
+  "tools": {
+    "Bash": 113,
+    "Read": 43,
+    "Edit": 42,
+    "TaskUpdate": 20,
+    "Write": 16,
+    "TaskCreate": 10,
+    "AskUserQuestion": 5,
+    "Agent": 4,
+    "ToolSearch": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      44
+    ],
+    [
+      "git",
+      18
+    ],
+    [
+      "find",
+      15
+    ],
+    [
+      "ls",
+      10
+    ],
+    [
+      "cat",
+      8
+    ],
+    [
+      "npx",
+      6
+    ],
+    [
+      "yarn",
+      5
+    ],
+    [
+      "head",
+      2
+    ],
+    [
+      "eval",
+      1
+    ],
+    [
+      "SLUG=\"ai-tool-benchmark-runs-refactor-gstack-t1\"",
+      1
+    ]
+  ],
+  "subagent_dispatches": 4,
+  "subagent_types": {
+    "general-purpose": 3,
+    "Explore": 1
+  },
+  "files_read": 43,
+  "files_edited": 42,
+  "files_written": 16,
+  "distinct_files_read": 21,
+  "distinct_files_edited": 26,
+  "tool_config_reads": 0,
+  "target_repo_reads": 43,
+  "tool_config_edits": 0,
+  "target_repo_edits": 58,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "autoplan": {
+      "turns": 148,
+      "input": 319,
+      "output": 92570,
+      "cache_read": 10502889,
+      "cache_creation": 762818
+    },
+    "ship": {
+      "turns": 258,
+      "input": 292,
+      "output": 126564,
+      "cache_read": 67731071,
+      "cache_creation": 704863
+    }
+  }
+}

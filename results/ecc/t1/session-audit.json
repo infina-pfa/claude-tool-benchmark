@@ -1,0 +1,98 @@
+{
+  "tool": "ecc",
+  "task": "feature",
+  "trial": "t1",
+  "paths": [
+    "results/ecc/t1/session-logs/10cf41cd-ebb3-472a-9108-598ffd56151b.jsonl"
+  ],
+  "main_turns": 258,
+  "sidechain_turns": 0,
+  "wall_clock_min": 633.07,
+  "first_ts": "2026-05-09T17:03:33.655Z",
+  "last_ts": "2026-05-10T03:36:37.706Z",
+  "input_tokens": 378,
+  "output_tokens": 171989,
+  "cache_read_tokens": 47477081,
+  "cache_creation_tokens": 1205074,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "everything-claude-code:plan": 18
+  },
+  "slash_commands": [
+    "/everything-claude-code:plan"
+  ],
+  "tools": {
+    "Bash": 63,
+    "Edit": 39,
+    "Read": 30,
+    "TaskUpdate": 26,
+    "TaskCreate": 13,
+    "Write": 5,
+    "ToolSearch": 1
+  },
+  "bash_commands_top": [
+    [
+      "npx",
+      24
+    ],
+    [
+      "grep",
+      21
+    ],
+    [
+      "ls",
+      5
+    ],
+    [
+      "find",
+      3
+    ],
+    [
+      "yarn",
+      3
+    ],
+    [
+      "cat",
+      2
+    ],
+    [
+      "sed",
+      2
+    ],
+    [
+      "head",
+      1
+    ],
+    [
+      "git",
+      1
+    ],
+    [
+      "Ho_Chi_Minh'",
+      1
+    ]
+  ],
+  "subagent_dispatches": 0,
+  "subagent_types": {},
+  "files_read": 30,
+  "files_edited": 39,
+  "files_written": 5,
+  "distinct_files_read": 18,
+  "distinct_files_edited": 11,
+  "tool_config_reads": 0,
+  "target_repo_reads": 30,
+  "tool_config_edits": 0,
+  "target_repo_edits": 44,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "everything-claude-code:plan": {
+      "turns": 18,
+      "input": 28,
+      "output": 14522,
+      "cache_read": 1259126,
+      "cache_creation": 165242
+    }
+  }
+}

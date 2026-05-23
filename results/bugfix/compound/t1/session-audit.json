@@ -1,0 +1,123 @@
+{
+  "tool": "compound",
+  "task": "bugfix",
+  "trial": "t1",
+  "paths": [
+    "results/bugfix/compound/t1/session-logs/71e4860a-cb76-429d-a92f-13278f04ecec.jsonl"
+  ],
+  "main_turns": 102,
+  "sidechain_turns": 0,
+  "wall_clock_min": 9.75,
+  "first_ts": "2026-05-10T10:10:03.329Z",
+  "last_ts": "2026-05-10T10:19:48.361Z",
+  "input_tokens": 138,
+  "output_tokens": 42931,
+  "cache_read_tokens": 14180334,
+  "cache_creation_tokens": 404666,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "compound-engineering:ce-work": 56,
+    "compound-engineering:ce-plan": 37,
+    "compound-engineering:ce-code-review": 7,
+    "compound-engineering:lfg": 2,
+    "Skill:compound-engineering:ce-plan": 1,
+    "Skill:compound-engineering:ce-work": 1,
+    "Skill:compound-engineering:ce-code-review": 1
+  },
+  "slash_commands": [
+    "/compound-engineering:lfg"
+  ],
+  "tools": {
+    "Bash": 50,
+    "Read": 14,
+    "Skill": 3,
+    "Write": 2,
+    "Edit": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      14
+    ],
+    [
+      "npx",
+      11
+    ],
+    [
+      "yarn",
+      7
+    ],
+    [
+      "git",
+      6
+    ],
+    [
+      "cd",
+      5
+    ],
+    [
+      "cat",
+      2
+    ],
+    [
+      "find",
+      2
+    ],
+    [
+      "ls",
+      1
+    ],
+    [
+      "mkdir",
+      1
+    ],
+    [
+      "pwd",
+      1
+    ]
+  ],
+  "subagent_dispatches": 0,
+  "subagent_types": {},
+  "files_read": 14,
+  "files_edited": 1,
+  "files_written": 2,
+  "distinct_files_read": 13,
+  "distinct_files_edited": 3,
+  "tool_config_reads": 0,
+  "target_repo_reads": 14,
+  "tool_config_edits": 0,
+  "target_repo_edits": 3,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "compound-engineering:lfg": {
+      "turns": 2,
+      "input": 10,
+      "output": 406,
+      "cache_read": 31554,
+      "cache_creation": 68856
+    },
+    "compound-engineering:ce-plan": {
+      "turns": 37,
+      "input": 45,
+      "output": 15107,
+      "cache_read": 3539907,
+      "cache_creation": 131434
+    },
+    "compound-engineering:ce-work": {
+      "turns": 56,
+      "input": 64,
+      "output": 20782,
+      "cache_read": 9167119,
+      "cache_creation": 102479
+    },
+    "compound-engineering:ce-code-review": {
+      "turns": 7,
+      "input": 19,
+      "output": 6636,
+      "cache_read": 1441754,
+      "cache_creation": 101897
+    }
+  }
+}

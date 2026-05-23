@@ -1,0 +1,86 @@
+{
+  "tool": "superpower",
+  "task": "refactor",
+  "trial": "t2",
+  "paths": [
+    "results/refactor/superpower/t2/session-logs/f5815525-03d4-4035-b2c4-42fd469bb415.jsonl",
+    "results/refactor/superpower/t2/session-logs/subagents/agent-a9befa67ed9011a3c.jsonl"
+  ],
+  "main_turns": 136,
+  "sidechain_turns": 52,
+  "wall_clock_min": 219.55,
+  "first_ts": "2026-05-11T10:14:39.416Z",
+  "last_ts": "2026-05-11T13:54:12.381Z",
+  "input_tokens": 362,
+  "output_tokens": 80540,
+  "cache_read_tokens": 18033717,
+  "cache_creation_tokens": 739239,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "superpowers:brainstorming": 63,
+    "Skill:superpowers:brainstorming": 1
+  },
+  "slash_commands": [],
+  "tools": {
+    "Bash": 48,
+    "Read": 35,
+    "Edit": 15,
+    "TaskUpdate": 14,
+    "TaskCreate": 7,
+    "Write": 7,
+    "Skill": 1,
+    "Agent": 1,
+    "ToolSearch": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      19
+    ],
+    [
+      "find",
+      13
+    ],
+    [
+      "yarn",
+      6
+    ],
+    [
+      "git",
+      4
+    ],
+    [
+      "ls",
+      4
+    ],
+    [
+      "cat",
+      2
+    ]
+  ],
+  "subagent_dispatches": 1,
+  "subagent_types": {
+    "Explore": 1
+  },
+  "files_read": 35,
+  "files_edited": 15,
+  "files_written": 7,
+  "distinct_files_read": 19,
+  "distinct_files_edited": 14,
+  "tool_config_reads": 0,
+  "target_repo_reads": 35,
+  "tool_config_edits": 0,
+  "target_repo_edits": 22,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "superpowers:brainstorming": {
+      "turns": 63,
+      "input": 198,
+      "output": 22036,
+      "cache_read": 2622586,
+      "cache_creation": 172193
+    }
+  }
+}

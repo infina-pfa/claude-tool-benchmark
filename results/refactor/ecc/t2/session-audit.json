@@ -1,0 +1,91 @@
+{
+  "tool": "ecc",
+  "task": "refactor",
+  "trial": "t2",
+  "paths": [
+    "results/refactor/ecc/t2/session-logs/6df6d0e6-e3e6-48d2-a36c-9a7faaa77d84.jsonl",
+    "results/refactor/ecc/t2/session-logs/subagents/agent-a5aa9f62147f53e76.jsonl"
+  ],
+  "main_turns": 180,
+  "sidechain_turns": 31,
+  "wall_clock_min": 28.34,
+  "first_ts": "2026-05-11T08:06:21.877Z",
+  "last_ts": "2026-05-11T08:34:42.261Z",
+  "input_tokens": 241,
+  "output_tokens": 102750,
+  "cache_read_tokens": 29002086,
+  "cache_creation_tokens": 438760,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "everything-claude-code:plan": 37
+  },
+  "slash_commands": [
+    "/everything-claude-code:plan"
+  ],
+  "tools": {
+    "Bash": 62,
+    "Edit": 37,
+    "Read": 36,
+    "Write": 8,
+    "Agent": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      39
+    ],
+    [
+      "yarn",
+      7
+    ],
+    [
+      "ls",
+      5
+    ],
+    [
+      "cat",
+      4
+    ],
+    [
+      "find",
+      3
+    ],
+    [
+      "cd",
+      2
+    ],
+    [
+      "npx",
+      1
+    ],
+    [
+      "echo",
+      1
+    ]
+  ],
+  "subagent_dispatches": 1,
+  "subagent_types": {
+    "Plan": 1
+  },
+  "files_read": 36,
+  "files_edited": 37,
+  "files_written": 8,
+  "distinct_files_read": 21,
+  "distinct_files_edited": 20,
+  "tool_config_reads": 0,
+  "target_repo_reads": 36,
+  "tool_config_edits": 0,
+  "target_repo_edits": 45,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "everything-claude-code:plan": {
+      "turns": 37,
+      "input": 57,
+      "output": 16142,
+      "cache_read": 1509564,
+      "cache_creation": 187624
+    }
+  }
+}

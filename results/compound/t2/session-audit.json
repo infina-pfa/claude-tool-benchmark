@@ -1,0 +1,138 @@
+{
+  "tool": "compound",
+  "task": "feature",
+  "trial": "t2",
+  "paths": [
+    "results/compound/t2/session-logs/b16ce54d-8696-4591-ad6f-0de3f3a74175.jsonl",
+    "results/compound/t2/session-logs/subagents/agent-a1ee25dc4e68cb142.jsonl",
+    "results/compound/t2/session-logs/subagents/agent-a51508d78ce03ddd9.jsonl",
+    "results/compound/t2/session-logs/subagents/agent-a69e27b16fd832e44.jsonl",
+    "results/compound/t2/session-logs/subagents/agent-ab3a6c2bfc0552416.jsonl",
+    "results/compound/t2/session-logs/subagents/agent-afae8b44e97f71c31.jsonl"
+  ],
+  "main_turns": 243,
+  "sidechain_turns": 160,
+  "wall_clock_min": 31.43,
+  "first_ts": "2026-05-09T09:43:46.910Z",
+  "last_ts": "2026-05-09T10:15:12.590Z",
+  "input_tokens": 10839,
+  "output_tokens": 176296,
+  "cache_read_tokens": 50335096,
+  "cache_creation_tokens": 1285540,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "compound-engineering:ce-code-review": 207,
+    "compound-engineering:ce-work": 152,
+    "compound-engineering:ce-plan": 42,
+    "compound-engineering:lfg": 2,
+    "Skill:compound-engineering:ce-plan": 1,
+    "Skill:compound-engineering:ce-work": 1,
+    "Skill:compound-engineering:ce-code-review": 1
+  },
+  "slash_commands": [
+    "/compound-engineering:lfg"
+  ],
+  "tools": {
+    "Bash": 188,
+    "Read": 50,
+    "Edit": 20,
+    "Write": 19,
+    "TaskUpdate": 10,
+    "TaskCreate": 5,
+    "Agent": 5,
+    "Skill": 3,
+    "ToolSearch": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      98
+    ],
+    [
+      "git",
+      26
+    ],
+    [
+      "npx",
+      19
+    ],
+    [
+      "cd",
+      15
+    ],
+    [
+      "find",
+      12
+    ],
+    [
+      "ls",
+      7
+    ],
+    [
+      "mkdir",
+      4
+    ],
+    [
+      "sed",
+      3
+    ],
+    [
+      "cat",
+      1
+    ],
+    [
+      "pwd",
+      1
+    ]
+  ],
+  "subagent_dispatches": 5,
+  "subagent_types": {
+    "compound-engineering:ce-correctness-reviewer": 1,
+    "compound-engineering:ce-adversarial-reviewer": 1,
+    "compound-engineering:ce-api-contract-reviewer": 1,
+    "compound-engineering:ce-testing-reviewer": 1,
+    "compound-engineering:ce-maintainability-reviewer": 1
+  },
+  "files_read": 50,
+  "files_edited": 20,
+  "files_written": 19,
+  "distinct_files_read": 28,
+  "distinct_files_edited": 27,
+  "tool_config_reads": 0,
+  "target_repo_reads": 50,
+  "tool_config_edits": 0,
+  "target_repo_edits": 39,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "compound-engineering:lfg": {
+      "turns": 2,
+      "input": 10,
+      "output": 480,
+      "cache_read": 0,
+      "cache_creation": 101482
+    },
+    "compound-engineering:ce-plan": {
+      "turns": 42,
+      "input": 50,
+      "output": 19470,
+      "cache_read": 4007490,
+      "cache_creation": 132905
+    },
+    "compound-engineering:ce-work": {
+      "turns": 152,
+      "input": 170,
+      "output": 60496,
+      "cache_read": 26786787,
+      "cache_creation": 418176
+    },
+    "compound-engineering:ce-code-review": {
+      "turns": 207,
+      "input": 10609,
+      "output": 95850,
+      "cache_read": 19540819,
+      "cache_creation": 632977
+    }
+  }
+}

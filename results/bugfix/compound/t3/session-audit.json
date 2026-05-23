@@ -1,0 +1,102 @@
+{
+  "tool": "compound",
+  "task": "bugfix",
+  "trial": "t3",
+  "paths": [
+    "results/bugfix/compound/t3/session-logs/c8710f61-3cd2-4e2e-80be-b05ac7c84768.jsonl"
+  ],
+  "main_turns": 73,
+  "sidechain_turns": 0,
+  "wall_clock_min": 6.63,
+  "first_ts": "2026-05-10T10:10:35.475Z",
+  "last_ts": "2026-05-10T10:17:13.533Z",
+  "input_tokens": 97,
+  "output_tokens": 37589,
+  "cache_read_tokens": 7923814,
+  "cache_creation_tokens": 231266,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "compound-engineering:ce-work": 43,
+    "compound-engineering:ce-plan": 28,
+    "compound-engineering:lfg": 2,
+    "Skill:compound-engineering:ce-plan": 1,
+    "Skill:compound-engineering:ce-work": 1
+  },
+  "slash_commands": [
+    "/compound-engineering:lfg"
+  ],
+  "tools": {
+    "Bash": 29,
+    "Read": 11,
+    "Skill": 2,
+    "Write": 2,
+    "Edit": 2
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      11
+    ],
+    [
+      "yarn",
+      7
+    ],
+    [
+      "ls",
+      4
+    ],
+    [
+      "git",
+      3
+    ],
+    [
+      "npx",
+      2
+    ],
+    [
+      "find",
+      1
+    ],
+    [
+      "cat",
+      1
+    ]
+  ],
+  "subagent_dispatches": 0,
+  "subagent_types": {},
+  "files_read": 11,
+  "files_edited": 2,
+  "files_written": 2,
+  "distinct_files_read": 10,
+  "distinct_files_edited": 3,
+  "tool_config_reads": 0,
+  "target_repo_reads": 11,
+  "tool_config_edits": 0,
+  "target_repo_edits": 4,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "compound-engineering:lfg": {
+      "turns": 2,
+      "input": 10,
+      "output": 390,
+      "cache_read": 32494,
+      "cache_creation": 68244
+    },
+    "compound-engineering:ce-plan": {
+      "turns": 28,
+      "input": 36,
+      "output": 12256,
+      "cache_read": 2362145,
+      "cache_creation": 89311
+    },
+    "compound-engineering:ce-work": {
+      "turns": 43,
+      "input": 51,
+      "output": 24943,
+      "cache_read": 5529175,
+      "cache_creation": 73711
+    }
+  }
+}

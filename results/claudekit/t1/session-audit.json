@@ -1,0 +1,107 @@
+{
+  "tool": "claudekit",
+  "task": "feature",
+  "trial": "t1",
+  "paths": [
+    "results/claudekit/t1/session-logs/b5192cda-3461-4e0d-afd3-bcf31d149e55.jsonl"
+  ],
+  "main_turns": 228,
+  "sidechain_turns": 0,
+  "wall_clock_min": 84.77,
+  "first_ts": "2026-05-09T18:17:40.372Z",
+  "last_ts": "2026-05-09T19:42:26.664Z",
+  "input_tokens": 385,
+  "output_tokens": 95330,
+  "cache_read_tokens": 32827145,
+  "cache_creation_tokens": 462712,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "cook": 182,
+    "ck-plan": 46
+  },
+  "slash_commands": [
+    "/ck-plan",
+    "/cook"
+  ],
+  "tools": {
+    "Bash": 75,
+    "Edit": 29,
+    "Read": 26,
+    "Write": 15,
+    "TaskUpdate": 13,
+    "TaskCreate": 7,
+    "ToolSearch": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      29
+    ],
+    [
+      "npx",
+      23
+    ],
+    [
+      "ls",
+      7
+    ],
+    [
+      "cd",
+      6
+    ],
+    [
+      "cat",
+      5
+    ],
+    [
+      "sed",
+      1
+    ],
+    [
+      "mkdir",
+      1
+    ],
+    [
+      "pwd;",
+      1
+    ],
+    [
+      "echo",
+      1
+    ],
+    [
+      "wc",
+      1
+    ]
+  ],
+  "subagent_dispatches": 0,
+  "subagent_types": {},
+  "files_read": 26,
+  "files_edited": 29,
+  "files_written": 15,
+  "distinct_files_read": 23,
+  "distinct_files_edited": 29,
+  "tool_config_reads": 0,
+  "target_repo_reads": 26,
+  "tool_config_edits": 0,
+  "target_repo_edits": 44,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "ck-plan": {
+      "turns": 46,
+      "input": 131,
+      "output": 25166,
+      "cache_read": 3648698,
+      "cache_creation": 192792
+    },
+    "cook": {
+      "turns": 182,
+      "input": 254,
+      "output": 70164,
+      "cache_read": 29178447,
+      "cache_creation": 269920
+    }
+  }
+}

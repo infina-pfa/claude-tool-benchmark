@@ -1,0 +1,87 @@
+{
+  "tool": "pure",
+  "task": "feature",
+  "trial": "t3",
+  "paths": [
+    "results/pure/t3/session-logs/772501c4-b3ce-4cd0-9bec-b6bb5abd2651.jsonl",
+    "results/pure/t3/session-logs/subagents/agent-ac2285fb4660744b5.jsonl"
+  ],
+  "main_turns": 169,
+  "sidechain_turns": 70,
+  "wall_clock_min": 32.03,
+  "first_ts": "2026-05-09T02:01:58.936Z",
+  "last_ts": "2026-05-09T02:34:00.941Z",
+  "input_tokens": 301,
+  "output_tokens": 86613,
+  "cache_read_tokens": 24939447,
+  "cache_creation_tokens": 471973,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {},
+  "slash_commands": [],
+  "tools": {
+    "Bash": 99,
+    "Read": 41,
+    "TaskUpdate": 15,
+    "Edit": 14,
+    "TaskCreate": 8,
+    "Write": 5,
+    "ToolSearch": 2,
+    "Agent": 1,
+    "ExitPlanMode": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      31
+    ],
+    [
+      "yarn",
+      27
+    ],
+    [
+      "find",
+      21
+    ],
+    [
+      "ls",
+      9
+    ],
+    [
+      "npx",
+      5
+    ],
+    [
+      "git",
+      3
+    ],
+    [
+      "mkdir",
+      1
+    ],
+    [
+      "sed",
+      1
+    ],
+    [
+      "tree",
+      1
+    ]
+  ],
+  "subagent_dispatches": 1,
+  "subagent_types": {
+    "Explore": 1
+  },
+  "files_read": 41,
+  "files_edited": 14,
+  "files_written": 5,
+  "distinct_files_read": 30,
+  "distinct_files_edited": 9,
+  "tool_config_reads": 0,
+  "target_repo_reads": 41,
+  "tool_config_edits": 0,
+  "target_repo_edits": 19,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {}
+}

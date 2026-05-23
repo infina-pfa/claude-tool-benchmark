@@ -1,0 +1,110 @@
+{
+  "tool": "claudekit",
+  "task": "feature",
+  "trial": "t2",
+  "paths": [
+    "results/claudekit/t2/session-logs/df1ceb5c-f8e7-4cc0-8967-8b027dc34230.jsonl",
+    "results/claudekit/t2/session-logs/subagents/agent-a9c3b431b05f7f6d4.jsonl",
+    "results/claudekit/t2/session-logs/subagents/agent-ad94002f5c920a5fe.jsonl"
+  ],
+  "main_turns": 56,
+  "sidechain_turns": 244,
+  "wall_clock_min": 82.62,
+  "first_ts": "2026-05-09T18:18:02.541Z",
+  "last_ts": "2026-05-09T19:40:39.468Z",
+  "input_tokens": 3158,
+  "output_tokens": 70038,
+  "cache_read_tokens": 27166368,
+  "cache_creation_tokens": 765778,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "cook": 211,
+    "ck-plan": 89
+  },
+  "slash_commands": [
+    "/ck-plan",
+    "/cook"
+  ],
+  "tools": {
+    "Bash": 115,
+    "Read": 52,
+    "Edit": 23,
+    "Write": 15,
+    "Agent": 2
+  },
+  "bash_commands_top": [
+    [
+      "find",
+      39
+    ],
+    [
+      "grep",
+      28
+    ],
+    [
+      "yarn",
+      12
+    ],
+    [
+      "ls",
+      11
+    ],
+    [
+      "npx",
+      8
+    ],
+    [
+      "cat",
+      7
+    ],
+    [
+      "git",
+      4
+    ],
+    [
+      "node",
+      3
+    ],
+    [
+      "sed",
+      2
+    ],
+    [
+      "mkdir",
+      1
+    ]
+  ],
+  "subagent_dispatches": 2,
+  "subagent_types": {
+    "Explore": 1,
+    "fullstack-developer": 1
+  },
+  "files_read": 52,
+  "files_edited": 23,
+  "files_written": 15,
+  "distinct_files_read": 40,
+  "distinct_files_edited": 21,
+  "tool_config_reads": 0,
+  "target_repo_reads": 52,
+  "tool_config_edits": 0,
+  "target_repo_edits": 38,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "ck-plan": {
+      "turns": 89,
+      "input": 2891,
+      "output": 25806,
+      "cache_read": 5062877,
+      "cache_creation": 357903
+    },
+    "cook": {
+      "turns": 211,
+      "input": 267,
+      "output": 44232,
+      "cache_read": 22103491,
+      "cache_creation": 407875
+    }
+  }
+}

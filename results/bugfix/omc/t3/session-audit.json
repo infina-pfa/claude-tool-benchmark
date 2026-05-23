@@ -1,0 +1,121 @@
+{
+  "tool": "omc",
+  "task": "bugfix",
+  "trial": "t3",
+  "paths": [
+    "results/bugfix/omc/t3/session-logs/67d69cff-3495-43d0-a302-ed67c55443a5.jsonl",
+    "results/bugfix/omc/t3/session-logs/b8e17563-b19b-4c22-a603-b94ab0a953ab.jsonl",
+    "results/bugfix/omc/t3/session-logs/subagents/agent-a73babe8c29686b8b.jsonl"
+  ],
+  "main_turns": 106,
+  "sidechain_turns": 56,
+  "wall_clock_min": 28.76,
+  "first_ts": "2026-05-10T09:07:23.415Z",
+  "last_ts": "2026-05-10T09:36:09.245Z",
+  "input_tokens": 777,
+  "output_tokens": 55435,
+  "cache_read_tokens": 10076725,
+  "cache_creation_tokens": 691185,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "oh-my-claudecode:ralplan": 122,
+    "oh-my-claudecode:hud": 22,
+    "oh-my-claudecode:omc-setup": 12,
+    "Skill:oh-my-claudecode:hud": 1
+  },
+  "slash_commands": [
+    "/oh-my-claudecode:omc-setup",
+    "/clear",
+    "/oh-my-claudecode:ralplan"
+  ],
+  "tools": {
+    "Bash": 53,
+    "Read": 35,
+    "Edit": 5,
+    "AskUserQuestion": 3,
+    "Skill": 1,
+    "Agent": 1,
+    "Write": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      16
+    ],
+    [
+      "find",
+      10
+    ],
+    [
+      "export",
+      5
+    ],
+    [
+      "yarn",
+      5
+    ],
+    [
+      ".omc-config.json\"",
+      3
+    ],
+    [
+      "ls",
+      3
+    ],
+    [
+      "node",
+      2
+    ],
+    [
+      "cat",
+      2
+    ],
+    [
+      "git",
+      2
+    ],
+    [
+      "hud\"",
+      1
+    ]
+  ],
+  "subagent_dispatches": 1,
+  "subagent_types": {
+    "Explore": 1
+  },
+  "files_read": 35,
+  "files_edited": 5,
+  "files_written": 1,
+  "distinct_files_read": 25,
+  "distinct_files_edited": 3,
+  "tool_config_reads": 0,
+  "target_repo_reads": 35,
+  "tool_config_edits": 0,
+  "target_repo_edits": 6,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "oh-my-claudecode:omc-setup": {
+      "turns": 12,
+      "input": 65,
+      "output": 2794,
+      "cache_read": 517272,
+      "cache_creation": 77486
+    },
+    "oh-my-claudecode:hud": {
+      "turns": 22,
+      "input": 122,
+      "output": 9245,
+      "cache_read": 1367693,
+      "cache_creation": 35459
+    },
+    "oh-my-claudecode:ralplan": {
+      "turns": 122,
+      "input": 554,
+      "output": 40605,
+      "cache_read": 7921714,
+      "cache_creation": 400626
+    }
+  }
+}

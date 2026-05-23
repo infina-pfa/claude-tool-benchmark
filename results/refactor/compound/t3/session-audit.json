@@ -1,0 +1,98 @@
+{
+  "tool": "compound",
+  "task": "refactor",
+  "trial": "t3",
+  "paths": [
+    "results/refactor/compound/t3/session-logs/a0db88e0-d9d0-44ff-98ed-e27b6cc4de6c.jsonl"
+  ],
+  "main_turns": 156,
+  "sidechain_turns": 0,
+  "wall_clock_min": 14.09,
+  "first_ts": "2026-05-11T07:34:56.609Z",
+  "last_ts": "2026-05-11T07:49:02.048Z",
+  "input_tokens": 184,
+  "output_tokens": 92655,
+  "cache_read_tokens": 22562498,
+  "cache_creation_tokens": 345161,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "compound-engineering:ce-work": 119,
+    "compound-engineering:ce-plan": 35,
+    "compound-engineering:lfg": 2,
+    "Skill:compound-engineering:ce-plan": 1,
+    "Skill:compound-engineering:ce-work": 1
+  },
+  "slash_commands": [
+    "/compound-engineering:lfg"
+  ],
+  "tools": {
+    "Bash": 45,
+    "Edit": 28,
+    "Read": 25,
+    "Write": 5,
+    "Skill": 2
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      21
+    ],
+    [
+      "yarn",
+      8
+    ],
+    [
+      "find",
+      5
+    ],
+    [
+      "ls",
+      4
+    ],
+    [
+      "cat",
+      4
+    ],
+    [
+      "git",
+      3
+    ]
+  ],
+  "subagent_dispatches": 0,
+  "subagent_types": {},
+  "files_read": 25,
+  "files_edited": 28,
+  "files_written": 5,
+  "distinct_files_read": 20,
+  "distinct_files_edited": 15,
+  "tool_config_reads": 0,
+  "target_repo_reads": 25,
+  "tool_config_edits": 0,
+  "target_repo_edits": 33,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "compound-engineering:lfg": {
+      "turns": 2,
+      "input": 10,
+      "output": 362,
+      "cache_read": 31554,
+      "cache_creation": 68842
+    },
+    "compound-engineering:ce-plan": {
+      "turns": 35,
+      "input": 43,
+      "output": 41715,
+      "cache_read": 3187840,
+      "cache_creation": 117806
+    },
+    "compound-engineering:ce-work": {
+      "turns": 119,
+      "input": 131,
+      "output": 50578,
+      "cache_read": 19343104,
+      "cache_creation": 158513
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "tool": "pure",
+  "task": "refactor",
+  "trial": "t1",
+  "paths": [
+    "results/refactor/pure/t1/session-logs/c28fafcc-2522-41d1-abd8-3f07867d77b6.jsonl",
+    "results/refactor/pure/t1/session-logs/subagents/agent-a46e409a413df6b71.jsonl"
+  ],
+  "main_turns": 130,
+  "sidechain_turns": 48,
+  "wall_clock_min": 25.38,
+  "first_ts": "2026-05-10T11:52:57.745Z",
+  "last_ts": "2026-05-10T12:18:20.635Z",
+  "input_tokens": 291,
+  "output_tokens": 103798,
+  "cache_read_tokens": 20888256,
+  "cache_creation_tokens": 485935,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {},
+  "slash_commands": [],
+  "tools": {
+    "Bash": 47,
+    "Read": 35,
+    "Edit": 24,
+    "Write": 12,
+    "Agent": 1,
+    "ToolSearch": 1,
+    "ExitPlanMode": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      20
+    ],
+    [
+      "find",
+      12
+    ],
+    [
+      "yarn",
+      6
+    ],
+    [
+      "ls",
+      5
+    ],
+    [
+      "cat",
+      3
+    ],
+    [
+      "echo",
+      1
+    ]
+  ],
+  "subagent_dispatches": 1,
+  "subagent_types": {
+    "Explore": 1
+  },
+  "files_read": 35,
+  "files_edited": 24,
+  "files_written": 12,
+  "distinct_files_read": 20,
+  "distinct_files_edited": 22,
+  "tool_config_reads": 0,
+  "target_repo_reads": 35,
+  "tool_config_edits": 0,
+  "target_repo_edits": 36,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {}
+}

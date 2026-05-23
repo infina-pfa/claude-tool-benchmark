@@ -1,0 +1,106 @@
+{
+  "tool": "gstack",
+  "task": "feature",
+  "trial": "t1",
+  "paths": [
+    "results/gstack/t1/session-logs/31aee0e8-6852-4124-bd74-29b59000fc2b.jsonl",
+    "results/gstack/t1/session-logs/subagents/agent-a7ccadb6b9e01439b.jsonl",
+    "results/gstack/t1/session-logs/subagents/agent-aa7c95bb1d7e36847.jsonl"
+  ],
+  "main_turns": 107,
+  "sidechain_turns": 11,
+  "wall_clock_min": 39.25,
+  "first_ts": "2026-05-09T08:53:17.300Z",
+  "last_ts": "2026-05-09T09:32:32.294Z",
+  "input_tokens": 188,
+  "output_tokens": 118487,
+  "cache_read_tokens": 14531227,
+  "cache_creation_tokens": 661518,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "autoplan": 37,
+    "ship": 12
+  },
+  "slash_commands": [
+    "/autoplan",
+    "/ship"
+  ],
+  "tools": {
+    "Bash": 37,
+    "Write": 15,
+    "Read": 7,
+    "Edit": 5,
+    "AskUserQuestion": 3,
+    "Agent": 2
+  },
+  "bash_commands_top": [
+    [
+      "cd",
+      18
+    ],
+    [
+      "ls",
+      10
+    ],
+    [
+      "cat",
+      2
+    ],
+    [
+      "grep",
+      2
+    ],
+    [
+      "gstack-update-check",
+      1
+    ],
+    [
+      "find",
+      1
+    ],
+    [
+      "eval",
+      1
+    ],
+    [
+      "SLUG=\"ai-tool-benchmark-gstack-t1\"",
+      1
+    ],
+    [
+      "COMMIT=$(git",
+      1
+    ]
+  ],
+  "subagent_dispatches": 2,
+  "subagent_types": {
+    "general-purpose": 2
+  },
+  "files_read": 7,
+  "files_edited": 5,
+  "files_written": 15,
+  "distinct_files_read": 4,
+  "distinct_files_edited": 16,
+  "tool_config_reads": 0,
+  "target_repo_reads": 7,
+  "tool_config_edits": 0,
+  "target_repo_edits": 20,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "autoplan": {
+      "turns": 37,
+      "input": 55,
+      "output": 44292,
+      "cache_read": 3106706,
+      "cache_creation": 288174
+    },
+    "ship": {
+      "turns": 12,
+      "input": 24,
+      "output": 10162,
+      "cache_read": 2598892,
+      "cache_creation": 200822
+    }
+  }
+}

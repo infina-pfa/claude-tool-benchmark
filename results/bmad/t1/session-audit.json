@@ -1,0 +1,93 @@
+{
+  "tool": "bmad",
+  "task": "feature",
+  "trial": "t1",
+  "paths": [
+    "results/bmad/t1/session-logs/a60baa6d-f1c8-49df-86ff-3ec6848e41ba.jsonl",
+    "results/bmad/t1/session-logs/cea2fc3f-83c2-4918-a02f-935e3f95ed23.jsonl"
+  ],
+  "main_turns": 181,
+  "sidechain_turns": 0,
+  "wall_clock_min": 22.36,
+  "first_ts": "2026-05-10T04:55:05.924Z",
+  "last_ts": "2026-05-10T05:17:27.628Z",
+  "input_tokens": 216,
+  "output_tokens": 96026,
+  "cache_read_tokens": 18720614,
+  "cache_creation_tokens": 620971,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "bmad-quick-dev": 181
+  },
+  "slash_commands": [
+    "/bmad-quick-dev",
+    "/bmad-quick-dev"
+  ],
+  "tools": {
+    "Bash": 85,
+    "Read": 35,
+    "Edit": 14,
+    "Write": 5
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      30
+    ],
+    [
+      "npx",
+      18
+    ],
+    [
+      "ls",
+      15
+    ],
+    [
+      "cat",
+      7
+    ],
+    [
+      "find",
+      7
+    ],
+    [
+      "python3",
+      2
+    ],
+    [
+      "git",
+      2
+    ],
+    [
+      "sed",
+      2
+    ],
+    [
+      "cd",
+      2
+    ]
+  ],
+  "subagent_dispatches": 0,
+  "subagent_types": {},
+  "files_read": 35,
+  "files_edited": 14,
+  "files_written": 5,
+  "distinct_files_read": 22,
+  "distinct_files_edited": 7,
+  "tool_config_reads": 6,
+  "target_repo_reads": 28,
+  "tool_config_edits": 0,
+  "target_repo_edits": 19,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "bmad-quick-dev": {
+      "turns": 181,
+      "input": 216,
+      "output": 96026,
+      "cache_read": 18720614,
+      "cache_creation": 620971
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "tool": "claudekit",
+  "task": "refactor",
+  "trial": "t1",
+  "paths": [
+    "results/refactor/claudekit/t1/session-logs/5a9d0a49-927f-44c0-942c-f473afbf45a7.jsonl"
+  ],
+  "main_turns": 108,
+  "sidechain_turns": 0,
+  "wall_clock_min": 30.34,
+  "first_ts": "2026-05-11T09:11:14.383Z",
+  "last_ts": "2026-05-11T09:41:34.880Z",
+  "input_tokens": 195,
+  "output_tokens": 56163,
+  "cache_read_tokens": 13634056,
+  "cache_creation_tokens": 250713,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "cook": 72,
+    "ck-plan": 36
+  },
+  "slash_commands": [
+    "/ck-plan",
+    "/copy",
+    "/copy",
+    "/cook"
+  ],
+  "tools": {
+    "Bash": 30,
+    "Edit": 19,
+    "Read": 16,
+    "Write": 10
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      14
+    ],
+    [
+      "yarn",
+      6
+    ],
+    [
+      "find",
+      3
+    ],
+    [
+      "cat",
+      2
+    ],
+    [
+      "git",
+      2
+    ],
+    [
+      "ls",
+      1
+    ],
+    [
+      "mkdir",
+      1
+    ],
+    [
+      "echo",
+      1
+    ]
+  ],
+  "subagent_dispatches": 0,
+  "subagent_types": {},
+  "files_read": 16,
+  "files_edited": 19,
+  "files_written": 10,
+  "distinct_files_read": 14,
+  "distinct_files_edited": 19,
+  "tool_config_reads": 0,
+  "target_repo_reads": 16,
+  "tool_config_edits": 0,
+  "target_repo_edits": 29,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "ck-plan": {
+      "turns": 36,
+      "input": 76,
+      "output": 23291,
+      "cache_read": 3150666,
+      "cache_creation": 155601
+    },
+    "cook": {
+      "turns": 72,
+      "input": 119,
+      "output": 32872,
+      "cache_read": 10483390,
+      "cache_creation": 95112
+    }
+  }
+}

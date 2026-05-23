@@ -1,0 +1,93 @@
+{
+  "tool": "pure",
+  "task": "feature",
+  "trial": "t1",
+  "paths": [
+    "results/pure/t1/session-logs/bff2e642-995a-4028-93c9-2b41d3bb399a.jsonl",
+    "results/pure/t1/session-logs/subagents/agent-a7e0bbe5107619fcc.jsonl"
+  ],
+  "main_turns": 203,
+  "sidechain_turns": 57,
+  "wall_clock_min": 32.36,
+  "first_ts": "2026-05-09T01:59:39.969Z",
+  "last_ts": "2026-05-09T02:32:01.798Z",
+  "input_tokens": 307,
+  "output_tokens": 125416,
+  "cache_read_tokens": 31359327,
+  "cache_creation_tokens": 560073,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {},
+  "slash_commands": [
+    "/resume"
+  ],
+  "tools": {
+    "Bash": 87,
+    "Read": 41,
+    "Edit": 23,
+    "TaskUpdate": 14,
+    "Write": 7,
+    "TaskCreate": 7,
+    "ToolSearch": 2,
+    "Agent": 1,
+    "ExitPlanMode": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      24
+    ],
+    [
+      "npx",
+      18
+    ],
+    [
+      "find",
+      11
+    ],
+    [
+      "jest",
+      11
+    ],
+    [
+      "ls",
+      10
+    ],
+    [
+      "cat",
+      2
+    ],
+    [
+      "git",
+      2
+    ],
+    [
+      "cd",
+      2
+    ],
+    [
+      "python3",
+      2
+    ],
+    [
+      "sed",
+      1
+    ]
+  ],
+  "subagent_dispatches": 1,
+  "subagent_types": {
+    "Explore": 1
+  },
+  "files_read": 41,
+  "files_edited": 23,
+  "files_written": 7,
+  "distinct_files_read": 30,
+  "distinct_files_edited": 20,
+  "tool_config_reads": 0,
+  "target_repo_reads": 41,
+  "tool_config_edits": 0,
+  "target_repo_edits": 30,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {}
+}

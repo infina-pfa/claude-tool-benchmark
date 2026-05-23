@@ -1,0 +1,85 @@
+{
+  "tool": "ecc",
+  "task": "refactor",
+  "trial": "t1",
+  "paths": [
+    "results/refactor/ecc/t1/session-logs/6204c6e3-15e8-40f6-8c40-5ae4f8f2cd02.jsonl",
+    "results/refactor/ecc/t1/session-logs/subagents/agent-aaa01c8b37e6dbdd4.jsonl"
+  ],
+  "main_turns": 105,
+  "sidechain_turns": 41,
+  "wall_clock_min": 22.71,
+  "first_ts": "2026-05-11T08:06:03.182Z",
+  "last_ts": "2026-05-11T08:28:46.024Z",
+  "input_tokens": 3969,
+  "output_tokens": 66462,
+  "cache_read_tokens": 16349594,
+  "cache_creation_tokens": 696644,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "everything-claude-code:plan": 46
+  },
+  "slash_commands": [
+    "/everything-claude-code:plan"
+  ],
+  "tools": {
+    "Read": 30,
+    "Bash": 27,
+    "Edit": 19,
+    "Grep": 17,
+    "Write": 6,
+    "Glob": 6,
+    "Agent": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      14
+    ],
+    [
+      "yarn",
+      7
+    ],
+    [
+      "git",
+      3
+    ],
+    [
+      "ls",
+      1
+    ],
+    [
+      "cat",
+      1
+    ],
+    [
+      "echo",
+      1
+    ]
+  ],
+  "subagent_dispatches": 1,
+  "subagent_types": {
+    "everything-claude-code:planner": 1
+  },
+  "files_read": 30,
+  "files_edited": 19,
+  "files_written": 6,
+  "distinct_files_read": 17,
+  "distinct_files_edited": 15,
+  "tool_config_reads": 0,
+  "target_repo_reads": 30,
+  "tool_config_edits": 0,
+  "target_repo_edits": 25,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "everything-claude-code:plan": {
+      "turns": 46,
+      "input": 3854,
+      "output": 21985,
+      "cache_read": 2953536,
+      "cache_creation": 555914
+    }
+  }
+}

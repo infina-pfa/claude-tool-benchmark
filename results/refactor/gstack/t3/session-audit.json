@@ -1,0 +1,114 @@
+{
+  "tool": "gstack",
+  "task": "refactor",
+  "trial": "t3",
+  "paths": [
+    "results/refactor/gstack/t3/session-logs/f6725cdb-e179-4936-8eca-9b979960a427.jsonl",
+    "results/refactor/gstack/t3/session-logs/subagents/agent-a5cc3e90b0d81e543.jsonl",
+    "results/refactor/gstack/t3/session-logs/subagents/agent-ae3a13072625bae93.jsonl"
+  ],
+  "main_turns": 254,
+  "sidechain_turns": 25,
+  "wall_clock_min": 32.78,
+  "first_ts": "2026-05-11T07:33:49.854Z",
+  "last_ts": "2026-05-11T08:06:36.395Z",
+  "input_tokens": 397,
+  "output_tokens": 149486,
+  "cache_read_tokens": 50588457,
+  "cache_creation_tokens": 1207925,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "autoplan": 43,
+    "ship": 11
+  },
+  "slash_commands": [
+    "/autoplan",
+    "/autoplan",
+    "/ship"
+  ],
+  "tools": {
+    "Bash": 82,
+    "Read": 39,
+    "Edit": 27,
+    "TaskUpdate": 19,
+    "TaskCreate": 9,
+    "Write": 8,
+    "Agent": 2,
+    "AskUserQuestion": 1,
+    "ToolSearch": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      34
+    ],
+    [
+      "nx",
+      11
+    ],
+    [
+      "npx",
+      11
+    ],
+    [
+      "find",
+      6
+    ],
+    [
+      "git",
+      6
+    ],
+    [
+      "ls",
+      5
+    ],
+    [
+      "cat",
+      2
+    ],
+    [
+      "pwd",
+      1
+    ],
+    [
+      "cp",
+      1
+    ],
+    [
+      "head",
+      1
+    ]
+  ],
+  "subagent_dispatches": 2,
+  "subagent_types": {
+    "general-purpose": 2
+  },
+  "files_read": 39,
+  "files_edited": 27,
+  "files_written": 8,
+  "distinct_files_read": 21,
+  "distinct_files_edited": 18,
+  "tool_config_reads": 0,
+  "target_repo_reads": 39,
+  "tool_config_edits": 0,
+  "target_repo_edits": 35,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "autoplan": {
+      "turns": 43,
+      "input": 123,
+      "output": 35676,
+      "cache_read": 2708673,
+      "cache_creation": 742879
+    },
+    "ship": {
+      "turns": 11,
+      "input": 19,
+      "output": 6388,
+      "cache_read": 3475216,
+      "cache_creation": 136130
+    }
+  }
+}

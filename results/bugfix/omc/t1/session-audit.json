@@ -1,0 +1,136 @@
+{
+  "tool": "omc",
+  "task": "bugfix",
+  "trial": "t1",
+  "paths": [
+    "results/bugfix/omc/t1/session-logs/3f3da427-ec70-42c3-8d05-3448548e8320.jsonl",
+    "results/bugfix/omc/t1/session-logs/8b34849b-5c0f-4040-99ee-bc7f14e55b2d.jsonl",
+    "results/bugfix/omc/t1/session-logs/subagents/agent-a3edeafeecc0b257e.jsonl",
+    "results/bugfix/omc/t1/session-logs/subagents/agent-a6af5fd4c9f831c54.jsonl",
+    "results/bugfix/omc/t1/session-logs/subagents/agent-abe54156a915dff04.jsonl",
+    "results/bugfix/omc/t1/session-logs/subagents/agent-af5ec8237c5754aca.jsonl"
+  ],
+  "main_turns": 109,
+  "sidechain_turns": 52,
+  "wall_clock_min": 24.56,
+  "first_ts": "2026-05-10T09:06:40.485Z",
+  "last_ts": "2026-05-10T09:31:14.028Z",
+  "input_tokens": 909,
+  "output_tokens": 66067,
+  "cache_read_tokens": 10172302,
+  "cache_creation_tokens": 1449670,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "oh-my-claudecode:ralplan": 76,
+    "oh-my-claudecode:team": 51,
+    "oh-my-claudecode:hud": 23,
+    "oh-my-claudecode:omc-setup": 11,
+    "Skill:oh-my-claudecode:team": 1,
+    "Skill:oh-my-claudecode:hud": 1
+  },
+  "slash_commands": [
+    "/clear",
+    "/oh-my-claudecode:ralplan",
+    "/oh-my-claudecode:omc-setup"
+  ],
+  "tools": {
+    "Bash": 54,
+    "Read": 24,
+    "Edit": 6,
+    "Agent": 4,
+    "AskUserQuestion": 4,
+    "Skill": 2,
+    "Write": 2,
+    "ToolSearch": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      17
+    ],
+    [
+      "cat",
+      8
+    ],
+    [
+      "find",
+      5
+    ],
+    [
+      "yarn",
+      4
+    ],
+    [
+      "export",
+      4
+    ],
+    [
+      "sed",
+      3
+    ],
+    [
+      "ls",
+      2
+    ],
+    [
+      "npx",
+      2
+    ],
+    [
+      "git",
+      2
+    ],
+    [
+      ".omc-config.json\"",
+      2
+    ]
+  ],
+  "subagent_dispatches": 4,
+  "subagent_types": {
+    "oh-my-claudecode:planner": 2,
+    "oh-my-claudecode:architect": 1,
+    "oh-my-claudecode:critic": 1
+  },
+  "files_read": 24,
+  "files_edited": 6,
+  "files_written": 2,
+  "distinct_files_read": 16,
+  "distinct_files_edited": 6,
+  "tool_config_reads": 1,
+  "target_repo_reads": 23,
+  "tool_config_edits": 2,
+  "target_repo_edits": 6,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "oh-my-claudecode:ralplan": {
+      "turns": 76,
+      "input": 416,
+      "output": 26472,
+      "cache_read": 2632473,
+      "cache_creation": 954983
+    },
+    "oh-my-claudecode:team": {
+      "turns": 51,
+      "input": 306,
+      "output": 27069,
+      "cache_read": 5595874,
+      "cache_creation": 382504
+    },
+    "oh-my-claudecode:omc-setup": {
+      "turns": 11,
+      "input": 59,
+      "output": 2443,
+      "cache_read": 475698,
+      "cache_creation": 75104
+    },
+    "oh-my-claudecode:hud": {
+      "turns": 23,
+      "input": 128,
+      "output": 10083,
+      "cache_read": 1468257,
+      "cache_creation": 37079
+    }
+  }
+}

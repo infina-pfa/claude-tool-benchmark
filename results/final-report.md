@@ -162,14 +162,14 @@ Weighted-mean score for each individual trial (same 3·opus + 2·`GPT-5.4` + oth
 
 | Tool | t1 | t2 | t3 | t4 | t5 | Δ (max − min) | Flag | Skills (t1/t2/t3/t4/t5) | Subagents (t1/t2/t3/t4/t5) |
 |---|---|---|---|---|---|---|---|---|---|
-| ecc | 149.67 | 152.75 | 144.50 | 164.83 | 154.75 | 20.33 | **noisy** | —/—/—/—/— | —/—/—/—/— |
-| pure | 140.00 | 146.79 | 139.71 | 143.96 | 145.21 | 7.08 |  | —/—/—/—/— | —/—/—/—/— |
-| bmad | 140.12 | 142.79 | 140.25 | 137.46 | 146.04 | 8.58 |  | —/—/—/—/— | —/—/—/—/— |
-| superpower | 144.29 | 148.83 | 138.38 | 129.42 | 139.88 | 19.42 | **noisy** | —/—/—/—/— | —/—/—/—/— |
-| omc | 146.00 | 126.08 | 134.21 | 147.46 | 143.71 | 21.37 | **noisy** | —/—/—/—/— | —/—/—/—/— |
-| claudekit | 135.62 | 115.54 | 146.54 | 141.38 | 136.12 | 31.00 | **noisy** | —/—/—/—/— | —/—/—/—/— |
-| compound | 141.58 | 144.29 | 140.12 | 120.37 | 126.96 | 23.92 | **noisy** | —/—/—/—/— | —/—/—/—/— |
-| gstack | 111.67 | 129.12 | 123.75 | 157.71 | 137.67 | 46.04 | **noisy** | —/—/—/—/— | —/—/—/—/— |
+| ecc | 149.67 | 152.75 | 144.50 | 164.83 | 154.75 | 20.33 | **noisy** | 18/18/46/—/— | 0/0/5/—/— |
+| pure | 140.00 | 146.79 | 139.71 | 143.96 | 145.21 | 7.08 |  | 0/0/0/—/— | 1/1/1/—/— |
+| bmad | 140.12 | 142.79 | 140.25 | 137.46 | 146.04 | 8.58 |  | 181/215/221/—/— | 0/2/1/—/— |
+| superpower | 144.29 | 148.83 | 138.38 | 129.42 | 139.88 | 19.42 | **noisy** | 909/1498/441/—/— | 18/28/9/—/— |
+| omc | 146.00 | 126.08 | 134.21 | 147.46 | 143.71 | 21.37 | **noisy** | 185/455/1100/—/— | 11/8/13/—/— |
+| claudekit | 135.62 | 115.54 | 146.54 | 141.38 | 136.12 | 31.00 | **noisy** | 228/300/823/—/— | 0/2/5/—/— |
+| compound | 141.58 | 144.29 | 140.12 | 120.37 | 126.96 | 23.92 | **noisy** | 106/406/151/—/— | 0/5/0/—/— |
+| gstack | 111.67 | 129.12 | 123.75 | 157.71 | 137.67 | 46.04 | **noisy** | 49/76/135/—/— | 2/2/4/—/— |
 
 Reading: a `noisy` flag here means the cohort mean for that tool is averaging over runs that disagree by ≥ 15 weighted pts. Use this column to read the headline rank with calibration — a tool whose trials cluster tightly is a more reliable signal than one with a wide spread. The pre-registered rerun protocol triggers on **per-round** outliers within a trial (not trial-to-trial), so a wide Δ here is real tool variance, not a harness artifact.
 

@@ -1,0 +1,109 @@
+{
+  "tool": "ecc",
+  "task": "feature",
+  "trial": "t3",
+  "paths": [
+    "results/ecc/t3/session-logs/0cbb0f16-64ba-4a38-8bd7-1b8d176dc9ef.jsonl",
+    "results/ecc/t3/session-logs/subagents/agent-a61025b7b92aa0cef.jsonl",
+    "results/ecc/t3/session-logs/subagents/agent-a9ccf949c063bae71.jsonl",
+    "results/ecc/t3/session-logs/subagents/agent-a9ef7b37c73f56398.jsonl",
+    "results/ecc/t3/session-logs/subagents/agent-abff6033e8b9515aa.jsonl",
+    "results/ecc/t3/session-logs/subagents/agent-aea03a4ef254b6004.jsonl"
+  ],
+  "main_turns": 36,
+  "sidechain_turns": 777,
+  "wall_clock_min": 634.21,
+  "first_ts": "2026-05-09T17:07:23.664Z",
+  "last_ts": "2026-05-10T03:41:36.014Z",
+  "input_tokens": 943,
+  "output_tokens": 171274,
+  "cache_read_tokens": 104698586,
+  "cache_creation_tokens": 2041980,
+  "web_search_requests": 0,
+  "web_fetch_requests": 0,
+  "skills_invoked": {
+    "everything-claude-code:plan": 46
+  },
+  "slash_commands": [
+    "/everything-claude-code:plan"
+  ],
+  "tools": {
+    "Bash": 300,
+    "Read": 109,
+    "Edit": 90,
+    "Write": 21,
+    "Grep": 16,
+    "TaskUpdate": 8,
+    "TaskCreate": 6,
+    "Agent": 5,
+    "ToolSearch": 1,
+    "Glob": 1
+  },
+  "bash_commands_top": [
+    [
+      "grep",
+      127
+    ],
+    [
+      "npx",
+      35
+    ],
+    [
+      "yarn",
+      28
+    ],
+    [
+      "find",
+      17
+    ],
+    [
+      "cat",
+      15
+    ],
+    [
+      "CI=1",
+      14
+    ],
+    [
+      "ls",
+      12
+    ],
+    [
+      "git",
+      11
+    ],
+    [
+      "cd",
+      8
+    ],
+    [
+      "node",
+      5
+    ]
+  ],
+  "subagent_dispatches": 5,
+  "subagent_types": {
+    "general-purpose": 4,
+    "everything-claude-code:planner": 1
+  },
+  "files_read": 109,
+  "files_edited": 90,
+  "files_written": 21,
+  "distinct_files_read": 67,
+  "distinct_files_edited": 53,
+  "tool_config_reads": 0,
+  "target_repo_reads": 109,
+  "tool_config_edits": 0,
+  "target_repo_edits": 111,
+  "lines_added": 0,
+  "lines_removed": 0,
+  "skill_token_cost": {
+    "everything-claude-code:plan": {
+      "turns": 46,
+      "input": 76,
+      "output": 21623,
+      "cache_read": 2600991,
+      "cache_creation": 491096
+    }
+  }
+}
