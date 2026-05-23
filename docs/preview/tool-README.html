@@ -21,7 +21,7 @@
       <a href="final-report-feature.html">feature</a>
       <a href="final-report-bugfix.html">bugfix</a>
       <a href="final-report-refactor.html">refactor</a>
-      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/README.md" target="_blank" rel="noopener">Source on GitHub →</a>
+      <a class="preview-source" href="tool-README.html" target="_blank" rel="noopener">Source on GitHub →</a>
     </div>
   </div>
 </nav>
@@ -51,7 +51,7 @@
 </tr>
 <tr>
 <td><a href="tool-claudekit.html"><code>claudekit</code></a></td>
-<td><code>a private Infina fork of claudekit</code> (fork of <code>carlrannaberg/claudekit</code>)</td>
+<td>a private Infina fork of claudekit (fork of <code>carlrannaberg/claudekit</code>)</td>
 <td>MIT</td>
 <td>master <code>cf636d9</code></td>
 <td><a href="tool-claudekit.html">claudekit.md</a></td>
@@ -308,7 +308,7 @@
 <hr>
 <h2 id="session-audit-transcript-mined-behavior" tabindex="-1"><a class="header-anchor" href="#session-audit-transcript-mined-behavior"><span>Session audit (transcript-mined behavior)</span></a></h2>
 <p>Each per-tool profile now includes a session-audit table with the headline behavioral metrics — wall-clock, main/sidechain turns, sub-agent dispatches, file reads (split into tool-config vs target-repo), files edited, and cache hit ratio — computed across 3 trials per task from the raw JSONL transcripts (session-audit run-time subsystem is n=3; the per-task score tables are the full n=5 cohort).</p>
-<p>Source: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a> walks <code>results/&lt;tool&gt;/t&lt;N&gt;/session-logs/*.jsonl</code> (feature) and <code>results/{bugfix,refactor}/&lt;tool&gt;/t&lt;N&gt;/session-logs/*.jsonl</code> for the other tasks, plus the <code>subagents/*.jsonl</code> files underneath. Per-trial JSON: <code>results/&lt;...&gt;/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<p>Source: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a> walks <code>results/&lt;tool&gt;/t&lt;N&gt;/session-logs/*.jsonl</code> (feature) and <code>results/{bugfix,refactor}/&lt;tool&gt;/t&lt;N&gt;/session-logs/*.jsonl</code> for the other tasks, plus the <code>subagents/*.jsonl</code> files underneath. Per-trial JSON: <code>results/&lt;...&gt;/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="session-audit.html"><code>results/_audits/session-audit.md</code></a>.</p>
 <p>Headline cross-tool findings from the audit:</p>
 <ul>
 <li><strong>Sub-agent dispatch is not what most docs claimed.</strong> <code>bmad</code> dispatches 0 sub-agents on bugfix across all 3 trials; <code>compound</code> dispatches reviewer-personas in only 1 of 9 trials (compound/t2 feature). The “multi-reviewer gate” architecture documented upstream materialises as sequential <code>attributionSkill</code> changes inside a single thread, not as actual <code>Agent</code> tool calls.</li>

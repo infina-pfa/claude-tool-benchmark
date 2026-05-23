@@ -21,7 +21,7 @@
       <a href="final-report-feature.html">feature</a>
       <a href="final-report-bugfix.html">bugfix</a>
       <a href="final-report-refactor.html">refactor</a>
-      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/ecc.md" target="_blank" rel="noopener">Source on GitHub →</a>
+      <a class="preview-source" href="tool-ecc.html" target="_blank" rel="noopener">Source on GitHub →</a>
     </div>
   </div>
 </nav>
@@ -94,7 +94,7 @@
 <p><strong>Correction (2026-05-18).</strong> Earlier versions of this profile described a load-bearing <code>/plan</code>-vs-<code>/build-fix</code> split (bugfix routed to <code>/build-fix</code>). That split was never implemented: <code>scripts/manual-bench.sh</code> has a single <code>ecc)</code> case with no task branch, and <code>/everything-claude-code:build-fix</code> is absent from every ecc transcript (feature/bugfix/refactor × t1–t5). The bugfix-performance explanation built on that premise was unfounded and has been re-derived below from the actual plan-only session data.</p>
 </blockquote>
 <h2 id="what-the-transcripts-show-session-audit" tabindex="-1"><a class="header-anchor" href="#what-the-transcripts-show-session-audit"><span>What the transcripts show (session audit)</span></a></h2>
-<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/ecc/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/ecc/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/ecc/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/ecc/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="session-audit.html"><code>results/_audits/session-audit.md</code></a>.</p>
 <table>
 <thead>
 <tr>

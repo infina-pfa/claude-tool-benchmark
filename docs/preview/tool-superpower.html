@@ -21,7 +21,7 @@
       <a href="final-report-feature.html">feature</a>
       <a href="final-report-bugfix.html">bugfix</a>
       <a href="final-report-refactor.html">refactor</a>
-      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/superpower.md" target="_blank" rel="noopener">Source on GitHub →</a>
+      <a class="preview-source" href="tool-superpower.html" target="_blank" rel="noopener">Source on GitHub →</a>
     </div>
   </div>
 </nav>
@@ -78,7 +78,7 @@
 <p><strong>Correction (2026-05-18).</strong> Earlier versions of this profile claimed the bugfix harness pinned <code>/superpowers:systematic-debugging</code> at session start and <code>/superpowers:verification-before-completion</code> as a completion gate, and that this “isolates skill quality from the base model’s trigger-phrase sensitivity.” That is false. <code>scripts/manual-bench.sh</code> fires only <code>/superpowers:brainstorming</code> on bugfix — confirmed as the sole typed slash command in all five bugfix trials — and <code>verification-before-completion</code> never attribution-fires in any bugfix trial. Bugfix activation is <strong>not</strong> controlled; it is as model-driven as feature and refactor. The session-audit analysis below has been re-derived from that reality.</p>
 </blockquote>
 <h2 id="what-the-transcripts-show-session-audit" tabindex="-1"><a class="header-anchor" href="#what-the-transcripts-show-session-audit"><span>What the transcripts show (session audit)</span></a></h2>
-<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/superpower/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/superpower/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/superpower/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/superpower/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="session-audit.html"><code>results/_audits/session-audit.md</code></a>.</p>
 <table>
 <thead>
 <tr>

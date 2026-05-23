@@ -21,7 +21,7 @@
       <a href="final-report-feature.html">feature</a>
       <a href="final-report-bugfix.html">bugfix</a>
       <a href="final-report-refactor.html">refactor</a>
-      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools/gstack.md" target="_blank" rel="noopener">Source on GitHub →</a>
+      <a class="preview-source" href="tool-gstack.html" target="_blank" rel="noopener">Source on GitHub →</a>
     </div>
   </div>
 </nav>
@@ -41,7 +41,7 @@
 <p><code>/investigate</code> is a four-phase debugger enforcing what the skill calls the <strong>Iron Law: no fixes without root cause</strong>. Phase 1 is root-cause investigation with a regression-diff check; Phase 2 is pattern analysis with an optional sanitized web search; Phase 3 is explicit hypothesis confirmation via temporary logs/assertions before any edit; Phase 4 is the minimal fix; Phase 5 writes a regression test and a capture-learnings entry to <code>~/.gstack/projects/&lt;slug&gt;/learnings.jsonl</code>. <code>PreToolUse</code> hooks on <code>Edit</code>/<code>Write</code> call <code>freeze/bin/check-freeze.sh</code> to enforce a scope lock.</p>
 <p><code>/ship</code> is where gstack’s “eng-review gate” lives — the reason gstack is excluded from plan mode. It runs: Step 0 platform detection → Step 1 pre-flight + Review Readiness Dashboard (tallies prior <code>/plan-ceo-review</code>, <code>/codex review</code>, <code>/plan-eng-review</code>, <code>/plan-design-review</code>, <code>/plan-devex-review</code> runs from <code>~/.gstack/</code> logs; verdict is <code>NO REVIEWS YET</code> until they’ve run) → Step 2 merge base branch → Step 2.5 test-framework bootstrap → Step 3 tests, with a Test Failure Ownership Triage that classifies failures as in-branch vs pre-existing and, on collaborative repos, can open and assign a GitHub issue via <code>gh</code>. Only after review+tests+eval-suites clear does it bump VERSION, update CHANGELOG, commit, push, and open the PR.</p>
 <h2 id="what-the-transcripts-show-session-audit" tabindex="-1"><a class="header-anchor" href="#what-the-transcripts-show-session-audit"><span>What the transcripts show (session audit)</span></a></h2>
-<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/gstack/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/gstack/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>results/_audits/session-audit.md</code></a>.</p>
+<p>Numbers below are mean across 3 trials per task (session-audit run-time subsystem is n=3; the score table above is the full n=5 cohort), from <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>scripts/audit-sessions.py</code></a>. Per-trial JSON: <code>results/gstack/t&lt;N&gt;/session-audit.json</code> (feature), <code>results/{bugfix,refactor}/gstack/t&lt;N&gt;/session-audit.json</code>. Cohort summary: <a href="session-audit.html"><code>results/_audits/session-audit.md</code></a>.</p>
 <table>
 <thead>
 <tr>

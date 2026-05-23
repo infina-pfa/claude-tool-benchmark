@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Improvement Plan — Next Cohort</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<nav class="preview-nav">
+  <div class="preview-nav-inner">
+    <a class="brand" href="../index.html">ai-tool-benchmark<span class="brand-accent">.</span></a>
+    <div class="preview-nav-links">
+      <a href="../index.html">Landing</a>
+      <a href="docs-index.html">Docs index</a>
+      <a href="paper.html">Paper</a>
+      <a href="final-report-feature.html">feature</a>
+      <a href="final-report-bugfix.html">bugfix</a>
+      <a href="final-report-refactor.html">refactor</a>
+      <a class="preview-source" href="improvement-plan-next-cohort.html" target="_blank" rel="noopener">Source on GitHub →</a>
+    </div>
+  </div>
+</nav>
+<main class="preview-main">
+<article class="preview-article">
+<h1 id="improvement-plan-next-cohort" tabindex="-1"><a class="header-anchor" href="#improvement-plan-next-cohort"><span>Improvement plan — next cohort</span></a></h1>
+<p>This document tracks the four compute-heavy improvements that cannot be implemented
+in a single editing session. Each item has a budget estimate, a trigger condition,
+and the concrete commands needed to execute. Operators should pick one and run
+to completion before starting the next — partial cohorts violate the cohort-symmetry
+rule (<code>scripts/audit-cohort-symmetry.py</code>).</p>
+<p>The four analysis-side improvements (Krippendorff α, MDE / power analysis,
+per-judge z-normalized sensitivity, per-trial skill-fired column) are already
+in <code>scripts/aggregate-results.sh</code> and re-emitted on every report regeneration.</p>
+<blockquote>
+<p><strong>Cohort baseline (current).</strong> The v2 cohort now runs <strong>N=5 trials per cell</strong> — 8 tools × 3 tasks × 5 trials = <strong>120 tool runs</strong>, <strong>1800 judgments</strong>, <strong>75 per (tool,task) cell</strong> (5 trials × 5 judges × 3 rounds). Item #1 below (the N=3→5 trial expansion <strong>and</strong> the n=5 MDE recompute) is <strong>complete</strong>. Wherever items #7/#8 say “same as the original cohort”, read the current 120-trial / 1800-judgment baseline.</p>
+</blockquote>
+<hr>
+<h2 id="1-trial-count-n3-n5-per-cell-status-complete-trials-shipped-n5-mde-recomputed" tabindex="-1"><a class="header-anchor" href="#1-trial-count-n3-n5-per-cell-status-complete-trials-shipped-n5-mde-recomputed"><span>#1 — Trial count N=3 → N=5 per cell  ·  <strong>STATUS: COMPLETE (trials shipped + n=5 MDE recomputed)</strong></span></a></h2>
+<p><strong>Shipped</strong>: the two additional trials per cell were run and judged; the cohort is N=5 (1800 judgments, 75 per (tool,task)). <code>results/power-analysis.json</code> and every per-task report now compute MDE at the actual n=5, and PAPER / README / landing / announcements have been resynced to it.</p>
+<p><strong>Outcome (note — counterintuitive)</strong>: the n=3 σ_pool <em>under-estimated</em> true trial-to-trial variance, so expanding to n=5 did <strong>not</strong> cut MDE the way 1/√n predicts. MDE now uses the exact Student-t critical value t(0.975, df=2(n-1)=8) ≈ 2.306 rather than the normal z=1.96 (at n=5 this enlarges MDE ~12%); the β/power term retains the normal z=0.84 as a deliberate conservative approximation. σ_pool rose on every task (feature 7.87→9.72, bugfix 9.99→11.14, refactor 6.07→22.13), so MDE did <strong>not</strong> scale down as 1/√n — it held roughly flat on feature, eased modestly on bugfix, and blew up on refactor. The refactor blow-up is driven by <code>gstack</code>’s trial-4 refactor diff scoring ≈36/200 against ~178 on its other four — a mechanically clean run (tsc 0, 77/77 tests, real 504/73 diff, slash commands fired), so a <strong>valid in-distribution trial</strong> under the pre-registered no-selective-rerun rule. Net effect: every rank-1 lead is below MDE (feature 10.17, bugfix 6.62, refactor 2.15) and the <strong>only</strong> separation clearing MDE anywhere in the corpus is <code>ecc</code> − <code>gstack</code> on feature (≈21.3 &gt; 19.33). The “statistically tied” headline got <em>stronger</em>, and the rising MDE is itself the empirical proof of why the protocol bars post-hoc selective reruns.</p>
+<p><strong>Budget</strong>: the 48 additional trials + judging (~$60, ~24h supervised ops) and the analysis-side recompute are all <strong>spent</strong>. No open cost.</p>
+<p><strong>Trigger condition</strong>: closed. Future cohorts wanting <em>significant</em> top-cluster differences need a different lever (lower trial variance or more trials than 5), not this item.</p>
+<p><strong>Runbook (executed)</strong>:</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># Trials + judging: DONE (cohort is N=5).</span>
+<span class="hljs-comment"># n=5 MDE recompute: DONE — compute-power-analysis.py now derives n from the</span>
+<span class="hljs-comment"># per-arm trial count (no flag), aggregate-results.sh re-emits the n=5 figure.</span>
+python3 scripts/compute-power-analysis.py
+TASK=feature ./scripts/aggregate-results.sh
+TASK=bugfix  ./scripts/aggregate-results.sh
+TASK=refactor ./scripts/aggregate-results.sh
+node tooling/render-md-previews.mjs
+</code></pre>
+<p><strong>Pre-registration</strong>: the N=3 → N=5 move was an additive expansion (no trials dropped), so there was no re-aggregation hazard; the cohort change is recorded in <code>versions.lock.json</code>.</p>
+<hr>
+<h2 id="4-replace-refactor-task-with-a-harder-one-or-drop-it-from-cross-task" tabindex="-1"><a class="header-anchor" href="#4-replace-refactor-task-with-a-harder-one-or-drop-it-from-cross-task"><span>#4 — Replace refactor task with a harder one (or drop it from cross-task)</span></a></h2>
+<p><strong>Why (re-evaluate at n=5 — original premise inverted)</strong>: at the n=3 single-round snapshot refactor looked informationally null (K-α = −0.085, judges disagreeing more than chance). <strong>The n=5 corpus inverts this</strong>: refactor K-α is now <strong>0.626</strong> — the <em>highest</em> of the three tasks (judges agree most on refactor). But the n=5 power analysis cuts the other way too: refactor σ_pool is <strong>22.13</strong> (one arm, <code>gstack</code> trial-4 ≈36/200, dominates it) and the n=5 refactor MDE is <strong>44.02 pts</strong>, so <em>no</em> refactor separation is statistically significant — not even gstack’s 35.3-pt gap to rank-1. So refactor both (a) has the most judge agreement and (b) statistically discriminates <em>nothing</em> at n=5. The original “informationally null / replace it” rationale is superseded by a more precise reading; treat #4 as <strong>re-evaluate against the n=5 evidence, trigger no longer clearly met</strong> rather than a recommended action.</p>
+<p><strong>Two paths</strong>:</p>
+<h3 id="path-a-drop-refactor-from-cross-task-synthesis-free-immediate" tabindex="-1"><a class="header-anchor" href="#path-a-drop-refactor-from-cross-task-synthesis-free-immediate"><span>Path A — Drop refactor from cross-task synthesis (free, immediate)</span></a></h3>
+<p>Edit <code>docs/index.html</code> cross-task section to compute z̄ over only <code>feature</code> + <code>bugfix</code>. Per-task refactor results stay published; just remove from the leaderboard. <strong>Budget</strong>: 30 minutes. <strong>Risk</strong>: cross-task narrative shrinks; rank ordering changes (recompute z̄ over 2 tasks).</p>
+<h3 id="path-b-replace-refactor-with-a-harder-task-full-new-cohort" tabindex="-1"><a class="header-anchor" href="#path-b-replace-refactor-with-a-harder-task-full-new-cohort"><span>Path B — Replace refactor with a harder task (full new cohort)</span></a></h3>
+<p>Pick a refactor that actually discriminates. Candidate criteria (Tested against a pilot pure-baseline trial):</p>
+<ul>
+<li>Inter-module API change spanning 3+ packages</li>
+<li>≥ 200 LOC of co-evolving change with a non-trivial type-graph rewrite</li>
+<li>Has a known correct/incorrect outcome (e.g., a ground-truth diff exists)</li>
+<li>Pure baseline scores ≤ 70/200 in one pilot trial (otherwise too easy)</li>
+</ul>
+<p><strong>Budget</strong>: identical to #1 minus the bugfix/feature components → 24 tool trials + 360 judgments. ~2 weeks calendar time including PRD design + pilot.</p>
+<p><strong>Recommendation</strong>: Path A first (publish honest narrative this quarter). Path B for the next major cohort.</p>
+<hr>
+<h2 id="7-second-executor-base-model-sonnet-46" tabindex="-1"><a class="header-anchor" href="#7-second-executor-base-model-sonnet-46"><span>#7 — Second executor base model (Sonnet 4.6)</span></a></h2>
+<p><strong>Why</strong>: caveat 02 names this. All current trials use <code>claude-opus-4-7</code>. Whether the rankings carry to a weaker base model is the strongest open question. If addon-vs-pure gaps shrink on Sonnet, that’s the meaningful finding (“addons help most where the base model is strongest”); if they grow, that’s also meaningful (“addons compensate for a weaker base”).</p>
+<p><strong>Minimal version</strong>: 1 trial × 8 tools × 1 task (bugfix — fastest and most discriminating). 8 trials, ~2 hours operator time, 40 new judgments.</p>
+<p><strong>Full version</strong>: 3 trials × 8 tools × 3 tasks = 72 new tool runs. Same budget as the original cohort. ~2 weeks calendar time.</p>
+<p><strong>Budget (full)</strong>:</p>
+<ul>
+<li>Operator-attended trials: ~24 hours of supervised runs.</li>
+<li>Token cost: ~50M input + ~5M output (Sonnet is faster but our tools may issue more turns).</li>
+<li>Judging cost: 72 × 5 × 3 = 1080 new judgments ≈ ~$90.</li>
+</ul>
+<p><strong>Runbook</strong>:</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># 1. Pin the second base model</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;{&quot;executor_base_model&quot;: &quot;claude-sonnet-4-6&quot;}&#x27;</span> &gt; config/executor-sonnet.json
+
+<span class="hljs-comment"># 2. Override CLAUDE_MODEL in env.sh for the new cohort</span>
+<span class="hljs-built_in">export</span> CLAUDE_MODEL=claude-sonnet-4-6
+
+<span class="hljs-comment"># 3. Re-run the original 72-trial cohort with the new model</span>
+<span class="hljs-comment"># (use a separate results/ subtree to keep them comparable)</span>
+<span class="hljs-built_in">mkdir</span> -p results-sonnet
+TASK=bugfix ./scripts/create-clones.sh 1 2 3 --base-model sonnet --out results-sonnet
+TASK=bugfix ./scripts/manual-bench.sh ecc 1
+<span class="hljs-comment"># … repeat per cell</span>
+
+<span class="hljs-comment"># 4. Aggregate into a separate report</span>
+TASK=bugfix RESULTS_DIR=results-sonnet ./scripts/aggregate-results.sh
+
+<span class="hljs-comment"># 5. Diff the rankings</span>
+python3 scripts/cross-cohort-diff.py results/final-report.md results-sonnet/final-report.md
+</code></pre>
+<p><strong>Trigger condition</strong>: required for any claim of the form “tools X, Y, Z generalize” or “tool X is most reliable”. Currently the benchmark is honest that it does not test this.</p>
+<hr>
+<h2 id="8-second-codebase-language" tabindex="-1"><a class="header-anchor" href="#8-second-codebase-language"><span>#8 — Second codebase / language</span></a></h2>
+<p><strong>Why</strong>: caveat 01 names this. Current cohort is one TypeScript NX monorepo. Generalization to Python / Go / Rust is unverified.</p>
+<p><strong>Minimal version</strong>: pick one Python repo (e.g., a clean FastAPI service of ~5kLOC) and one task type (bugfix again — fastest). 8 trials + 40 judgments + new PRD design. ~3 days operator time.</p>
+<p><strong>Full version</strong>: same task taxonomy (feature / bugfix / refactor) on 1 new codebase. Same budget as the original cohort, plus ~1 week of PRD design and pilot judging. ~3 weeks calendar time.</p>
+<p><strong>Budget (full)</strong>:</p>
+<ul>
+<li>PRD design: 40 hours (one operator-week)</li>
+<li>Pilot judging: 8 trials × 5 judges = 40 judgments to confirm rubric items map sensibly to the new repo</li>
+<li>Full cohort: 72 trials + 1080 judgments → same as original</li>
+<li>Token cost: ~80M input total</li>
+</ul>
+<p><strong>Runbook</strong>:</p>
+<pre class="hljs"><code class="language-bash"><span class="hljs-comment"># 1. Pick + clone the second codebase</span>
+git <span class="hljs-built_in">clone</span> https://github.com/&lt;org&gt;/&lt;python-repo&gt; ../bench-python-repo
+
+<span class="hljs-comment"># 2. Author 3 PRDs (feature/bugfix/refactor) over the new codebase</span>
+<span class="hljs-comment"># Use the existing PRDs as templates — same rubric items must map cleanly</span>
+<span class="hljs-built_in">mkdir</span> -p results-python/{feature,bugfix,refactor}/_blind-eval
+<span class="hljs-variable">$EDITOR</span> results-python/feature/_blind-eval/prd.md
+<span class="hljs-comment"># … see PAPER §1 for PRD design checklist</span>
+
+<span class="hljs-comment"># 3. Pilot one trial per task with pure to verify rubric coverage</span>
+TASK=feature BENCH_REPO=../bench-python-repo RESULTS_DIR=results-python ./scripts/manual-bench.sh pure 1
+
+<span class="hljs-comment"># 4. Inspect judge JSONs — every rubric item should have a non-zero score</span>
+<span class="hljs-comment"># If 5+ items collapse to 0/N for the pilot, rewrite the rubric mapping</span>
+
+<span class="hljs-comment"># 5. Run the full cohort once the rubric is stable</span>
+TASK=feature BENCH_REPO=../bench-python-repo RESULTS_DIR=results-python ./scripts/create-clones.sh 1 2 3
+<span class="hljs-comment"># … repeat per (task, tool, trial)</span>
+</code></pre>
+<p><strong>Trigger condition</strong>: required for any cross-language generalization claim. Optional otherwise (current scope is honestly described as “TypeScript only” in caveat 01).</p>
+<hr>
+<h2 id="decision-matrix" tabindex="-1"><a class="header-anchor" href="#decision-matrix"><span>Decision matrix</span></a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Cost</th>
+<th>Calendar</th>
+<th>Statistical impact</th>
+<th>Narrative impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#1 N=3→5</td>
+<td>$60 + 24h ops</td>
+<td>1 week</td>
+<td><strong>COMPLETE</strong></td>
+<td>Done — MDE <em>rose</em> (σ underestimated at n=3); headline unchanged (still tied)</td>
+</tr>
+<tr>
+<td>#4 Path A (drop refactor)</td>
+<td>$0</td>
+<td>30 min</td>
+<td>Medium (cleaner cross-task)</td>
+<td>High (more honest narrative)</td>
+</tr>
+<tr>
+<td>#4 Path B (replace refactor)</td>
+<td>$90 + 1wk PRD</td>
+<td>3 weeks</td>
+<td>High</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>#7 Sonnet base (full)</td>
+<td>$90 + 24h ops</td>
+<td>2 weeks</td>
+<td><strong>High</strong> (resolves caveat 02)</td>
+<td>High (new finding either way)</td>
+</tr>
+<tr>
+<td>#8 Python codebase (full)</td>
+<td>$200 + 1wk PRD</td>
+<td>3 weeks</td>
+<td>High (resolves caveat 01)</td>
+<td>High (generalization claim)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Suggested order</strong>:</p>
+<ol>
+<li>#4 Path A — free, immediate honesty win.</li>
+<li>#1 — biggest statistical-power gain per dollar.</li>
+<li>#7 minimal version (1 task × 1 trial) — cheapest exploration of caveat 02.</li>
+<li>#7 full or #8 minimal — pick based on which caveat (model vs language) is most cited by readers.</li>
+</ol>
+
+</article>
+<footer class="preview-footer">
+  <div>Rendered from <code>docs/IMPROVEMENT-PLAN-NEXT-COHORT.md</code>. <a href="../index.html">← Back to landing</a></div>
+</footer>
+</main>
+</body>
+</html>

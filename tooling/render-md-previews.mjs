@@ -53,6 +53,8 @@ const SOURCES = [
   { src: "results/refactor/final-report.md",              out: "final-report-refactor.html",  title: "Final Report — refactor (5-judge weighted)" },
   { src: "results/refactor/final-report.equal-weight.md", out: "final-report-refactor-eqw.html", title: "Final Report — refactor (equal-weight comparator)" },
   { src: "results/robust-statistics-companion.md",        out: "robust-statistics-companion.html", title: "Robust-statistics Companion (median / trimmed mean)" },
+  { src: "results/_audits/session-audit.md",              out: "session-audit.html",          title: "Session Audit — Cohort Behavioural Fingerprints" },
+  { src: "docs/IMPROVEMENT-PLAN-NEXT-COHORT.md",          out: "improvement-plan-next-cohort.html", title: "Improvement Plan — Next Cohort" },
   { src: "docs/RERUN-PRE-PUBLISH.md",                     out: "rerun-pre-publish.html",      title: "Pre-publish Rerun Runbook" },
 
   // Reader guides

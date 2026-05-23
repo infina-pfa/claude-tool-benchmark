@@ -28,7 +28,7 @@
 <main class="preview-main">
 <article class="preview-article">
 <h1 id="verification-guide-reproducing-the-benchmark-claims" tabindex="-1"><a class="header-anchor" href="#verification-guide-reproducing-the-benchmark-claims"><span>Verification Guide — Reproducing the Benchmark Claims</span></a></h1>
-<p>Guide for a reader who wants to independently verify any claim made in <a href="paper.html"><code>../../PAPER.md</code></a>, <a href="readme.html"><code>../../README.md</code></a>, or the per-task <code>results/&lt;task&gt;/final-report.md</code> files. Everything needed is checked into <a href="https://github.com/infina-pfa/claude-tool-benchmark/tree/main/results"><code>results/</code></a> — no private state, no network access.</p>
+<p>Guide for a reader who wants to independently verify any claim made in <a href="paper.html"><code>../../PAPER.md</code></a>, <a href="readme.html"><code>../../README.md</code></a>, or the per-task <code>results/&lt;task&gt;/final-report.md</code> files. Everything needed is checked into <code>results/</code> — no private state, no network access.</p>
 <hr>
 <h2 id="0-setup" tabindex="-1"><a class="header-anchor" href="#0-setup"><span>0. Setup</span></a></h2>
 <pre class="hljs"><code class="language-bash">git <span class="hljs-built_in">clone</span> &lt;this-repo&gt;
@@ -60,7 +60,7 @@ diff /tmp/final-report.feature.before.md results/final-report.md
 <p><strong>Claim example:</strong> “On the aggregate-ownership refactor, <code>pure</code> (no addons) takes rank-1 at 180.19/200 over <code>claudekit</code> (178.04) and <code>bmad</code> (177.74). Top-5 span is 5.8 weighted pts.”</p>
 <p><strong>Walk the chain:</strong></p>
 <ol>
-<li><code>results/refactor/_blind-eval/.mapping-DO-NOT-OPEN.json</code> <span class="muted">(omitted from public release)</span> — find which labels map to <code>pure t1/t2/t3</code>.</li>
+<li><code>results/refactor/_blind-eval/.mapping-DO-NOT-OPEN.json</code> — find which labels map to <code>pure t1/t2/t3</code>.</li>
 <li><code>results/refactor/_blind-eval/&lt;label&gt;/implementation-diff.patch</code> — inspect the actual code diff the judges saw.</li>
 <li><code>results/refactor/_blind-eval/&lt;label&gt;/&lt;judge&gt;-judge.json</code> — read <code>notes</code> field and per-item rubric scores; compare to the next-ranked tool’s labels.</li>
 <li><code>results/refactor/pure/t1/session-logs/&lt;uuid&gt;.jsonl</code> — the full session transcript.</li>
@@ -69,7 +69,7 @@ diff /tmp/final-report.feature.before.md results/final-report.md
 <p><strong>Cross-reference:</strong> <a href="paper.html#21-per-task-rankings">PAPER §2.1 refactor</a> and <a href="paper.html#3-discussion">§3 Discussion</a> narrate this result.</p>
 <hr>
 <h2 id="3-no-hidden-sampling-of-trials-no-cherry-picking-reruns" tabindex="-1"><a class="header-anchor" href="#3-no-hidden-sampling-of-trials-no-cherry-picking-reruns"><span>3. “No hidden sampling of trials / no cherry-picking reruns”</span></a></h2>
-<p><strong>Claim example:</strong> The cohort-symmetry rule in <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/CLAUDE.md#rerun-protocol-pre-registered"><code>../../CLAUDE.md</code></a> requires that if trial <code>t&lt;N&gt;</code> is rerun for one tool, it’s rerun for all 8 before the trial is used in comparison.</p>
+<p><strong>Claim example:</strong> The cohort-symmetry rule in <code>../../CLAUDE.md</code> requires that if trial <code>t&lt;N&gt;</code> is rerun for one tool, it’s rerun for all 8 before the trial is used in comparison.</p>
 <p><strong>Verify:</strong></p>
 <pre class="hljs"><code class="language-bash">python3 scripts/audit-cohort-symmetry.py
 </code></pre>
@@ -154,7 +154,7 @@ python3 scripts/audit-cohort-symmetry.py
 <p>Being explicit about what’s outside the scope of the artifact:</p>
 <ul>
 <li><strong>Judge self-preference at the family level</strong> — all 8 executors use a Claude base model, so Anthropic-family favoritism is not identified by this design. A true audit would need a non-Anthropic-base executor as control.</li>
-<li><strong>Generalization to other languages / codebases</strong> — single TypeScript NX monorepo (<a href="#"><code>a private TypeScript NX monorepo</code></a>).</li>
+<li><strong>Generalization to other languages / codebases</strong> — single TypeScript NX monorepo (a private TypeScript NX monorepo).</li>
 <li><strong>Tool-version drift</strong> — results are a 2026-05 snapshot pinned in <code>versions.lock.json</code>.</li>
 <li><strong>Cross-task synthesis</strong> — intentionally not reported as a single leaderboard; read the three per-task <code>final-report.md</code> files together. See <a href="readme.html#caveats">README caveat 7</a>.</li>
 </ul>

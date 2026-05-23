@@ -21,7 +21,7 @@
       <a href="final-report-feature.html">feature</a>
       <a href="final-report-bugfix.html">bugfix</a>
       <a href="final-report-refactor.html">refactor</a>
-      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/analysis/skill-cost-efficiency.md" target="_blank" rel="noopener">Source on GitHub →</a>
+      <a class="preview-source" href="analysis-skill-cost-efficiency.html" target="_blank" rel="noopener">Source on GitHub →</a>
     </div>
   </div>
 </nav>
@@ -31,7 +31,7 @@
 <p><strong>Generated</strong>: 2026-05-18 (Score column re-derived from the canonical n=5 weighted mean; cost columns unchanged)
 <strong>Score source</strong>: <code>results/final-report.md</code> (canonical n=5 weighted-mean feature score)
 <strong>Cost source</strong>: <code>scripts/audit-sessions.py</code> → <code>results/_audits/session-audit.json</code> (n=3 session-audit subset: t1–t3; the t4–t5 audit re-run is pending)
-<strong>Scope</strong>: <code>feature</code> task. <code>+Lines</code> and <code>Skill out tok</code> are means over the n=3 session-audited trials (t1–t3) per tool; per-task drill-downs live in <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>session-audit.md</code></a>.</p>
+<strong>Scope</strong>: <code>feature</code> task. <code>+Lines</code> and <code>Skill out tok</code> are means over the n=3 session-audited trials (t1–t3) per tool; per-task drill-downs live in <a href="session-audit.html"><code>session-audit.md</code></a>.</p>
 <p>This page joins two audit fields:</p>
 <ul>
 <li><strong><code>message.usage.output_tokens</code></strong> — tokens the model generated on the assistant turn (i.e. the <em>cost-bearing</em> tokens billed to output).</li>
@@ -261,7 +261,7 @@
 <h2 id="related" tabindex="-1"><a class="header-anchor" href="#related"><span>Related</span></a></h2>
 <ul>
 <li><a href="analysis-feature-cohort.html"><code>feature-cohort.md</code></a> — full feature-task table with billed <code>$</code> cost (cache-aware) and per-trial run-time stats.</li>
-<li><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/_audits/session-audit.md"><code>../../results/_audits/session-audit.md</code></a> — cohort behavioural fingerprints, top-5 skills per tool, full per-(tool, task) metrics.</li>
+<li><a href="session-audit.html"><code>../../results/_audits/session-audit.md</code></a> — cohort behavioural fingerprints, top-5 skills per tool, full per-(tool, task) metrics.</li>
 <li><a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/scripts/audit-sessions.py"><code>../../scripts/audit-sessions.py</code></a> — miner; the <code>skill_token_cost</code> field is at TrialMetrics.skill_token_cost.</li>
 </ul>
 
