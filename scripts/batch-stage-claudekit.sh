@@ -3,7 +3,7 @@
 # Installs fork skills at user-level (CLAUDE_CONFIG_DIR) and dedupes clone.
 # Usage: ./batch-stage-claudekit.sh <task> <trial> <label>
 set -eu
-BENCH_HOME=/Users/randytran/Codes/ai-tool-benchmark
+BENCH_HOME="${BENCH_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 cd "$BENCH_HOME"
 
 TASK="$1"; TRIAL="$2"; LABEL="$3"

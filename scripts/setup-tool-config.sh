@@ -19,7 +19,7 @@ echo "=== Setting up $TOOL t$TRIAL ==="
 case "$TOOL" in
   x-skills)
     echo "Installing x-skills + x-omo + superpowers + OMC plugin..."
-    REAL_HOME="/Users/randytran"
+    REAL_HOME="$HOME"
 
     # Copy user-level skills (x-do, x-research, etc.) into CLAUDE_CONFIG_DIR/skills
     mkdir -p "$TOOL_CONFIG/skills"

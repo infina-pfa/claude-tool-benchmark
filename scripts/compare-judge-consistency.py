@@ -32,7 +32,7 @@ DEFAULT_JUDGES = ["opus", "codex", "qwen", "deepseek"]
 
 
 def task_results_dir(task: str) -> Path:
-    home = Path(os.environ.get("BENCH_HOME", "/Users/randytran/Codes/ai-tool-benchmark"))
+    home = Path(os.environ.get("BENCH_HOME") or Path(__file__).resolve().parent.parent)
     if task == "feature":
         return home / "results"
     return home / "results" / task

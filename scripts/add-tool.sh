@@ -312,8 +312,8 @@ if doc.exists():
     section += f"""
 **Launch:**
 ```bash
-cd /Users/randytran/Codes/ai-tool-benchmark/runs/{name}-t<trial>
-env CLAUDE_CONFIG_DIR=/Users/randytran/Codes/ai-tool-benchmark/config/{name}-t<trial> claude{' --permission-mode plan' if plan_mode == 'yes' else ''}
+cd "$BENCH_HOME/runs/{name}-t<trial>"
+env CLAUDE_CONFIG_DIR="$BENCH_HOME/config/{name}-t<trial>" claude{' --permission-mode plan' if plan_mode == 'yes' else ''}
 ```
 
 **Initial prompt:**

@@ -563,7 +563,7 @@ trap 'capture_and_cleanup' EXIT
 cd "$CLONE_DIR"
 env -i \
   HOME=$BENCH_HOME \
-  PATH=/Users/randytran/.local/bin:/Users/randytran/.opencode/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$(dirname "$(which node)") \
+  PATH="${HOME}/.local/bin:${HOME}/.opencode/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$(dirname "$(which node)")" \
   CLAUDE_CONFIG_DIR=$TOOL_CONFIG_DIR \
   CLAUDE_CODE_EFFORT_LEVEL=${BENCH_EFFORT:-medium} \
   TERM=${TERM:-xterm-256color} \

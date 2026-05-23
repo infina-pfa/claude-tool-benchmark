@@ -200,7 +200,8 @@ def extract_trial(task: str, tool: str, trial: str, trial_dir: Path) -> dict | N
     if not primary_logs:
         return None
 
-    run_root = f"/Users/randytran/Codes/ai-tool-benchmark/runs/{tool}-{trial}"
+    bench_home = os.environ.get("BENCH_HOME") or str(Path(__file__).resolve().parent.parent)
+    run_root = f"{bench_home}/runs/{tool}-{trial}"
 
     skill_calls: list[tuple[str, str, dict]] = []
     plugin_reads: list[tuple[str, str]] = []

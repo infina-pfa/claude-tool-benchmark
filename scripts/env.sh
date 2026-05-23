@@ -15,7 +15,7 @@
 #   bugfix    runs/bugfix/{tool}-t{T}      results/bugfix/*    config/bugfix/*
 #   refactor  runs/refactor/{tool}-t{T}    results/refactor/*  config/refactor/*
 
-export BENCH_HOME=/Users/randytran/Codes/ai-tool-benchmark
+export BENCH_HOME="${BENCH_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 # Set this to the clone URL of the target repo. Kept as a placeholder so
 # this script can be shared publicly without leaking the internal repo.
 export BENCH_REPO="${BENCH_REPO:-<internal-sdk-repo>}"

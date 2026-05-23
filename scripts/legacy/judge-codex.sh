@@ -26,7 +26,7 @@ mkdir -p "$OUT_DIR"
 PROMPT=$("$SCRIPTS_DIR/generate-judge-prompt-combined.sh" "$LABEL" | sed 's/JUDGE_NAME/codex/g')
 
 # Route through opencode with GPT-5.4 (avoids codex CLI hangs on large prompts)
-/Users/randytran/.opencode/bin/opencode run --pure --model openai/gpt-5.4 --variant high "$PROMPT" > "$OUT_FILE.raw.txt" 2>/dev/null
+"${HOME}/.opencode/bin/opencode" run --pure --model openai/gpt-5.4 --variant high "$PROMPT" > "$OUT_FILE.raw.txt" 2>/dev/null
 
 python3 - "$OUT_FILE.raw.txt" "$OUT_FILE" <<'PY' 2>/dev/null
 import json, re, sys

@@ -26,7 +26,7 @@ mkdir -p "$OUT_DIR"
 PROMPT=$("$SCRIPTS_DIR/generate-judge-prompt-combined.sh" "$LABEL" | sed 's/JUDGE_NAME/qwen/g')
 
 # Route through opencode (qwen3.6-plus via opencode-go provider, high reasoning)
-/Users/randytran/.opencode/bin/opencode run --pure --model opencode-go/qwen3.6-plus --variant high "$PROMPT" > "$OUT_FILE.raw.txt" 2>/dev/null
+"${HOME}/.opencode/bin/opencode" run --pure --model opencode-go/qwen3.6-plus --variant high "$PROMPT" > "$OUT_FILE.raw.txt" 2>/dev/null
 
 # Extract JSON from response (Qwen may wrap in markdown code blocks)
 python3 - "$OUT_FILE.raw.txt" "$OUT_FILE" <<'PY' 2>/dev/null

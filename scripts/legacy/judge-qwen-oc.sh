@@ -20,7 +20,7 @@ set -uo pipefail
 
 if [ -z "${OPENCODE_GO_API_KEY:-}" ]; then
   # Fall back to reading it from opencode config for dev convenience.
-  OPENCODE_GO_API_KEY=$(python3 -c "import json; print(json.load(open('/Users/randytran/.config/opencode/opencode.json'))['provider']['opencode-go']['options']['apiKey'])" 2>/dev/null || true)
+  OPENCODE_GO_API_KEY=$(python3 -c "import json,os; print(json.load(open(os.path.expanduser('~/.config/opencode/opencode.json')))['provider']['opencode-go']['options']['apiKey'])" 2>/dev/null || true)
 fi
 if [ -z "$OPENCODE_GO_API_KEY" ]; then
   echo "ERROR: OPENCODE_GO_API_KEY not set and couldn't read from opencode.json" >&2

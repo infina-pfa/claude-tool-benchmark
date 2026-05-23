@@ -53,7 +53,7 @@ cd "$CLONE_DIR"
 
 env -i \
   HOME=$BENCH_HOME \
-  PATH=/Users/randytran/.local/bin:/Users/randytran/.opencode/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$(dirname "$(which node)") \
+  PATH="${HOME}/.local/bin:${HOME}/.opencode/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$(dirname "$(which node)")" \
   CLAUDE_CONFIG_DIR=$CONFIG_DIR/${TOOL}-t${TRIAL} \
   TERM=${TERM:-xterm-256color} \
   USER=$USER \
