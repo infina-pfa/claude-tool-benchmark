@@ -627,7 +627,7 @@ def main():
     L.append('- **Tier grouping is descriptive, not FWER-controlling.** Tiers are formed by pairwise 95%-CI overlap (complete linkage); this is a visual-cluster heuristic. Only individually cited pairwise separations (see §3 per-task pairwise-disjoint lists) carry statistical weight, and no multiple-comparison adjustment (Bonferroni/Holm) is applied across the 108 cross-task cell comparisons.')
     L.append('- **Inter-judge agreement uses Spearman ρ** at the (label, round) artifact level. Krippendorff α / ICC(3,k) would give absolute-scale reliability; see `scripts/krippendorff-alpha.py`. Low agreement on refactor is a genuine ranking signal, not an artifact of n=9 tool means.')
     L.append('- **Self-preference is not identified.** Every executor uses an Anthropic base; a uniform opus offset is indistinguishable from calibration drift. The §6 statistic is a judge-calibration check, not a family-favoritism audit.')
-    L.append('- **Not preregistered.** Tasks, rubric, and judge panel were chosen iteratively by the benchmark author (who also authors `omc`). `omc` ranks 7–8 across weighting schemes (self-critical); see `PAPER.md` §6 and §7 for COI disclosure.')
+    L.append('- **Not preregistered.** Tasks, rubric, and judge panel were chosen iteratively. If a benchmark author runs their own tool against others, disclose the COI and report self-relevant ranks transparently in the published writeup.')
     L.append('- **Corpus hygiene:** 239 historical judge JSONs had stale `total` fields; this report uses `sum(scores)` as canonical (corrected in-place). `_human-reference/` is excluded from cohort mean/stdev.')
     L.append('')
 

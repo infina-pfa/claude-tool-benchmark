@@ -10,8 +10,8 @@ trial-level weighted means, this script reports the median and trimmed mean
 
 This is a SENSITIVITY VIEW, not the pre-registered primary statistic. The canonical
 report is the headline; this file lets readers see whether rank ordering is robust
-to single-trial outliers. The largest shift in this corpus is gstack refactor
-(mean 144.92 → median 174.58) — one bad trial.
+to single-trial outliers — useful when one tool has a single-trial outlier that
+pulls its canonical mean away from its typical performance.
 
 Reads versions.lock.json for judge weights.
 """

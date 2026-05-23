@@ -253,7 +253,7 @@ lines.append(f"- **Trial input (task PRD).** The exact prompt every tool saw for
 lines.append(f"- **Per-tool prompt prefix.** The tool-specific slash command bound to that PRD lives in [`scripts/manual-bench.sh`]({_root_rel}/scripts/manual-bench.sh).")
 lines.append(f"- **Judge input (verbatim request payload).** What each of the 5 judges received per label per round — same blinded diff + rubric, varying only by model: [`_blind-eval/Alpha/round1/`](_blind-eval/Alpha/round1/) (`<judge>-judge.json.request.json`).")
 lines.append(f"- **Judge prompt template.** [`scripts/generate-judge-prompt-combined-v2.sh`]({_root_rel}/scripts/generate-judge-prompt-combined-v2.sh).")
-lines.append(f"- **Methodology and threats to validity.** [`PAPER.md`]({_root_rel}/PAPER.md) (§1 methodology, §4 limitations) · [`README.md`]({_root_rel}/README.md) · [landing page](https://claude-tool-benchmark.pages.dev/).")
+lines.append(f"- **Methodology and threats to validity.** Methodology, limitations, and the full caveat list for the 2026-05 example run live on the [landing page](https://claude-tool-benchmark.pages.dev/); the harness configuration and tool list are in [`README.md`]({_root_rel}/README.md).")
 lines.append("")
 
 lines.append("## Methodology")
@@ -279,7 +279,7 @@ lines.append("- **Blind eval is structural, not semantic.** Tool identity is hid
 _span_h, _span_first, _span_last = cohort_span_hours()
 if _span_h is not None:
     if _span_h > 24:
-        lines.append(f"- **Cohort span:** {_span_h:.1f}h ({_span_first} → {_span_last}). Spans >24h indicate the cohort did not complete within a single day; `scripts/audit-cohort-symmetry.py` flags this as a soft warning. The longest spans in this report stem from the leak-fix re-judge pass (see `docs/RERUN-PRE-PUBLISH.md`).")
+        lines.append(f"- **Cohort span:** {_span_h:.1f}h ({_span_first} → {_span_last}). Spans >24h indicate the cohort did not complete within a single day; `scripts/audit-cohort-symmetry.py` flags this as a soft warning.")
     else:
         lines.append(f"- **Cohort span:** {_span_h:.1f}h ({_span_first} → {_span_last}). `scripts/audit-cohort-symmetry.py` flags spans >24h as a soft warning; this cohort completed within that window.")
 lines.append("")
@@ -357,7 +357,7 @@ if _pwr and task in _pwr.get('tasks', {}):
             mark = '✓' if g.get('significant') else '⚠'
             lines.append(f"    - {g['top']} − {g['vs']}: **{g['gap']:.2f} pts** {mark}")
     lines.append("")
-    lines.append(f"**Implication for this cohort:** at n={_n} trials per cell, every per-task rank-1 lead falls below MDE (per-task MDEs and σ_pool for all three tasks are in `results/power-analysis.json`) — the top cluster is a statistical tie, not a ranking. The α/2 critical value is the exact Student-t quantile for df=2(n-1)=8 (≈2.306), not the normal z=1.96 — at n=5 this enlarges every MDE by ~12% (feature ≈19.33, bugfix ≈22.17, refactor ≈44.02). Under the corrected threshold the **only** gap that clears its task MDE anywhere in the corpus is `ecc`−`gstack` on `feature` (≈21.3 vs the 19.33 feature MDE); the previously-cited `ecc`−`claudekit` (≈18.3) and `ecc`−`compound` (≈18.6) feature gaps fall **below** MDE under the exact-t critical and are no longer treated as separations. No rank-1 lead on any task clears MDE; no gap on `bugfix` or `refactor` clears its own task MDE. Trial-to-trial variance (not judge noise) is the binding constraint: the n=3→n=5 expansion *raised* σ_pool on every task, so MDE did not follow the expected 1/√n drop (refactor worsened sharply, driven by `gstack`'s trial-4 refactor diff scoring ≈36/200 against ~178 on its other four). No family-wise correction is applied to the ≥21 pairwise gap tests — they are descriptive detection-threshold comparisons, not confirmatory hypothesis tests. This is exactly why post-hoc selective reruns are pre-registered as invalid. See `docs/IMPROVEMENT-PLAN-NEXT-COHORT.md`.")
+    lines.append(f"**How to read the gaps above.** At n={_n} trials per cell, the binding constraint is trial-to-trial variance (not judge noise), since judgments within a cell are correlated. Each gap above is marked ✓ if it exceeds the task's MDE in `results/power-analysis.json` and ⚠ otherwise — read ⚠ gaps as ties. The α/2 critical value is the exact Student-t quantile for df=2(n-1), not the normal z=1.96; at small n this enlarges every MDE meaningfully. No family-wise correction is applied to the pairwise gap tests — they are descriptive detection-threshold comparisons, not confirmatory hypothesis tests. This is exactly why post-hoc selective re-runs are pre-registered as invalid.")
 else:
     lines.append("_Run `scripts/compute-power-analysis.py` to populate this section._")
 
@@ -416,7 +416,7 @@ if _oa and task in _oa.get('tasks', {}):
             others_str = ', '.join(str(o) for o in f.get('others', []))
             lines.append(f"| {f['tool']} | t{f['trial']} | {f['judge']} | {f['round']} | {f['score']} | [{others_str}] | {f['delta_from_median']} |")
     lines.append("")
-    lines.append("**Rerun verdict: no action.** No Tier-1 (skill failure, t1–t3 audited) or Tier-3 (harness bug) triggers fired. The Tier-2 per-round 2σ trigger did fire on the individual rounds counted above, but the *aggregate* outlier rate is statistically consistent with the 2σ-chance baseline (point estimate at/below ~5%, 95% CI overlapping it), so this is treated as a class-level no-action decision rather than per-round re-rolling. Selectively re-rolling the flagged rounds would bias the cohort toward the mean (extreme values re-roll closer to median while in-distribution values stay), shrinking the cohort's apparent variance without removing real noise. The correct fix for round-level noise is **deterministic judge sampling** (caveat 09); the correct fix for trial-level variance is **more trials per cell** (see `docs/IMPROVEMENT-PLAN-NEXT-COHORT.md` item #1).")
+    lines.append("**How to read the rerun verdict.** The rerun decision is class-level, not per-round. Three pre-registered triggers apply: Tier-1 (skill failure detected in session audits), Tier-2 (per-round 2σ above the cohort-baseline outlier rate), Tier-3 (harness bug). Selectively re-rolling individual flagged rounds biases the cohort toward the mean — extreme values re-roll closer to median while in-distribution values stay, shrinking apparent variance without removing real noise. The correct fix for round-level noise is **deterministic judge sampling**; the correct fix for trial-level variance is **more trials per cell**.")
 else:
     lines.append("_Run `scripts/compute-outlier-audit.py` to populate this section._")
 
@@ -425,10 +425,7 @@ lines.append("## Robust-statistics sensitivity (median / trimmed-mean companion)
 lines.append("")
 _robust_link = "robust-statistics-companion.md" if task == "feature" else "../robust-statistics-companion.md"
 _robust_data = "robust-statistics.json" if task == "feature" else "../robust-statistics.json"
-if task == "refactor":
-    lines.append(f"The canonical Weighted Mean above is sensitive to single-trial outliers. The most consequential example is in this report: `gstack` t4 weighted mean **36.42** vs **153.79–181.67** on its other four trials drags the canonical `gstack` figure down to 144.92 — under the **median** (174.58) `gstack` is rank-7 rather than rank-8, and the rank-1-to-rank-8 spread collapses from 35.3 pts to ~5.6 pts. Pure rank-1 is invariant under mean / median / trimmed mean on every task. Full per-(task, tool) table: [`{_robust_link}`]({_robust_link}); raw figures in [`{_robust_data}`]({_robust_data}); recompute with `scripts/compute-robust-stats.py`. *Not* the pre-registered primary statistic — a sensitivity view alongside the equal-weight companion.")
-else:
-    lines.append(f"Sensitivity view: per-tool **median** and **trimmed mean** (drop hi/lo) of the 5 trial-level weighted means, instead of the arithmetic mean used above. Rank-1 is invariant on every task under mean / median / trimmed; the largest middle-rank shift in this corpus is `gstack` refactor (rank-8 → rank-7 under median, driven by one bad trial — the canonical mean correctly retains it). Full table: [`{_robust_link}`]({_robust_link}); raw figures in [`{_robust_data}`]({_robust_data}); recompute with `scripts/compute-robust-stats.py`. *Not* the pre-registered primary statistic — a sensitivity view alongside the equal-weight companion.")
+lines.append(f"Sensitivity view: per-tool **median** and **trimmed mean** (drop hi/lo) of the trial-level weighted means, instead of the arithmetic mean used above. Useful when one tool has a single-trial outlier that pulls its canonical mean away from its typical performance — the median is robust to that, the canonical mean is not. Full per-(task, tool) table: [`{_robust_link}`]({_robust_link}); raw figures in [`{_robust_data}`]({_robust_data}); recompute with `scripts/compute-robust-stats.py`. *Not* the pre-registered primary statistic — a sensitivity view alongside the equal-weight companion.")
 lines.append("")
 lines.append("## Per-judge z-normalized sensitivity")
 lines.append("")
@@ -670,7 +667,7 @@ eq.append(f"- **Trial input (task PRD).** [`_blind-eval/prd.md`](_blind-eval/prd
 eq.append(f"- **Per-tool prompt prefix.** [`scripts/manual-bench.sh`]({_root_rel}/scripts/manual-bench.sh).")
 eq.append(f"- **Judge input (verbatim request payload).** [`_blind-eval/Alpha/round1/`](_blind-eval/Alpha/round1/) (`<judge>-judge.json.request.json`).")
 eq.append(f"- **Judge prompt template.** [`scripts/generate-judge-prompt-combined-v2.sh`]({_root_rel}/scripts/generate-judge-prompt-combined-v2.sh).")
-eq.append(f"- **Methodology and threats to validity.** [`PAPER.md`]({_root_rel}/PAPER.md) · [`README.md`]({_root_rel}/README.md) · [landing page](https://claude-tool-benchmark.pages.dev/).")
+eq.append(f"- **Methodology and threats to validity.** Methodology and full caveats for the 2026-05 example run live on the [landing page](https://claude-tool-benchmark.pages.dev/); the harness configuration is in [`README.md`]({_root_rel}/README.md).")
 eq.append("")
 eq.append("## Methodology")
 eq.append("- Same cohort, judges, rubric, and 3-round layout as `final-report.md`.")
