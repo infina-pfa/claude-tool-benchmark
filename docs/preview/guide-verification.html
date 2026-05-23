@@ -28,7 +28,7 @@
 <main class="preview-main">
 <article class="preview-article">
 <h1 id="verification-guide-reproducing-the-benchmark-claims" tabindex="-1"><a class="header-anchor" href="#verification-guide-reproducing-the-benchmark-claims"><span>Verification Guide — Reproducing the Benchmark Claims</span></a></h1>
-<p>Guide for a reader who wants to independently verify any claim made in <a href="paper.html"><code>../../PAPER.md</code></a>, <a href="readme.html"><code>../../README.md</code></a>, or the per-task <code>results/&lt;task&gt;/final-report.md</code> files. Everything needed is checked into <code>results/</code> — no private state, no network access.</p>
+<p>Guide for a reader who wants to independently verify any claim made in <a href="../preview/paper.html">PAPER</a>, <a href="../preview/readme.html">README</a>, or the per-task <code>results/&lt;task&gt;/final-report.md</code> files. Everything needed is checked into <code>results/</code> — no private state, no network access.</p>
 <hr>
 <h2 id="0-setup" tabindex="-1"><a class="header-anchor" href="#0-setup"><span>0. Setup</span></a></h2>
 <pre class="hljs"><code class="language-bash">git <span class="hljs-built_in">clone</span> &lt;this-repo&gt;
@@ -66,10 +66,10 @@ diff /tmp/final-report.feature.before.md results/final-report.md
 <li><code>results/refactor/pure/t1/session-logs/&lt;uuid&gt;.jsonl</code> — the full session transcript.</li>
 <li><code>results/refactor/pure/t1/auto-metrics.json</code> — tsc / eslint / test counts, line changes.</li>
 </ol>
-<p><strong>Cross-reference:</strong> <a href="paper.html#21-per-task-rankings">PAPER §2.1 refactor</a> and <a href="paper.html#3-discussion">§3 Discussion</a> narrate this result.</p>
+<p><strong>Cross-reference:</strong> <a href="../preview/paper.html#21-per-task-rankings">PAPER §2.1 refactor</a> and <a href="../preview/paper.html#3-discussion">§3 Discussion</a> narrate this result.</p>
 <hr>
 <h2 id="3-no-hidden-sampling-of-trials-no-cherry-picking-reruns" tabindex="-1"><a class="header-anchor" href="#3-no-hidden-sampling-of-trials-no-cherry-picking-reruns"><span>3. “No hidden sampling of trials / no cherry-picking reruns”</span></a></h2>
-<p><strong>Claim example:</strong> The cohort-symmetry rule in <code>../../CLAUDE.md</code> requires that if trial <code>t&lt;N&gt;</code> is rerun for one tool, it’s rerun for all 8 before the trial is used in comparison.</p>
+<p><strong>Claim example:</strong> The cohort-symmetry rule (enforced by <code>scripts/audit-cohort-symmetry.py</code>) requires that if trial <code>t&lt;N&gt;</code> is rerun for one tool, it’s rerun for all 8 before the trial is used in comparison.</p>
 <p><strong>Verify:</strong></p>
 <pre class="hljs"><code class="language-bash">python3 scripts/audit-cohort-symmetry.py
 </code></pre>
@@ -131,11 +131,11 @@ total = len(files); with_snap = sum(1 for f in files if &#x27;scores_pre_r1&#x27
 print(f&#x27;{with_snap}/{total} files carry scores_pre_r1&#x27;)
 &quot;</span>
 </code></pre>
-<p>Expected: <code>1800/1800 files carry scores_pre_r1</code> (3 tasks × 8 tools × 5 trials × 5 judges × 3 rounds). The locked items per task are documented in <a href="paper.html#15-r1-mechanical-fact-override"><code>../../PAPER.md</code> §1.5</a>.</p>
+<p>Expected: <code>1800/1800 files carry scores_pre_r1</code> (3 tasks × 8 tools × 5 trials × 5 judges × 3 rounds). The locked items per task are documented in <a href="../preview/paper.html#15-r1-mechanical-fact-override">PAPER §1.5</a>.</p>
 <hr>
 <h2 id="8-reproducing-the-pipeline-end-to-end" tabindex="-1"><a class="header-anchor" href="#8-reproducing-the-pipeline-end-to-end"><span>8. Reproducing the pipeline end-to-end</span></a></h2>
 <p>If you want to re-run the benchmark (not just re-aggregate):</p>
-<p>See <strong><a href="guide-quickstart.html"><code>quickstart.md</code></a></strong> for the full clone → execute → judge → aggregate flow and <strong><a href="paper.html#6-reproducibility"><code>../../PAPER.md</code> §6</a></strong> for the canonical pipeline reference.</p>
+<p>See <strong><a href="guide-quickstart.html"><code>quickstart.md</code></a></strong> for the full clone → execute → judge → aggregate flow and <strong><a href="../preview/paper.html#6-reproducibility">PAPER §6</a></strong> for the canonical pipeline reference.</p>
 <p><strong>Minimum re-run for one (task, tool, trial):</strong></p>
 <pre class="hljs"><code class="language-bash">TASK=refactor ./scripts/create-clones.sh 1
 TASK=refactor ./scripts/setup-tool-config.sh bmad 1
@@ -156,9 +156,9 @@ python3 scripts/audit-cohort-symmetry.py
 <li><strong>Judge self-preference at the family level</strong> — all 8 executors use a Claude base model, so Anthropic-family favoritism is not identified by this design. A true audit would need a non-Anthropic-base executor as control.</li>
 <li><strong>Generalization to other languages / codebases</strong> — single TypeScript NX monorepo (a private TypeScript NX monorepo).</li>
 <li><strong>Tool-version drift</strong> — results are a 2026-05 snapshot pinned in <code>versions.lock.json</code>.</li>
-<li><strong>Cross-task synthesis</strong> — intentionally not reported as a single leaderboard; read the three per-task <code>final-report.md</code> files together. See <a href="readme.html#caveats">README caveat 7</a>.</li>
+<li><strong>Cross-task synthesis</strong> — intentionally not reported as a single leaderboard; read the three per-task <code>final-report.md</code> files together. See <a href="../preview/readme.html#caveats">README caveat 7</a>.</li>
 </ul>
-<p>Each limitation is disclosed in <a href="paper.html#4-limitations-and-threats-to-validity"><code>../../PAPER.md</code> §4</a> and <a href="readme.html#caveats"><code>../../README.md</code> Caveats</a>.</p>
+<p>Each limitation is disclosed in <a href="../preview/paper.html#4-limitations-and-threats-to-validity">PAPER §4</a> and <a href="../preview/readme.html#caveats">README Caveats</a>.</p>
 <hr>
 <h2 id="quick-reference" tabindex="-1"><a class="header-anchor" href="#quick-reference"><span>Quick Reference</span></a></h2>
 <table>
@@ -199,7 +199,7 @@ python3 scripts/audit-cohort-symmetry.py
 </tr>
 <tr>
 <td>What are the integrity guarantees?</td>
-<td>This file + <code>../../CLAUDE.md</code> (rerun protocol, aggregation rules)</td>
+<td>This file + <code>scripts/audit-cohort-symmetry.py</code> (rerun protocol) + <code>scripts/aggregate-results.sh</code> (aggregation rules)</td>
 </tr>
 </tbody>
 </table>

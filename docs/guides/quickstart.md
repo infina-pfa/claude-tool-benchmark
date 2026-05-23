@@ -1,6 +1,6 @@
 # Quickstart — Run one trial end-to-end in ~10 minutes
 
-This guide gets you from `git clone` to a scored trial in the shortest path. For the full methodology and reference, see [`../../PAPER.md`](../../PAPER.md) §1 (methodology) and §6 (reproducibility).
+This guide gets you from `git clone` to a scored trial in the shortest path. For the full methodology and reference, see [PAPER §1](../preview/paper.html#1-methodology) (methodology) and [§6](../preview/paper.html#6-reproducibility) (reproducibility).
 
 ---
 

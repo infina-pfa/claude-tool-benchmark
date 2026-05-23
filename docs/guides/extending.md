@@ -41,7 +41,7 @@ for trial in 1 2 3 4 5; do
 done
 ```
 
-**Cohort symmetry:** if you re-run any trial for your tool, you must re-run it for all 8 tools in the same cohort. Judge-side artifacts must all come from the same trial SHA. `scripts/audit-cohort-symmetry.py` exits non-zero if this is violated. See [`../../CLAUDE.md`](../../CLAUDE.md#rerun-protocol-pre-registered) for the rerun protocol (valid triggers, archival procedure).
+**Cohort symmetry:** if you re-run any trial for your tool, you must re-run it for all 8 tools in the same cohort. Judge-side artifacts must all come from the same trial SHA. `scripts/audit-cohort-symmetry.py` exits non-zero if this is violated. The rerun protocol (valid triggers, archival procedure under `results/<task>/<tool>/archive-t<N>-<date>/`) is enforced mechanically by that script — see its header comment.
 
 ### 4. Judge
 
@@ -150,4 +150,4 @@ In `versions.lock.json` `judges.<name>` — model id, route, temperature setting
 
 ---
 
-See [`../../PAPER.md` §1](../../PAPER.md#1-methodology) for the canonical methodology reference and [`verification.md`](verification.md) for the "how do I independently verify a claim?" walkthrough.
+See [PAPER §1](../preview/paper.html#1-methodology) for the canonical methodology reference and [`verification.md`](verification.md) for the "how do I independently verify a claim?" walkthrough.

@@ -1,6 +1,6 @@
 # Verification Guide — Reproducing the Benchmark Claims
 
-Guide for a reader who wants to independently verify any claim made in [`../../PAPER.md`](../preview/paper.html), [`../../README.md`](../preview/readme.html), or the per-task `results/<task>/final-report.md` files. Everything needed is checked into `results/` — no private state, no network access.
+Guide for a reader who wants to independently verify any claim made in [PAPER](../preview/paper.html), [README](../preview/readme.html), or the per-task `results/<task>/final-report.md` files. Everything needed is checked into `results/` — no private state, no network access.
 
 ---
 
@@ -53,13 +53,13 @@ The R1 sweep is idempotent, so the diff should be empty (modulo the regenerated 
 4. `results/refactor/pure/t1/session-logs/<uuid>.jsonl` — the full session transcript.
 5. `results/refactor/pure/t1/auto-metrics.json` — tsc / eslint / test counts, line changes.
 
-**Cross-reference:** [PAPER §2.1 refactor](../../PAPER.md#21-per-task-rankings) and [§3 Discussion](../../PAPER.md#3-discussion) narrate this result.
+**Cross-reference:** [PAPER §2.1 refactor](../preview/paper.html#21-per-task-rankings) and [§3 Discussion](../preview/paper.html#3-discussion) narrate this result.
 
 ---
 
 ## 3. "No hidden sampling of trials / no cherry-picking reruns"
 
-**Claim example:** The cohort-symmetry rule in [`../../CLAUDE.md`](../../CLAUDE.md#rerun-protocol-pre-registered) requires that if trial `t<N>` is rerun for one tool, it's rerun for all 8 before the trial is used in comparison.
+**Claim example:** The cohort-symmetry rule (enforced by `scripts/audit-cohort-symmetry.py`) requires that if trial `t<N>` is rerun for one tool, it's rerun for all 8 before the trial is used in comparison.
 
 **Verify:**
 
@@ -145,7 +145,7 @@ print(f'{with_snap}/{total} files carry scores_pre_r1')
 "
 ```
 
-Expected: `1800/1800 files carry scores_pre_r1` (3 tasks × 8 tools × 5 trials × 5 judges × 3 rounds). The locked items per task are documented in [`../../PAPER.md` §1.5](../../PAPER.md#15-r1-mechanical-fact-override).
+Expected: `1800/1800 files carry scores_pre_r1` (3 tasks × 8 tools × 5 trials × 5 judges × 3 rounds). The locked items per task are documented in [PAPER §1.5](../preview/paper.html#15-r1-mechanical-fact-override).
 
 ---
 
@@ -153,7 +153,7 @@ Expected: `1800/1800 files carry scores_pre_r1` (3 tasks × 8 tools × 5 trials 
 
 If you want to re-run the benchmark (not just re-aggregate):
 
-See **[`quickstart.md`](quickstart.md)** for the full clone → execute → judge → aggregate flow and **[`../../PAPER.md` §6](../../PAPER.md#6-reproducibility)** for the canonical pipeline reference.
+See **[`quickstart.md`](quickstart.md)** for the full clone → execute → judge → aggregate flow and **[PAPER §6](../preview/paper.html#6-reproducibility)** for the canonical pipeline reference.
 
 **Minimum re-run for one (task, tool, trial):**
 
@@ -180,9 +180,9 @@ Being explicit about what's outside the scope of the artifact:
 - **Judge self-preference at the family level** — all 8 executors use a Claude base model, so Anthropic-family favoritism is not identified by this design. A true audit would need a non-Anthropic-base executor as control.
 - **Generalization to other languages / codebases** — single TypeScript NX monorepo (a private TypeScript NX monorepo).
 - **Tool-version drift** — results are a 2026-05 snapshot pinned in `versions.lock.json`.
-- **Cross-task synthesis** — intentionally not reported as a single leaderboard; read the three per-task `final-report.md` files together. See [README caveat 7](../../README.md#caveats).
+- **Cross-task synthesis** — intentionally not reported as a single leaderboard; read the three per-task `final-report.md` files together. See [README caveat 7](../preview/readme.html#caveats).
 
-Each limitation is disclosed in [`../../PAPER.md` §4](../../PAPER.md#4-limitations-and-threats-to-validity) and [`../../README.md` Caveats](../../README.md#caveats).
+Each limitation is disclosed in [PAPER §4](../preview/paper.html#4-limitations-and-threats-to-validity) and [README Caveats](../preview/readme.html#caveats).
 
 ---
 
@@ -197,4 +197,4 @@ Each limitation is disclosed in [`../../PAPER.md` §4](../../PAPER.md#4-limitati
 | What was the pre-R1 score? | `scores_pre_r1` field inside the same judge file |
 | How is the aggregate computed? | `scripts/aggregate-results.sh` |
 | Which label is which tool? | `results/<task>/_blind-eval/.mapping-DO-NOT-OPEN.json` (after judging is done) |
-| What are the integrity guarantees? | This file + `../../CLAUDE.md` (rerun protocol, aggregation rules) |
+| What are the integrity guarantees? | This file + `scripts/audit-cohort-symmetry.py` (rerun protocol) + `scripts/aggregate-results.sh` (aggregation rules) |
