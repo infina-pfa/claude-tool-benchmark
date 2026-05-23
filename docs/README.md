@@ -59,7 +59,7 @@ HTML renders of every docs markdown file so readers can view them in-browser wit
 
 ## Reader routes
 
-- **"I just want the numbers."** → [`../results/final-report.md`](https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/final-report.md) (feature, tabular) plus [`../results/bugfix/final-report.md`](https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/bugfix/final-report.md) and [`../results/refactor/final-report.md`](https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/refactor/final-report.md), or [`../PAPER.md`](../PAPER.md) (narrative).
+- **"I just want the numbers."** → [`../results/final-report.md`](preview/final-report-feature.html) (feature, tabular) plus [`../results/bugfix/final-report.md`](preview/final-report-bugfix.html) and [`../results/refactor/final-report.md`](preview/final-report-refactor.html), or [`../PAPER.md`](preview/paper.html) (narrative).
 - **"I want to verify a specific claim."** → [`guides/verification.md`](guides/verification.md).
 - **"I want to re-run one trial."** → [`guides/quickstart.md`](guides/quickstart.md), or [`../PAPER.md`](../PAPER.md) §6 for the full command sequence.
 - **"I want to understand what each tool actually does."** → [`tools/README.md`](tools/README.md) (comparison), then the per-tool profile that catches your eye.

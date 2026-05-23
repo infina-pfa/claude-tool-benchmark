@@ -1,6 +1,6 @@
 # Verification Guide — Reproducing the Benchmark Claims
 
-Guide for a reader who wants to independently verify any claim made in [`../../PAPER.md`](../../PAPER.md), [`../../README.md`](../../README.md), or the per-task `results/<task>/final-report.md` files. Everything needed is checked into [`results/`](https://github.com/infina-pfa/claude-tool-benchmark/tree/main/results) — no private state, no network access.
+Guide for a reader who wants to independently verify any claim made in [`../../PAPER.md`](../preview/paper.html), [`../../README.md`](../preview/readme.html), or the per-task `results/<task>/final-report.md` files. Everything needed is checked into `results/` — no private state, no network access.
 
 ---
 
@@ -47,7 +47,7 @@ The R1 sweep is idempotent, so the diff should be empty (modulo the regenerated 
 
 **Walk the chain:**
 
-1. [`results/refactor/_blind-eval/.mapping-DO-NOT-OPEN.json`](https://github.com/infina-pfa/claude-tool-benchmark/blob/main/results/refactor/_blind-eval/.mapping-DO-NOT-OPEN.json) — find which labels map to `pure t1/t2/t3`.
+1. `results/refactor/_blind-eval/.mapping-DO-NOT-OPEN.json` — find which labels map to `pure t1/t2/t3`.
 2. `results/refactor/_blind-eval/<label>/implementation-diff.patch` — inspect the actual code diff the judges saw.
 3. `results/refactor/_blind-eval/<label>/<judge>-judge.json` — read `notes` field and per-item rubric scores; compare to the next-ranked tool's labels.
 4. `results/refactor/pure/t1/session-logs/<uuid>.jsonl` — the full session transcript.
