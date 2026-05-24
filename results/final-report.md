@@ -104,7 +104,7 @@ Sample flagged rounds (first 5):
 
 ## Robust-statistics sensitivity (median / trimmed-mean companion)
 
-Sensitivity view: per-tool **median** and **trimmed mean** (drop hi/lo) of the 5 trial-level weighted means, instead of the arithmetic mean used above. Rank-1 is invariant on every task under mean / median / trimmed; the largest middle-rank shift in this corpus is `gstack` refactor (rank-8 → rank-7 under median, driven by one bad trial — the canonical mean correctly retains it). Full table: [`robust-statistics-companion.md`](robust-statistics-companion.md); raw figures in [`robust-statistics.json`](robust-statistics.json); recompute with `scripts/compute-robust-stats.py`. *Not* the pre-registered primary statistic — a sensitivity view alongside the equal-weight companion.
+Sensitivity view: per-tool **median** and **trimmed mean** (drop hi/lo) of the 5 trial-level weighted means, instead of the arithmetic mean used above. Rank-1 is invariant on every task under mean / median / trimmed; the largest middle-rank shift in this corpus is `gstack` refactor (rank-8 → rank-7 under median, driven by one bad trial — the canonical mean correctly retains it). Full table: [`robust-statistics-companion.md`](robust-statistics-companion.md); raw figures in `results/robust-statistics.json`; recompute with `scripts/compute-robust-stats.py`. *Not* the pre-registered primary statistic — a sensitivity view alongside the equal-weight companion.
 
 ## Per-judge z-normalized sensitivity
 

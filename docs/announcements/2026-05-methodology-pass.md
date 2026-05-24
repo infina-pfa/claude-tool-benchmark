@@ -215,7 +215,7 @@ because the canonical-rank framing is widely cited, but happy to hear
 other framings.
 
 Reports: https://claude-tool-benchmark.pages.dev/
-Repo: https://github.com/quangtran88/claude-tool-benchmark
+Repo: https://github.com/infina-pfa/claude-tool-benchmark
 
 ---
 

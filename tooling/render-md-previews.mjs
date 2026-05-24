@@ -29,6 +29,23 @@ const OUT_DIR = resolve(ROOT, "docs/preview");
 const TIMELINE_BASE = resolve(ROOT, "docs/analysis/trial-timelines");
 const TIMELINE_TASKS = ["feature", "bugfix", "refactor"];
 
+// Paths kept on the private webpage-source branch but scrubbed from the public
+// infina-pfa/claude-tool-benchmark repo (per 18607d9). The "Source on GitHub →"
+// button would 404 for these — suppress it instead.
+const PUBLIC_REPO_ABSENT_PREFIXES = [
+  "PAPER.md",
+  "results/",
+  "docs/analysis/",
+  "docs/announcements/",
+  "docs/charts/",
+  "docs/RERUN-PRE-PUBLISH.md",
+  "docs/IMPROVEMENT-PLAN-NEXT-COHORT.md",
+  "METHODOLOGY-FLOW-VISUAL.md",
+];
+function isPublicRepoAbsent(p) {
+  return PUBLIC_REPO_ABSENT_PREFIXES.some(prefix => p === prefix || p.startsWith(prefix));
+}
+
 // Colour palette for bash-kind segments — matches the editorial palette in preview.css
 const BASH_KIND_COLORS = {
   "tests":         "#d97757",
@@ -373,7 +390,7 @@ function shell({ title, body, relPath, sourceRel }) {
       <a href="final-report-feature.html">feature</a>
       <a href="final-report-bugfix.html">bugfix</a>
       <a href="final-report-refactor.html">refactor</a>
-      <a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/${sourceRel}" target="_blank" rel="noopener">Source on GitHub →</a>
+      ${isPublicRepoAbsent(sourceRel) ? "" : `<a class="preview-source" href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/${sourceRel}" target="_blank" rel="noopener">Source on GitHub →</a>`}
     </div>
   </div>
 </nav>

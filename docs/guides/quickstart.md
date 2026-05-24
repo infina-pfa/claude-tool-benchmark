@@ -133,10 +133,7 @@ Exits non-zero on missing trials, base-commit divergence within a trial, or any 
 
 ## 8. Check your numbers against the published benchmark
 
-```bash
-diff <(grep -A20 '^| Tool ' results/refactor/final-report.md) \
-     <(curl -s https://raw.githubusercontent.com/infina-pfa/claude-tool-benchmark/main/results/refactor/final-report.md | grep -A20 '^| Tool ')
-```
+The canonical rankings are published at [claude-tool-benchmark.pages.dev](https://claude-tool-benchmark.pages.dev/) — open the per-task report (feature / bugfix / refactor) and compare your `results/<task>/final-report.md` rank-order and weighted means against the table there.
 
 If your numbers diverge, check: base-repo SHA, tool version, judge model versions, round count.
 

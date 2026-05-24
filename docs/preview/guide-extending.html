@@ -86,7 +86,7 @@ TASK=refactor ./scripts/aggregate-results.sh
 </code></pre>
 <p>Your tool now appears in <code>results/&lt;task&gt;/final-report.md</code> (per-tool weighted-mean ranking with σ decomposition) and the landing page bench-data block.</p>
 <h3 id="6-write-the-tool-profile" tabindex="-1"><a class="header-anchor" href="#6-write-the-tool-profile"><span>6. Write the tool profile</span></a></h3>
-<p>Add <code>docs/tools/&lt;yourtool&gt;.md</code> following the <a href="https://github.com/infina-pfa/claude-tool-benchmark/blob/main/docs/tools">template in this folder</a>. Sections: Upstream, Performance, Mechanism, How this benchmark invoked it, What actually happened in the transcripts (per task), Why it ranked where it did, Strengths &amp; failure modes, References. Keep it transcript-grounded.</p>
+<p>Add <code>docs/tools/&lt;yourtool&gt;.md</code> following the <a href="../preview/tool-README.html">existing per-tool profiles</a>. Sections: Upstream, Performance, Mechanism, How this benchmark invoked it, What actually happened in the transcripts (per task), Why it ranked where it did, Strengths &amp; failure modes, References. Keep it transcript-grounded.</p>
 <hr>
 <h2 id="add-a-new-judge" tabindex="-1"><a class="header-anchor" href="#add-a-new-judge"><span>Add a new judge</span></a></h2>
 <p>Judges are OpenCode CLI sessions (for <code>grok420</code>, <code>glm51</code>, <code>mimo25pro</code>), Claude Code sessions (for <code>opus</code>), or direct <code>/v1/responses</code> HTTP calls (for <code>gpt54pro</code>). They receive a fully-inlined prompt and return structured JSON scores. No tool access, no retrieval, no internet.</p>

@@ -67,7 +67,7 @@ Your tool now appears in `results/<task>/final-report.md` (per-tool weighted-mea
 
 ### 6. Write the tool profile
 
-Add `docs/tools/<yourtool>.md` following the [template in this folder](../tools/). Sections: Upstream, Performance, Mechanism, How this benchmark invoked it, What actually happened in the transcripts (per task), Why it ranked where it did, Strengths & failure modes, References. Keep it transcript-grounded.
+Add `docs/tools/<yourtool>.md` following the [existing per-tool profiles](../preview/tool-README.html). Sections: Upstream, Performance, Mechanism, How this benchmark invoked it, What actually happened in the transcripts (per task), Why it ranked where it did, Strengths & failure modes, References. Keep it transcript-grounded.
 
 ---
 

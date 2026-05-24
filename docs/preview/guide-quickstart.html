@@ -111,9 +111,7 @@ TASK=<span class="hljs-variable">$TASK</span> ROUND=1 ./scripts/judge-mimo25pro.
 <p>Exits non-zero on missing trials, base-commit divergence within a trial, or any other hard violation; soft-warns on &gt;24h cohort spans.</p>
 <hr>
 <h2 id="8-check-your-numbers-against-the-published-benchmark" tabindex="-1"><a class="header-anchor" href="#8-check-your-numbers-against-the-published-benchmark"><span>8. Check your numbers against the published benchmark</span></a></h2>
-<pre class="hljs"><code class="language-bash">diff &lt;(grep -A20 <span class="hljs-string">&#x27;^| Tool &#x27;</span> results/refactor/final-report.md) \
-     &lt;(curl -s https://raw.githubusercontent.com/infina-pfa/claude-tool-benchmark/main/results/refactor/final-report.md | grep -A20 <span class="hljs-string">&#x27;^| Tool &#x27;</span>)
-</code></pre>
+<p>The canonical rankings are published at <a href="https://claude-tool-benchmark.pages.dev/">claude-tool-benchmark.pages.dev</a> — open the per-task report (feature / bugfix / refactor) and compare your <code>results/&lt;task&gt;/final-report.md</code> rank-order and weighted means against the table there.</p>
 <p>If your numbers diverge, check: base-repo SHA, tool version, judge model versions, round count.</p>
 <hr>
 <h2 id="minimum-viable-re-run" tabindex="-1"><a class="header-anchor" href="#minimum-viable-re-run"><span>Minimum viable re-run</span></a></h2>
