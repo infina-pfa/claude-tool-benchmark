@@ -1,6 +1,6 @@
 # AI Coding Tool Benchmark: A Multi-Task, 5-Judge Evaluation of Eight Claude Code Setups
 
-**Author:** Randy Tran (tranquang882000@gmail.com)
+**Author:** Randy Tran (randytran8800@gmail.com)
 **Date:** 2026-05-12
 **Repository:** [`infina-pfa/claude-tool-benchmark`](https://github.com/infina-pfa/claude-tool-benchmark)
 
