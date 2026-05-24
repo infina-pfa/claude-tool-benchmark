@@ -4,9 +4,11 @@ runs/
 # Per-trial configs
 config/
 
-# Session logs and raw results (large)
-results/*/t*/sessions/
-results-v1/*/t*/sessions/
+# Session logs and raw results (large, may contain prompts/tool args/file contents)
+results/**/sessions/
+results/**/session-logs/
+results-v1/**/sessions/
+results-v1/**/session-logs/
 
 # Launcher runtime logs (raw shell output, regenerated on each run)
 results/_logs/
