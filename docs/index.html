@@ -77,8 +77,8 @@
         <em>No single winner.</em>
       </h1>
       <p class="lede">
-        A blind, multi-judge evaluation of the Claude Code ecosystem — plugins, skill packs, hook kits, and a
-        no-addon baseline — on feature, bugfix, and refactor work in a real
+        A blind, multi-judge evaluation of the Claude Code ecosystem — <span class="term" tabindex="0" data-tip="Pluggable extension bundles installed into Claude Code (e.g. claudekit, compound, gstack) — ship sub-agents, slash commands, and MCP servers as one unit.">plugins</span>, <span class="term" tabindex="0" data-tip="Drop-in Markdown 'skill' files that Claude reads at session start to teach itself patterns (e.g. superpower, ecc). No code, just instructions.">skill packs</span>, <span class="term" tabindex="0" data-tip="Shell hooks that fire on Claude Code lifecycle events (PreToolUse, PostToolUse, SessionStart, etc.) — let the kit inject context or block actions deterministically.">hook kits</span>, and a
+        no-addon <span class="term" tabindex="0" data-tip="The pure Claude Code CLI with no plugins, skills, hooks, or MCP servers installed — the control arm against which every addon is compared.">baseline</span> — on feature, bugfix, and refactor work in a real
         TypeScript monorepo. 1800 judgments (5 trials per cell, 75 per (tool, task) cell). No setup is top-2 on all three tasks — every
         prompt, transcript, diff, and judge score is checked in for independent re-analysis.
       </p>
@@ -96,12 +96,12 @@
       <div class="meta-cell"><div class="n">8</div><div class="label">Claude Code setups (plugins, skill packs, hook kits, and a no-addon baseline), all on <code class="mono">claude-opus-4-7</code></div></div>
       <div class="meta-cell"><div class="n">3</div><div class="label">Tasks: feature · bugfix · refactor (TypeScript NX monorepo)</div></div>
       <div class="meta-cell"><div class="n">5</div><div class="label">Judges (<span class="term" tabindex="0" data-tip="Each judge's score is multiplied by a pre-registered weight (3/2/1/1/1) before averaging — so Opus 4.7 counts 3× more than Grok in the final tool score.">weighted</span>): Opus 4.7 ×3 · GPT-5.4 ×2 · Grok-4.20 ×1 · GLM-5.1 ×1 · MiMo-2.5-pro ×1</div></div>
-      <div class="meta-cell"><div class="n">1800</div><div class="label">Blind-labeled judgments: 3 tasks × 8 tools × 5 trials × 5 judges (N=75 per cell; every trial ran 3 rounds — symmetric)</div></div>
+      <div class="meta-cell"><div class="n">1800</div><div class="label"><span class="term" tabindex="0" data-tip="Each diff was relabeled with a NATO codename (Alpha, Bravo…) before any judge saw it. Judges scored the codename, not the tool name — so vendor recognition cannot bias the score.">Blind-labeled</span> judgments: 3 tasks × 8 tools × 5 trials × 5 judges (N=75 per cell; every trial ran 3 <span class="term" tabindex="0" data-tip="One round = one full pass of all 5 judges over all 8 codenames. Three rounds = the canonical pass plus two added stability passes, so each diff is scored 15 times per judge per cell.">rounds</span> — symmetric)</div></div>
     </div>
     <div class="meta-strip" style="margin-top: 12px;">
-      <div class="meta-cell"><div class="n">120</div><div class="label">Tool trials (8 tools × 5 trials × 3 tasks), every clone pinned to the task's base SHA</div></div>
-      <div class="meta-cell"><div class="n">40</div><div class="label">NATO-codename blind labels per task (8 tools × 5 trials) — diff scrubbed for tool-state directories, mapping sealed until aggregation</div></div>
-      <div class="meta-cell"><div class="n">4 / 2 / 2</div><div class="label">R1 mechanical-fact items locked per task from <code class="mono">auto-metrics.json</code> (feature locks 4: tsc / eslint / core-test failures / lines removed; bugfix locks 2; refactor locks 2 — see PAPER §1.5)</div></div>
+      <div class="meta-cell"><div class="n">120</div><div class="label">Tool trials (8 tools × 5 trials × 3 tasks), every clone pinned to the task's <span class="term" tabindex="0" data-tip="The git commit hash (SHA-1) the task starts from. Every tool's worktree is reset to the same SHA so they all see byte-identical source before the trial begins.">base SHA</span></div></div>
+      <div class="meta-cell"><div class="n">40</div><div class="label"><span class="term" tabindex="0" data-tip="Each trial's diff was renamed to a NATO phonetic codename (Alpha, Bravo, Charlie… Hotel) so judges cannot tell which tool produced which diff. The codename→tool mapping (.mapping-DO-NOT-OPEN.json) stays sealed until scoring is done.">NATO-codename blind labels</span> per task (8 tools × 5 trials) — diff scrubbed for tool-state directories, mapping sealed until aggregation</div></div>
+      <div class="meta-cell"><div class="n">4 / 2 / 2</div><div class="label"><span class="term" tabindex="0" data-tip="R1 = the rubric's 'mechanical-fact override' pass. After judges score the diff, a deterministic script rewrites specific items (e.g. did tsc pass? did eslint pass?) directly from auto-metrics.json — so factual items can't be gamed by a verbose judge. The 4/2/2 means 4 items locked on feature, 2 on bugfix, 2 on refactor.">R1 mechanical-fact items</span> locked per task from <code class="mono">auto-metrics.json</code> (feature locks 4: tsc / eslint / core-test failures / lines removed; bugfix locks 2; refactor locks 2 — see PAPER §1.5)</div></div>
       <div class="meta-cell"><div class="n">3 / 2 / 1</div><div class="label">Judge weights pre-registered in <code class="mono">versions.lock.json</code>: Anthropic ×3 · OpenAI ×2 · xAI / Z.ai / Xiaomi ×1</div></div>
     </div>
   </section>
@@ -111,9 +111,9 @@
     <div class="container">
       <h2 class="h2">How a trial flows to a score</h2>
       <p class="kicker">
-        Same PRD, same base commit, isolated worktrees produce the artifacts. Then judging runs in <strong>two parallel modes</strong>:
+        Same <span class="term" tabindex="0" data-tip="Product Requirements Document — the byte-identical task brief handed to every tool. Same words, same acceptance criteria, no per-tool customization.">PRD</span>, same base commit, isolated <span class="term" tabindex="0" data-tip="A git worktree is a checkout of the same repo into its own folder. Each trial gets its own worktree so file edits, npm installs, and tool state never cross-contaminate.">worktrees</span> produce the artifacts. Then judging runs in <strong>two parallel modes</strong>:
         a <strong>5-judge panel</strong> scores each diff independently (canonical, weighted mean), and a <strong>comparative-rank sidecar</strong>
-        has a single judge rank all 8 diffs head-to-head, run as two independent model lanes (validity probe). Their Spearman ρ measures whether the rank order
+        has a single judge rank all 8 diffs head-to-head, run as two independent model lanes (validity probe). Their <span class="term" tabindex="0" data-tip="Spearman's rank-correlation coefficient (ρ, 'rho') — ranges from −1 to +1. Measures whether two orderings agree: +1 = identical order, 0 = unrelated, −1 = reversed. Used here to ask 'does the comparative ranking land in the same order as the panel's weighted-mean ranking?'">Spearman ρ</span> measures whether the rank order
         survives a different judging regime.
       </p>
 
@@ -150,7 +150,7 @@
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
             </svg>
             <h4 class="flow-card-title">Tool config</h4>
-            <p class="flow-card-body">Skills · agents · hooks · MCP dropped into <span class="mono">HOME</span></p>
+            <p class="flow-card-body">Skills · agents · hooks · <span class="term" tabindex="0" data-tip="Model Context Protocol — an open protocol Claude Code uses to talk to external tool servers (filesystems, browsers, databases, etc.). 'MCP servers' = pluggable tool backends the tool can install.">MCP</span> dropped into <span class="mono">HOME</span></p>
           </article>
 
           <div class="flow-arrow" aria-hidden="true">
@@ -168,8 +168,8 @@
             <svg class="flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polygon points="5 3 19 12 5 21 5 3"/>
             </svg>
-            <h4 class="flow-card-title">Vibecode mode</h4>
-            <p class="flow-card-body">Fire slash command · approve-only · tool implements the task</p>
+            <h4 class="flow-card-title"><span class="term" tabindex="0" data-tip="Operator fires the tool's main slash command once and then only clicks 'approve' on permission prompts — no mid-flight steering, no plan revisions, no 'try again'. Measures one-shot autonomous capability, not interactive pair-programming.">Vibecode mode</span></h4>
+            <p class="flow-card-body">Fire <span class="term" tabindex="0" data-tip="A Claude Code command typed with a leading slash (e.g. /omc:autopilot, /sp:plan). Each tool exposes its main entry point as one — that single command is what gets fired in a trial.">slash command</span> · <span class="term" tabindex="0" data-tip="Operator only clicks 'approve' on permission prompts — no rejecting plans, no asking the tool to retry, no mid-edit feedback.">approve-only</span> · tool implements the task</p>
           </article>
 
           <div class="flow-arrow" aria-hidden="true">
@@ -232,7 +232,7 @@
             <header class="judge-mode-head">
               <span class="judge-tag judge-tag-canonical">Mode A · canonical</span>
               <h3 class="judge-mode-title">Panel · <em>absolute</em> scoring</h3>
-              <p class="judge-mode-sub">Each blinded diff scored independently by 5 judges against a 20-item / 200-pt rubric. Weighted mean is the headline number.</p>
+              <p class="judge-mode-sub">Each blinded diff scored independently by 5 judges against a <span class="term" tabindex="0" data-tip="20 scoring items, each worth 10 points (max 200/diff). Items span correctness, completeness, code quality, test discipline, and operational hygiene — see PAPER §1.4 for the full list.">20-item / 200-pt rubric</span>. Weighted mean is the headline number.</p>
             </header>
 
             <div class="panel-diagram" data-panel-diagram aria-hidden="true">
@@ -278,8 +278,8 @@
               </div>
 
               <div class="panel-mean">
-                <span class="panel-mean-label">R1 override (4/2/2)</span>
-                <span class="panel-mean-formula">μ = Σ(w · score) / Σw</span>
+                <span class="panel-mean-label"><span class="term" tabindex="0" data-tip="After the 5 judges score, deterministic rubric items (did tsc pass? did eslint pass? lines removed?) are overwritten from auto-metrics.json — so factual items can't drift across judges. 4/2/2 = items locked on feature/bugfix/refactor.">R1 override (4/2/2)</span></span>
+                <span class="panel-mean-formula" title="Weighted mean: sum of (weight × score) divided by sum of weights">μ = Σ(w · score) / Σw</span>
                 <span class="panel-mean-out">→ <code class="mono">final-report.md</code></span>
               </div>
             </div>
@@ -359,8 +359,8 @@
         </div>
 
         <div class="judge-join">
-          <span class="judge-join-tag">Convergent validity</span>
-          <strong>Spearman ρ</strong> between the two modes (per task) — does the rank order survive a different judging regime? Cross-model ρ separates regime drift from vendor bias.
+          <span class="judge-join-tag"><span class="term" tabindex="0" data-tip="A measurement is 'convergently valid' if two different ways of measuring the same thing agree. Here: do the 5-judge weighted-mean ranking (Mode A) and the head-to-head ranking (Mode B) land in the same order? If yes, the ranking isn't an artifact of one judging regime.">Convergent validity</span></span>
+          <strong><span class="term" tabindex="0" data-tip="Spearman rank-correlation coefficient (ρ). +1 = identical rank order, 0 = unrelated, −1 = reversed. Per-task ρ between Mode A and Mode B tells us whether comparative ranking lands the same answer as the weighted-mean panel.">Spearman ρ</span></strong> between the two modes (per task) — does the rank order survive a different judging regime? Cross-model ρ separates <span class="term" tabindex="0" data-tip="Regime drift = the panel (absolute scoring) and comparative (head-to-head) judging methods systematically disagree on what 'good' looks like — independent of which model is doing the judging. Surfaces here as both comparative lanes diverging from the panel while agreeing with each other.">regime drift</span> from <span class="term" tabindex="0" data-tip="Vendor bias = a specific judge model (e.g. Opus-comp from Anthropic) ranks differently than a non-affiliated model (e.g. GPT-comp from OpenAI). Diagnosed when one comp lane tracks the panel but the other does not.">vendor bias</span>.
         </div>
         <div class="judge-rho-strip" aria-label="Comparative-rank triangulation — panel vs Opus-1M vs GPT-5.4, by task">
           <div class="rho-strip-head">
@@ -484,7 +484,7 @@
       <div class="insight-grid">
         <a class="insight-card" href="preview/final-report-feature.html">
           <div class="insight-num">01 · Feature</div>
-          <h3>ecc is point-estimate rank-1; the top cluster is a statistical tie.</h3>
+          <h3>ecc is <span class="term" tabindex="0" data-tip="A point estimate is the single best-guess number (the sample mean). It doesn't tell you whether the difference between two tools is bigger than measurement noise — that's what MDE answers.">point-estimate</span> rank-1; the top cluster is a <span class="term" tabindex="0" data-tip="A statistical tie means the gap between two tools is smaller than the Minimum Detectable Effect (MDE) — the noise floor of this experiment. We can rank them on the point estimate, but can't claim one truly outperforms the other.">statistical tie</span>.</h3>
           <p>
             On the greenfield Mode-2 CD Batch feature, ecc (153.30) leads pure (143.13, rank-2) and <strong>bmad (141.33, rank-3)</strong>,
             but the rank-1 lead (10.17 pts) is within the 19.33-pt feature <span class="term" tabindex="0" data-tip="Minimum Detectable Effect — the smallest tool-vs-tool gap distinguishable at α=0.05 (two-sided), power=0.80, at the cohort's n=5. Uses the exact Student-t critical value t(0.975, df=2(n-1)=8) ≈ 2.306, not the normal z=1.96 (at n=5 this enlarges MDE ~12%); the β/power term keeps the normal z=0.84 as a deliberate conservative approximation. Gaps below MDE are statistical ties.">MDE</span> — a statistical tie, like every per-task rank-1 lead. The only separation that clears MDE anywhere in the corpus is ecc − gstack on feature (21.3 &gt; 19.33); gstack at 131.98 (z = −1.28) is the lowest. On the per-judge z-normalized sensitivity, ecc is the only setup cleanly outside the pack (z = +2.17 vs next +0.23).
@@ -573,7 +573,7 @@
       <div class="behavior-grid">
         <figure class="behavior-figure">
           <table class="behavior-table">
-            <caption>Sub-agent dispatches per trial</caption>
+            <caption><span class="term" tabindex="0" data-tip="A sub-agent is a separate Claude instance the main agent spawns to do a sub-task (e.g. 'find every call site of X', 'review my plan'). Count = how many times per trial the tool fired a sub-agent. Higher ≠ better — it's an architectural choice that costs tokens and adds coordination overhead.">Sub-agent dispatches</span> per trial</caption>
             <thead>
               <tr><th>Tool</th><th>feature</th><th>bugfix</th><th>refactor</th></tr>
             </thead>
@@ -596,7 +596,7 @@
         </figure>
         <figure class="behavior-figure">
           <table class="behavior-table">
-            <caption>Tool-config reads per trial ("setup tax")</caption>
+            <caption>Tool-config reads per trial (<span class="term" tabindex="0" data-tip="'Setup tax' = the tool re-reading its own scaffolding (skill files, agent definitions, hook configs) during execution, not the user's source code. High setup-tax means tokens spent re-loading the tool's own instructions every few turns. Most tools load this once into the system prompt and never re-read; omc and bmad are the exceptions.">"setup tax"</span>)</caption>
             <thead>
               <tr><th>Tool</th><th>feature</th><th>bugfix</th><th>refactor</th></tr>
             </thead>
@@ -626,14 +626,14 @@
     <div class="container">
       <h2 class="h2">Token spend &amp; cost per trial — ranked most-efficient first</h2>
       <p class="kicker">
-        <span class="term" tabindex="0" data-tip="Arithmetic mean across the full n=5 trials per (tool, task) cell, sourced from each trial's phase1-metrics.json (cost_usd is Anthropic billing-derived; input tokens include cache_creation + cache_read).">Mean</span> per trial across the full n=5 cohort (24 (tool, task) cells × 5 trials = 120 trials). Each table is ordered by <strong>$ cost ascending</strong> so the row at the top is the cheapest setup for that task. <em style="color:var(--olive-gray);">Input tokens include cache-creation and cache-read volume — Anthropic prices cache reads at 0.1× input, so dollar cost is the better cross-tool axis than raw input volume.</em> Score column is the canonical n=5 weighted-mean per task (opus×3, gpt54pro×2, others×1). The <code class="mono">$/pt</code> column is cost-efficiency: dollars per rubric point.
+        <span class="term" tabindex="0" data-tip="Arithmetic mean across the full n=5 trials per (tool, task) cell, sourced from each trial's phase1-metrics.json (cost_usd is Anthropic billing-derived; input tokens include cache_creation + cache_read).">Mean</span> per trial across the full n=5 cohort (24 (tool, task) cells × 5 trials = 120 trials). Each table is ordered by <strong>$ cost ascending</strong> so the row at the top is the cheapest setup for that task. <em style="color:var(--olive-gray);">Input tokens include cache-creation and cache-read volume — Anthropic prices <span class="term" tabindex="0" data-tip="Prompt caching lets Claude store a prefix of the context (system prompt, repo files) and reuse it across requests at 0.1× the normal input-token price. A 'cache read' = a token served from cache; 'cache creation' = a token written to cache the first time. Big addon kits often re-read the same scaffolding many times — caching makes that cheap.">cache reads</span> at 0.1× input, so dollar cost is the better cross-tool axis than raw input volume.</em> Score column is the canonical n=5 weighted-mean per task (opus×3, gpt54pro×2, others×1). The <code class="mono">$/pt</code> column is <span class="term" tabindex="0" data-tip="Cost-efficiency = mean trial dollar cost divided by mean rubric score (e.g. $50 / 150 pts = $0.33/pt). Lower is better — answers 'how much do I pay per rubric point this setup buys me?'">cost-efficiency</span>: dollars per rubric point. <em style="color:var(--olive-gray);">Token columns use SI scale: <strong>K</strong> = thousand, <strong>M</strong> = million (so 15.9M = 15.9 million input tokens per trial).</em>
       </p>
       <div class="behavior-grid" style="grid-template-columns: minmax(420px, 580px); justify-content: center;">
         <figure class="behavior-figure">
           <table class="behavior-table">
             <caption>feature — ranked by $ cost (n=5)</caption>
             <thead>
-              <tr><th>Tool</th><th>$ cost</th><th>Out tok</th><th>In tok</th><th>Score</th><th>$/pt</th></tr>
+              <tr><th>Tool</th><th title="Mean Anthropic-billed dollar cost per trial (from phase1-metrics.json cost_usd).">$ cost</th><th title="Output tokens per trial (mean) — what the model generated. K = thousand. Output is the more expensive direction; Anthropic prices it ~5× input.">Out tok</th><th title="Input tokens per trial (mean), including cache_creation + cache_read. M = million. Cache reads are billed at 0.1× — so high In tok with cache amortization can still be cheap.">In tok</th><th title="Canonical n=5 weighted-mean rubric score for that (tool, task) cell. Max 200.">Score</th><th title="Cost-efficiency: $ cost ÷ Score. Lower = more rubric points per dollar.">$/pt</th></tr>
             </thead>
             <tbody>
               <tr><td><strong>bmad</strong></td><td><strong>$38.92</strong></td><td>72.6K</td><td>15.9M</td><td>141.3</td><td><strong>0.275</strong></td></tr>
@@ -658,7 +658,7 @@
           <table class="behavior-table">
             <caption>bugfix — ranked by $ cost (n=5)</caption>
             <thead>
-              <tr><th>Tool</th><th>$ cost</th><th>Out tok</th><th>In tok</th><th>Score</th><th>$/pt</th></tr>
+              <tr><th>Tool</th><th title="Mean Anthropic-billed dollar cost per trial (from phase1-metrics.json cost_usd).">$ cost</th><th title="Output tokens per trial (mean) — what the model generated. K = thousand. Output is the more expensive direction; Anthropic prices it ~5× input.">Out tok</th><th title="Input tokens per trial (mean), including cache_creation + cache_read. M = million. Cache reads are billed at 0.1× — so high In tok with cache amortization can still be cheap.">In tok</th><th title="Canonical n=5 weighted-mean rubric score for that (tool, task) cell. Max 200.">Score</th><th title="Cost-efficiency: $ cost ÷ Score. Lower = more rubric points per dollar.">$/pt</th></tr>
             </thead>
             <tbody>
               <tr><td><strong>ecc</strong></td><td><strong>$18.27</strong></td><td>27.6K</td><td>7.5M</td><td>172.3</td><td><strong>0.106</strong></td></tr>
@@ -681,7 +681,7 @@
           <table class="behavior-table">
             <caption>refactor — ranked by $ cost (n=5)</caption>
             <thead>
-              <tr><th>Tool</th><th>$ cost</th><th>Out tok</th><th>In tok</th><th>Score</th><th>$/pt</th></tr>
+              <tr><th>Tool</th><th title="Mean Anthropic-billed dollar cost per trial (from phase1-metrics.json cost_usd).">$ cost</th><th title="Output tokens per trial (mean) — what the model generated. K = thousand. Output is the more expensive direction; Anthropic prices it ~5× input.">Out tok</th><th title="Input tokens per trial (mean), including cache_creation + cache_read. M = million. Cache reads are billed at 0.1× — so high In tok with cache amortization can still be cheap.">In tok</th><th title="Canonical n=5 weighted-mean rubric score for that (tool, task) cell. Max 200.">Score</th><th title="Cost-efficiency: $ cost ÷ Score. Lower = more rubric points per dollar.">$/pt</th></tr>
             </thead>
             <tbody>
               <tr><td><strong>ecc</strong></td><td><strong>$50.26</strong></td><td>80.5K</td><td>21.9M</td><td>173.6</td><td><strong>0.290</strong></td></tr>
@@ -862,7 +862,7 @@
         <div class="caveat-item"><div class="caveat-num">01</div><div class="caveat-body"><b>Single codebase, single language</b> — TypeScript. Don't assume the rankings carry to Python, Go, or Rust.</div></div>
         <div class="caveat-item"><div class="caveat-num">02</div><div class="caveat-body"><b>Single executor base model</b> — <code class="mono">claude-opus-4-7</code>. A setup tuned for Sonnet or Haiku could rank differently.</div></div>
         <div class="caveat-item"><div class="caveat-num">03</div><div class="caveat-body"><b>LLM judges diverge 32–42 pts (full panel spread).</b> GPT-5.4 is consistently the harshest (19–27 pts below the per-task panel mean), MiMo-2.5-pro the most lenient. The 5-judge weighted panel and the <span class="term" tabindex="0" data-tip="σ (standard deviation) split into within-judge (same judge differs across rounds/trials = sampling noise) and between-judge (judges disagree with each other = systematic lenience drift).">within / between σ split</span> are the intended mitigations — they expose drift rather than hide it.</div></div>
-        <div class="caveat-item"><div class="caveat-num">04</div><div class="caveat-body"><b>Pure (no addons) is rank-1 on refactor, rank-3 on bugfix, and rank-2 on feature — top-3 on every task in this corpus.</b> The per-task reports now compute the <span class="term" tabindex="0" data-tip="Minimum Detectable Effect at α=0.05 (two-sided), power=0.80, computed at the cohort's actual n=5 trials per arm using the exact Student-t critical value t(0.975, df=2(n-1)=8) ≈ 2.306, not the normal z=1.96 (at n=5 this enlarges MDE ~12%); the β/power term keeps the normal z=0.84 as a deliberate conservative approximation.">MDE</span> at the cohort's actual n=5 trials per arm: <strong>19.33 pts (feature) · 22.17 pts (bugfix) · 44.02 pts (refactor)</strong> (σ_pool 9.72 / 11.14 / 22.13). Counter-intuitively the n=3 → n=5 expansion did <em>not</em> cut MDE the way 1/√n predicts — σ_pool rose on every task as more trials exposed true trial-to-trial variance (feature 7.87→9.72, bugfix 9.99→11.14, refactor 6.07→22.13), driven on refactor by gstack's trial-4 refactor diff scoring ≈36/200 against ~178 on its other four (a mechanically clean run, valid under the pre-registered no-selective-rerun rule). Every rank-1 lead falls below MDE (feature 10.17, bugfix 6.62, refactor 2.15); an earlier reading rejected the strict null on bugfix via claudekit's lead over pure against a heuristic ~5-pt tie envelope — it does not survive the formal power analysis (9.4 ≪ 22.17). The only separation that clears MDE anywhere in the 1800-judgment corpus is ecc − gstack on feature (≈21.3 &gt; 19.33); no separation clears MDE on bugfix or refactor. Treat all top-cluster rank-1 claims as <em>"point-estimate first, statistically tied"</em>; use cost, speed, and DX as the real differentiator. See <a href="preview/improvement-plan-next-cohort.html" style="color:var(--terracotta); border-bottom:1px solid var(--border-warm);">the next-cohort improvement plan</a>.</div></div>
+        <div class="caveat-item"><div class="caveat-num">04</div><div class="caveat-body"><b>Pure (no addons) is rank-1 on refactor, rank-3 on bugfix, and rank-2 on feature — top-3 on every task in this corpus.</b> The per-task reports now compute the <span class="term" tabindex="0" data-tip="Minimum Detectable Effect at α=0.05 (two-sided), power=0.80, computed at the cohort's actual n=5 trials per arm using the exact Student-t critical value t(0.975, df=2(n-1)=8) ≈ 2.306, not the normal z=1.96 (at n=5 this enlarges MDE ~12%); the β/power term keeps the normal z=0.84 as a deliberate conservative approximation.">MDE</span> at the cohort's actual n=5 trials per arm: <strong>19.33 pts (feature) · 22.17 pts (bugfix) · 44.02 pts (refactor)</strong> (<span class="term" tabindex="0" data-tip="Pooled standard deviation — the typical trial-to-trial spread within a tool, pooled across all 8 tools on this task. Bigger σ_pool = noisier task = bigger MDE = harder to claim one tool truly beats another. Refactor's 22.13 is huge because one gstack trial scored ~36/200.">σ_pool</span> 9.72 / 11.14 / 22.13). Counter-intuitively the n=3 → n=5 expansion did <em>not</em> cut MDE the way 1/√n predicts — σ_pool rose on every task as more trials exposed true trial-to-trial variance (feature 7.87→9.72, bugfix 9.99→11.14, refactor 6.07→22.13), driven on refactor by gstack's trial-4 refactor diff scoring ≈36/200 against ~178 on its other four (a mechanically clean run, valid under the pre-registered no-selective-rerun rule). Every rank-1 lead falls below MDE (feature 10.17, bugfix 6.62, refactor 2.15); an earlier reading rejected the strict null on bugfix via claudekit's lead over pure against a heuristic ~5-pt tie envelope — it does not survive the formal power analysis (9.4 ≪ 22.17). The only separation that clears MDE anywhere in the 1800-judgment corpus is ecc − gstack on feature (≈21.3 &gt; 19.33); no separation clears MDE on bugfix or refactor. Treat all top-cluster rank-1 claims as <em>"point-estimate first, statistically tied"</em>; use cost, speed, and DX as the real differentiator. See <a href="preview/improvement-plan-next-cohort.html" style="color:var(--terracotta); border-bottom:1px solid var(--border-warm);">the next-cohort improvement plan</a>.</div></div>
       </div>
 
       <details class="caveats-more">
